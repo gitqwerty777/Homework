@@ -1,0 +1,18 @@
+\documentclass{article}
+\usepackage[encapsulated]{CJK}
+\linespread{1.36}
+\begin{document}
+%中文時不能用 \fontsize{12pt}{20pt}\selectfont
+\fontsize{15pt}{20pt}\selectfont
+
+\begin{CJK}{UTF8}{bsmi} % 開始 CJK 環境，設定編碼，設定字體
+\noindent
+$p$ = P(5有車 $\mid$ 開6且6是羊)\\
+   = $\frac{\frac{1}{9} \times \frac{31}{52}}{\frac{1}{9}\times\frac{1}{8} + \frac{4}{9}\times\frac{31}{52} + \frac{1}{9}\times0 + \frac{3}{9} \times \frac{21}{52}\times\frac{1}{6}}$\\
+   = $\frac{31}{141}$\\
+
+E(增加身高) = $\sum^{\frac{k}{2}}_{i=0} (2i \times C_{\frac{k}{2}-i}^k \times p^{\frac{k}{2}+i}(1-p)^{\frac{k}{2}-i}) + (-1) \times \sum^{\frac{k}{2}}_{i=1} ( C_{i-1}^{2i-1} \times p^{i-1}(1-p)^{i})$\\
+
+ANS = 153 + E(增加身高)
+\end{CJK} % 結束 CJK 環境
+\end{document}

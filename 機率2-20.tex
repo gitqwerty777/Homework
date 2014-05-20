@@ -1,0 +1,21 @@
+\documentclass{article}
+\usepackage[encapsulated]{CJK}
+\linespread{1.36}
+\begin{document}
+%中文時不能用 \fontsize{12pt}{20pt}\selectfont
+\fontsize{15pt}{20pt}\selectfont
+
+\begin{CJK}{UTF8}{bsmi} % 開始 CJK 環境，設定編碼，設定字體
+\noindent
+變異數 = $\frac{1-p}{p^{2}} = 4.206$\\
+p = 0.38006
+
+\noindent
+且 p = $1-(1-x)^{6}(1.01)^{15}$\\
+x = 0.0999981773 $\approx$ 0.1
+
+\noindent
+E[X] = $\frac{1}{p}$ = $\frac{1}{1-(1-x)^{4}(1.01)^{14}}$ = 4.06785\\
+
+\end{CJK} % 結束 CJK 環境
+\end{document}

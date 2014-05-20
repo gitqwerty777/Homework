@@ -1,0 +1,24 @@
+\documentclass{article}
+\usepackage[encapsulated]{CJK}
+\linespread{1.36}
+\begin{document}
+%中文時不能用 \fontsize{12pt}{20pt}\selectfont
+\fontsize{15pt}{20pt}\selectfont
+
+\begin{CJK}{UTF8}{bsmi} % 開始 CJK 環境，設定編碼，設定字體
+\noindent
+P(三架引擎成功) = $P^{3} + 3 \times P^{2}(1-P)$\\
+P(四架引擎成功) = $P^{4} + 4 \times P^{3}(1-P) $\\
+
+\noindent
+令Random Variable X = x架引擎成功\\
+If( P(X = 3) $\leq$ P(X = 4))
+
+$(P-1)^{2} \leq 0$\\
+所以只有 P = 1 時， P(X = 3) $\leq$ P(X = 4)\\
+
+\noindent
+所以若 $0 < P < 1$, \textbf{三架}的成功起飛機率較高。
+	
+\end{CJK} % 結束 CJK 環境
+\end{document}

@@ -1,0 +1,39 @@
+\documentclass{article}
+\usepackage[encapsulated]{CJK}
+\linespread{1.36}
+\voffset=-1in
+\begin{document}
+%中文時不能用 \fontsize{12pt}{20pt}\selectfont
+\fontsize{13pt}{20pt}\selectfont
+
+\begin{CJK}{UTF8}{bsmi} % 開始 CJK 環境，設定編碼，設定字體
+\begin{tabular}[t]{|l|l|l|}
+\hline
+A & B & C\\
+\hline
+D & E & F\\
+\hline
+G & H & I \\
+\hline
+\end{tabular} 
+\\
+
+
+由於其對稱性， A = I， B = F， D = H
+
+\noindent
+E(A$\rightarrow$C) = 1 + $\frac{1}{2}$E(D$\rightarrow$C) + $\frac{1}{2}$E(B$\rightarrow$C)
+
+= 1 + $\frac{1}{2}(\frac{1}{2} \times$ 0+ ($\frac{1}{2}$ + $\frac{1}{2}E(A\rightarrow C))) + \frac{1}{2}E(B \rightarrow$C)
+
+= $\frac{5}{4} + \frac{1}{4}E(A\rightarrow C)) + \frac{1}{2}(1+\frac{1}{2}E(A\rightarrow C) + \frac{1}{2}E(G\rightarrow C))$\\
+E(A$\rightarrow$C) = $\frac{7}{2} + \frac{1}{2}E(G\rightarrow C)$
+
+\noindent
+E(G$\rightarrow$C) = 1 + E(B$\rightarrow$C)
+= 2 + $\frac{1}{2}$E(A$\rightarrow$C) + $\frac{1}{2}$E(G$\rightarrow$C)\\
+E(G$\rightarrow$C) = 15
+\end{CJK} % 結束 CJK 環境
+\end{document}
+
+

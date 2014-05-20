@@ -1,0 +1,26 @@
+\documentclass{article}
+\usepackage[encapsulated]{CJK}
+\linespread{1.36}
+\begin{document}
+%中文時不能用 \fontsize{12pt}{20pt}\selectfont
+\fontsize{15pt}{20pt}\selectfont
+
+\begin{CJK}{UTF8}{bsmi} % 開始 CJK 環境，設定編碼，設定字體
+\noindent
+令E(x) 為有x顆頭的揮劍次數期望值，則\\
+E(5) = 10 + 0.8$\times$E(5) + 0.2$\times$E(4)\\
+E(4) = $\frac{10}{3}$ + 0.8$\times$E(5) + 0.2$\times$E(3)\\
+E(3) = $\frac{10}{5}$ + 0.8$\times$E(4) + 0.2$\times$E(2)\\
+E(2) = $\frac{10}{7}$ + 0.8$\times$E(3) + 0.2$\times$E(1)\\
+E(1) = $\frac{10}{9}$\\
+
+整理過後，\\
+E(5) = 50 + E(4)\\
+E(4) = $\frac{650}{3}$ + E(3) = $\frac{290320}{63}$\\
+E(3) = $\frac{2630}{3}$ + E(2)\\
+E(2) = $\frac{221440}{63}$\\
+E(1) = $\frac{10}{9}$\\
+
+ANS = $\frac{290320}{63}$
+\end{CJK} % 結束 CJK 環境
+\end{document}
