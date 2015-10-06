@@ -1,0 +1,7 @@
+graph graph1{
+       a -- b;
+       b -- c;
+       c -- d;
+       d -- e;
+       e -- a;
+}

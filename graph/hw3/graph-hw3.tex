@@ -1,0 +1,298 @@
+\documentclass{article}
+
+\usepackage{fancyhdr}
+\usepackage{extramarks}
+\usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage{amsfonts}
+\usepackage{tikz}
+\usepackage[plain]{algorithm}
+\usepackage{algpseudocode}
+\usepackage[encapsulated]{CJK}
+\usepackage{graphicx}
+\usepackage{caption}
+\usepackage{subcaption}
+\graphicspath{ {./images/} }
+
+\usetikzlibrary{automata,positioning}
+
+%
+% Basic Document Settings
+%
+
+\topmargin=-0.45in
+\evensidemargin=0in
+\oddsidemargin=0in
+\textwidth=6.5in
+\textheight=9.0in
+\headsep=0.25in
+
+\linespread{1.1}
+
+\pagestyle{fancy}
+\lhead{\hmwkAuthorName}
+\chead{\hmwkClass\:\hmwkTitle}
+\rhead{\firstxmark}
+\lfoot{\lastxmark}
+\cfoot{\thepage}
+
+\renewcommand\headrulewidth{0.4pt}
+\renewcommand\footrulewidth{0.4pt}
+
+\setlength\parindent{0pt}
+
+%
+% Create Problem Sections
+%
+
+\newcommand{\enterProblemHeader}[1]{
+    \nobreak\extramarks{}{Problem \arabic{#1} continued on next page\ldots}\nobreak{}
+    \nobreak\extramarks{Problem \arabic{#1} (continued)}{Problem \arabic{#1} continued on next page\ldots}\nobreak{}
+}
+
+\newcommand{\exitProblemHeader}[1]{
+    \nobreak\extramarks{Problem \arabic{#1} (continued)}{Problem \arabic{#1} continued on next page\ldots}\nobreak{}
+    \stepcounter{#1}
+    \nobreak\extramarks{Problem \arabic{#1}}{}\nobreak{}
+}
+
+\setcounter{secnumdepth}{0}
+\newcounter{partCounter}
+\newcounter{homeworkProblemCounter}
+\setcounter{homeworkProblemCounter}{1}
+\nobreak\extramarks{Problem \arabic{homeworkProblemCounter}}{}\nobreak{}
+
+%
+% Homework Problem Environment
+%
+% This environment takes an optional argument. When given, it will adjust the
+% problem counter. This is useful for when the problems given for your
+% assignment aren't sequential. See the last 3 problems of this template for an
+% example.
+%
+\newenvironment{homeworkProblem}[1][-1]{
+    \ifnum#1>0
+        \setcounter{homeworkProblemCounter}{#1}
+    \fi
+    \section{Problem \arabic{homeworkProblemCounter}}
+    \setcounter{partCounter}{1}
+    \enterProblemHeader{homeworkProblemCounter}
+}{
+    \exitProblemHeader{homeworkProblemCounter}
+}
+
+%
+% Homework Details
+%   - Title
+%   - Due date
+%   - Class
+%   - Section/Time
+%   - Instructor
+%   - Author
+%
+
+\newcommand{\hmwkTitle}{Homework\ \#3}
+%\newcommand{\hmwkDueDate}{September 17, 2015}
+\newcommand{\hmwkClass}{Graph Theory}
+\newcommand{\hmwkClassTime}{}
+\newcommand{\hmwkClassInstructor}{}
+\newcommand{\hmwkAuthorName}{Lin Hung Cheng B01902059}
+
+%
+% Title Page
+%
+
+\title{
+    \vspace{2in}
+    \textmd{\textbf{\hmwkClass:\ \hmwkTitle}}\\
+    %\normalsize\vspace{0.1in}\small{Due\ on\ \hmwkDueDate\ at 3:10pm}\\
+    %\vspace{0.1in}\large{\textit{\hmwkClassInstructor\ \hmwkClassTime}}
+    \vspace{3in}
+}
+
+\author{\textbf{\hmwkAuthorName}}
+\date{}
+
+\renewcommand{\part}[1]{\textbf{\large Part \Alph{partCounter}}\stepcounter{partCounter}\\}
+
+%
+% Various Helper Commands
+%
+
+% Useful for algorithms
+\newcommand{\alg}[1]{\textsc{\bfseries \footnotesize #1}}
+
+% For derivatives
+\newcommand{\deriv}[1]{\frac{\mathrm{d}}{\mathrm{d}x} (#1)}
+
+% For partial derivatives
+\newcommand{\pderiv}[2]{\frac{\partial}{\partial #1} (#2)}
+
+% Integral dx
+\newcommand{\dx}{\mathrm{d}x}
+
+% Alias for the Solution section header
+\newcommand{\solution}{\textbf{\large Solution}}
+
+% Probability commands: Expectation, Variance, Covariance, Bias
+\newcommand{\E}{\mathrm{E}}
+\newcommand{\Var}{\mathrm{Var}}
+\newcommand{\Cov}{\mathrm{Cov}}
+\newcommand{\Bias}{\mathrm{Bias}}
+
+\begin{document}
+
+\maketitle
+
+\pagebreak
+
+\begin{homeworkProblem}
+  \begin{CJK}{UTF8}{bsmi} % 開始 CJK
+    用gcd(m, n) 表示非負整數m和n的最大公因數。試證：如果m = an+r， 其中a 和r 是整數且$0 \leq r < n$， 則gcd(m, n)=gcd(n, r)。並證明：這可以用來構造出一個用O(logm + log n)個除法的演算法
+
+    \textbf{1.}
+    
+    令gcd(m, n) = g，則存在x, y 使　m = gx, n = gy, 且x, y互質；此時 r = g(x-ay)。\\
+    因為y 和 x-ay互質，所以 $gcd(n, r) = gcd(gy, g(x-ay)) = g$
+
+    \proof 設 y 和 x-ay 有 gcd = $h > 1$, 則 $y = hj, x-ay = hk$。
+    此時 $x = h(aj+k), gcd(x, y) \geq h$, 與x, y互質矛盾
+    
+    \textbf{2.}
+
+    $m = an + r$, $r < \frac{1}{2}m$
+    當r = 0或n = 1時，可以找到gcd = n
+    每次執行除法可以使m或n至少減少一半，所以至多需要$\log_2n + \log_2m$次除法
+    
+    \proof 若 $r \leq \frac{1}{2}m$, 則 $a_n < \frac{1}{2}m$, 且 $n < \frac{1}{2}m$, 與 $n>r$ 矛盾，所以每次執行除法可以使m或n至少減少一半
+
+  \end{CJK}
+\end{homeworkProblem}
+
+\begin{homeworkProblem}
+  \begin{CJK}{UTF8}{bsmi} % 開始 CJK
+    給定實數列$x_1, x_2, . . . , x_n$， 要從中找出一段連續的若干項使其和為最大。試找一個比這個更有效率的演算法。
+
+    \textbf{Solution}
+
+    \begin{algorithm}[]
+      \begin{algorithmic}[1]
+        \Function{findmaxsequencesum}{$array$}
+        \State{} $s[0] \gets 0$
+        \State{} $minsum \gets s[0]$
+        \State{} $ans \gets - \infty$
+        \For{$i = 1, n$}
+        \State{} $s[i] \gets s[i-1] + array[i]$
+        \State{} $minsum = min(minsum, s[i-1])$
+        \If{$s[i]-minsum > ans$}
+        \State{} $ans = s[i]-minsum$
+        \EndIf
+        \EndFor
+        \State{} \Return{ans}
+        \EndFunction{}
+      \end{algorithmic}
+      \caption{findMaxSequenceSum}
+    \end{algorithm}
+
+  可以達到 $O(n)$ 的時間複雜度
+
+\end{CJK} % 結束 CJK 環境 
+\end{homeworkProblem}
+
+\pagebreak
+
+\begin{homeworkProblem}
+  \begin{CJK}{UTF8}{bsmi} % 開始 CJK
+    雙單連表列A的資料存在陣列DATA中、而其指標維陣列是NEXT 和PREV。(1)請寫出程式，將新資料x 加入A 中、放在i後面。(2) 請寫出程式，將A 中的一項i 刪除。
+
+    \textbf{1.}
+    
+    \begin{algorithm}[]
+      \begin{algorithmic}[1]
+        \While{$A.value \neq i$}
+        \State{} $A \gets (A \rightarrow next)$
+        \EndWhile
+        \State{} $n \gets (A \rightarrow next)$
+        \State{} $(A \rightarrow next) \gets x$
+        \State{} $(n \rightarrow prev) \gets x$
+        \State{} $(x \rightarrow next) \gets n$
+        \State{} $(x \rightarrow prev) \gets A$
+      \end{algorithmic}
+      \caption{pushback}
+    \end{algorithm}
+
+    \textbf{2.}
+
+    \begin{algorithm}[]
+      \begin{algorithmic}[1]
+        \While{$A.value \neq i$}
+        \State{} $A  \gets  (A \rightarrow next)$
+        \EndWhile
+        \State{} $p  \gets  (A \rightarrow prev)$
+        \State{} $n  \gets  (A \rightarrow next)$
+        \State{} $(p  \rightarrow next)  \gets  n$
+        \State{} $(n  \rightarrow prev)  \gets  p$
+        \State{} $delete A$
+      \end{algorithmic}
+      \caption{deleteElement}
+    \end{algorithm}
+    
+  \end{CJK} % 結束 CJK 環境 
+\end{homeworkProblem}
+
+\begin{homeworkProblem}
+  \begin{CJK}{UTF8}{bsmi} % 開始 CJK
+    假設圖G = (V,E) 有n 個頂點v1, v2, . . . , vn 及m 條邊e1, e2, . . . , em， 定義G的相連矩陣（incidence matrix） M = [bij ] 是一個n × m 矩陣， 其中bij = 1, 若vi 和ej 相連；0, 若vi 和ej 不相連。試證： MMT = A + 度數矩陣
+
+    \solution
+
+    $MM^T_{ij} = b_{i1}b_{j1} * b_{i2}b_{j2} * b_{i3}b_{j3} ... * b_{im}b_{jm}$\\
+    若 i $\neq$ j，其意義為$v_i$和$v_j$是否有在$e_1, e_2, ... e_m$相連，即為$v_i$和$v_j$是否有相連，也就是相鄰矩陣的定義。\\
+    若 i = j，則$MM^T_{ij} = MM^T_{ii} = b_{11}b_{11} + b_{22}b_{22} + ... b_{nn}b_{nn} = b_{11} + b_{22} + ... b_{nn} = v_n$的度數。
+    $MM^T_{ij}$由此可知，等於相鄰矩陣和度數矩陣的和。
+
+  \end{CJK} % 結束 CJK 環境 
+\end{homeworkProblem}
+
+\begin{homeworkProblem}
+  \begin{CJK}{UTF8}{bsmi} % 開始 CJK
+    假設圖G = (V,E) 中V = {1, 2, . . . , n} 而E 則以m 個有序對表示。我們可以用連續空間（sequential space）來儲存G 中各點的鄰居，也就是在陣列DATA中先存N(1)、然後接續著存N(2)、. . . 依此類推直到放完N(n) 為止； 我們以bi 表示資料N(i) 在DATA 中的起始位置， 於是N(i) 所在的範圍就是從DATA[bi] 到DATA[bi+1 − 1]這一段（其中定義bn+1 為資料結束後的下一個位置）。bi 的值存放在陣列BEG 內。例如， 設n = 9， 而E = {31, 41, 59, 26, 53, 58, 97, 93, 23, 84}，則此時DATA 和BEG的資料分別如下：試寫一個演算法（或程式），能讓使用者輸入n 和E， 產生出對應的DATA 和BEG。\\
+
+    \solution
+
+    \begin{algorithm}[]
+      \begin{algorithmic}[1]
+        \Function{generateDATAandBEG}{n, E}
+        \State{} $v \gets array(list())$
+        \State{} $DATA \gets array(E.length*2)$ 
+        \State{} $BEG \gets array(E.length*2)$
+        \For{edge in E}
+        \State{} $v[edge.first].push(edge.second)$ \Comment{first and second are two vertex in the edge}
+        \State{} $v[edge.second].push(edge.first)$
+        \EndFor
+        \State{} $BEG[i] \gets 1$
+        \For{$i \gets 2, n$}
+        \State{} $BEG[i] \gets BEG[i-1]+v[i-1].length$
+        \EndFor
+        \State{} $index \gets 1$
+        \For{$i \gets 1, n$}
+        \For{each node N in v[i]}
+        \State{} $DATA[index] \gets N$
+        \State{} $index \gets index + 1$
+        \EndFor
+        \EndFor
+        \State{} \Return{BEG, DATA}
+        \EndFunction
+      \end{algorithmic}
+      \caption{getBEGandDATA}
+    \end{algorithm}
+
+\end{CJK} % 結束 CJK 環境 
+\end{homeworkProblem}
+
+\end{document}
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: t
+%%% End:
