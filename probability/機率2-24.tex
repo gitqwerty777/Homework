@@ -1,0 +1,17 @@
+\documentclass{article}
+\usepackage[encapsulated]{CJK}
+\linespread{1.36}
+\begin{document}
+%中文時不能用 \fontsize{12pt}{20pt}\selectfont
+\fontsize{15pt}{20pt}\selectfont
+
+\begin{CJK}{UTF8}{bsmi} % 開始 CJK 環境，設定編碼，設定字體
+\noindent
+P(花活著) = $0.6 \times 0.9 + 0.4 \times 0.25 = 0.64$ 
+
+原式 = P(公貓貓為父親 $\cap$ 碰到不死)
+
+= 0.7 $\times (0.64 \times 0.1 + 0.36 \times 1)$ = 0.4648
+
+\end{CJK} % 結束 CJK 環境
+\end{document}

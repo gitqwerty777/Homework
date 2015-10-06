@@ -1,0 +1,36 @@
+\documentclass{article}
+\begin{document}
+\fontsize{12pt}{20pt}\selectfont
+Exist $c_{1}, c_{2},$ and $n_{0}$ that
+ $ \Theta(g(n)) = \{f(n): 0 \leq c_{1}g(n) \leq f(n) \leq c_{2}g(n)\}$
+  for all $n \geq n_{0} $
+  
+  
+Exist $c_{1}, c_{2},$ and $n_{0}$ that
+ $ o(g(n)) = \{f(n): 0 \leq f(n) < cg(n)\}$
+  for all $n \geq n_{0} $
+  
+  
+For Example: $2n^{2} = O(n^{2})$, but $2n^{2} \neq o(n^{2})$.
+
+
+$f(n) = \omega(g(n))$ if and only if $g(n) = o(f(n))$
+
+Because $\Theta(g(n))$ is a set, $ f(n) \in \Theta(g(n))$ , but we always write $f(n) = \Theta(g(n))$.
+\\Property:
+\\ \indent 1.Transitivity: $f(n) = \Theta(g(n))$ and $g(n) = \Theta(h(n))$
+then $f(n) = \Theta(h(n))$
+\\ \indent 2.Reflexivity: $f(n) = \Theta(f(n))$
+\\ \indent 3.Symmetry: $f(n) = \Theta(g(n))$ if and only if $g(n) = \Theta(f(n))$
+\\ \indent 4.Transpose Symmetry: $f(n) = \Theta(g(n))$ if and only if $g(n) = \Omega(f(n))$
+\\ $f(n) = o(g(n))$ if and only if $g(n) = \omega(f(n))$
+
+$e^{x}= 1+x+\frac{x^{2}}{2!}+\frac{x^{3}}{3!} ... = \sum_{i=0}^{\infty}\frac{x^{i}}{i!}$
+
+$1+x \leq e^{x} \leq 1+x+x^{2}$
+
+Fibonacci: $F_{i} = \frac{\rho^{i} - \bar{\rho^{i}}}{\sqrt{5}}$
+\\$\rho$ is golden ratio
+$F_{i}$ equal to $\frac{\rho^{i}}{\sqrt{5}}$ rounded to the nearist integer
+
+\end{document}
