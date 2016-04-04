@@ -8,6 +8,8 @@ new:
 
 test:
 	time ./sudoku < testdata2
+	time ./sudoku < testdata3
 	./fast-sudoku < testdata1
 	time ./fast-sudoku < testdata2
+	time ./fast-sudoku < testdata3
 
