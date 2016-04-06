@@ -1,12 +1,41 @@
 #include <cstdio>
+#include <cstring>
 #include <omp.h>
- 
-int arr[2002][2002] = {{0}};
-int newarr[2002][2002] = {{0}};
- 
+
+int arr[2003][2003];
+int counts[2][2003][2003] = {{0}};
+int m, n;
+
+inline void reduceCounts(int t, int r, int c){
+  #pragma omp critial
+  {
+    counts[t][r-1][c-1]--;
+    counts[t][r-1][c]--;
+    counts[t][r-1][c+1]--;
+    counts[t][r][c-1]--;
+    counts[t][r][c+1]--;
+    counts[t][r+1][c-1]--;
+    counts[t][r+1][c]--;
+    counts[t][r+1][c+1]--;
+  }
+}
+
+inline void increaseCounts(int t, int r, int c){
+  #pragma omp critial
+  {
+    counts[t][r-1][c-1]++;
+    counts[t][r-1][c]++;
+    counts[t][r-1][c+1]++;
+    counts[t][r][c-1]++;
+    counts[t][r][c+1]++;
+    counts[t][r+1][c-1]++;
+    counts[t][r+1][c]++;
+    counts[t][r+1][c+1]++;
+  }  
+}
+
 int main(){
-  int m, n;
-  char s[2002];
+  char s[2004];
   scanf("%d %d", &n, &m);
   for(int i = 1; i <= n; i++){
     scanf("%s", s);
@@ -14,60 +43,71 @@ int main(){
       arr[i][j] = s[j-1]-'0';
   }
   /*fprintf(stderr, "before iteration\n");
-  for(int r = 1; r <= n; r++){
+    for(int r = 1; r <= n; r++){
     for(int c = 1; c <= n; c++){
-          printf("%d ", arr[r][c]);    
+    printf("%d ", arr[r][c]);	
     }
     printf("\n");          
-    }*/
- 
-  for(int t = 1; t <= m; t++){
-    //fprintf(stderr, "turn %d\n", t);
-#pragma omp parallel for collapse(2)
+    }
+  */
+  omp_set_num_threads(20);
+
+#pragma omp parallel for
+    //first: calculate initial count
     for(int i = 1; i <= n; i++){
       for(int j = 1; j <= n; j++){
 	int count = 0;
 	if(arr[i-1][j])
 	  count++;
-	if(arr[i+1][j])
+	if(arr[i-1][j+1])
 	  count++;
+	if(arr[i-1][j-1])
+	  count++;	
 	if(arr[i][j-1])
 	  count++;
 	if(arr[i][j+1])
 	  count++;
 	if(arr[i+1][j+1])
 	  count++;
-	if(arr[i-1][j+1])
-	  count++;
+	if(arr[i+1][j])
+	  count++;	
 	if(arr[i+1][j-1])
 	  count++;
-	if(arr[i-1][j-1])
-	  count++;
- 
-	if((arr[i][j] == 1) && !(count == 2 || count == 3)){
-	  newarr[i][j] = 0;
-	} else if((arr[i][j] == 0) && (count == 3)){
-	  newarr[i][j] = 1;
-	} else {
-	  newarr[i][j] = arr[i][j];
+	counts[1][i][j] = count;
+      }
+    }
+  
+    for(int t = 1; t <= m; t++){
+      //fprintf(stderr, "turn %d\n", t);
+#pragma omp parallel
+  {        
+#pragma omp for 
+      for(int i = 1; i <= n; i++)
+	for(int j = 1; j <= n; j++)
+	  counts[(t+1)%2][i][j] = counts[t%2][i][j];
+      
+#pragma omp for 
+      for(int i = 1; i <= n; i++){
+	for(int j = 1; j <= n; j++){
+	  if((arr[i][j] == 1) && !(counts[t%2][i][j] == 2 || counts[t%2][i][j] == 3)){
+	    arr[i][j] = 0;
+	    reduceCounts((t+1)%2, i, j);	    
+	  } else if((arr[i][j] == 0) && (counts[t%2][i][j] == 3)){
+	    arr[i][j] = 1;
+	    increaseCounts((t+1)%2, i, j);
+	  }
+	  //fprintf(stderr, "turn %d = %d %d = %d\n", t , i, j , arr[i][j]);
 	}
-	//fprintf(stderr, "thread %d - %d, %d, arr = %d->%d, count = %d\n", omp_get_thread_num(), i, j, arr[i][j], newarr[i][j], count);
       }
     }
- 
-    //fprintf(stderr, "after %d iteration\n", t);
-    for(int r = 1; r <= n; r++){
-      for(int c = 1; c <= n; c++){
-	//printf("%d ", newarr[r][c]);    
-	arr[r][c] = newarr[r][c];
-      }
-      //printf("\n");          
+
     }
-  } 
+
   for(int i = 1; i <= n; i++){
     for(int j = 1; j <= n; j++)
       printf("%d", arr[i][j]);
-    printf("\n");    
+    printf("\n");
   }
   return 0;
 }
+
