@@ -1,5 +1,6 @@
 #include <cstdio>
 #include <omp.h>
+#include <stack>
 
 int nextn[9][9];
 
@@ -43,7 +44,34 @@ int placeNumber (int n, int sudoku [9][9]){
   sudoku [row][col] = 0;
   return numSolution;
 }
-    
+
+class Board{
+public:
+  Board(int s[9][9], int i){
+    std::copy(&s[0][0], &s[0][0] + 81, &sudoku[0][0]);
+    nowi = i;
+  }
+
+  Board(int s[9][9], int i, int r, int c, int v){
+    std::copy(&s[0][0], &s[0][0] + 81, &sudoku[0][0]);
+    sudoku[r][c] = v;
+    nowi = i;
+  }
+  void print(){
+    for(int i = 0; i < 9; i ++){
+      for(int j = 0; j < 9; j++){
+	fprintf(stderr, "%d ",  sudoku[i][j]);
+      }
+      fprintf(stderr, "\n");
+    }
+  }
+  int sudoku[9][9];
+  int nowi;
+};
+
+
+
+
 int main ( void ){
   int sudoku [9][9];
   int firstZero = -1;
@@ -64,19 +92,41 @@ int main ( void ){
     nextn[preZero/9][preZero%9] = 81;
   omp_set_num_threads (9);
   int numSolution = 0;
-  bool isLegal[10];
-  getPossibleValue(sudoku, isLegal, firstZero/9, firstZero%9, (firstZero/9)/3, (firstZero%9)/3);
+  //bool isLegal[10];
+  //getPossibleValue(sudoku, isLegal, firstZero/9, firstZero%9, (firstZero/9)/3, (firstZero%9)/3);
   
-# pragma omp parallel
-  {
-# pragma omp     for reduction (+ : numSolution ) firstprivate ( sudoku )
+  Board b(sudoku, firstZero);
+  std::stack<Board> s;
+  while(!s.empty())
+    s.pop();
+  s.push(b);
+
+  
+  while(!s.empty()){
+    Board nowb = s.top();
+    //fprintf(stderr, "nown = %d\n", nowb.nowi);
+    //nowb.print();
+    s.pop();
+    if(nowb.nowi == 81){
+      numSolution += 1;
+      continue;
+    }
+    bool isLegal[10];
+    getPossibleValue(nowb.sudoku, isLegal, nowb.nowi/9, nowb.nowi%9, (nowb.nowi/9)/3, (nowb.nowi%9)/3);
+    int nexti = nextn[nowb.nowi/9][nowb.nowi%9];
+
+# pragma omp parallel for firstprivate(nexti, isLegal)
     for (int i = 1; i <= 9; i++) {
       if(isLegal[i]){
-	sudoku [ firstZero / 9][ firstZero % 9] = i;
-	numSolution += placeNumber ( nextn[firstZero/9][firstZero%9] , sudoku );
+	//fprintf(stderr, "push next n =  %d, nowi = %d\n", nextn[nowb.nowi/9][nowb.nowi%9], nowb.nowi);
+	Board nextb = Board(nowb.sudoku, nexti, nowb.nowi/9, nowb.nowi%9, i);
+	#pragma omp critical
+	s.push(nextb);
       }
-    }
+
   }
+}
+
   printf ("%d\n", numSolution );
   return 0;
 }
