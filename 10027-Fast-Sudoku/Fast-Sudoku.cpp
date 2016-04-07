@@ -1,7 +1,6 @@
 #include <cstdio>
 #include <omp.h>
 
-
 int nextn[9][9];
 
 inline void getPossibleValue(int sudoku[9][9], bool isLegal[], int row, int col, int blockRow, int blockCol){
@@ -31,8 +30,6 @@ int placeNumber (int n, int sudoku [9][9]){
   int col = n % 9;
   int blockRow = row / 3;
   int blockCol = col / 3;
-  if ( sudoku [ row ][ col ] != 0)
-    return ( placeNumber (n + 1, sudoku ));
 
   int numSolution = 0;
   bool isLegal[10];
@@ -70,11 +67,14 @@ int main ( void ){
   bool isLegal[10];
   getPossibleValue(sudoku, isLegal, firstZero/9, firstZero%9, (firstZero/9)/3, (firstZero%9)/3);
   
-# pragma omp parallel for reduction (+ : numSolution ) firstprivate ( sudoku )
-  for (int i = 1; i <= 9; i++) {
-    if(isLegal[i]){
-      sudoku [ firstZero / 9][ firstZero % 9] = i;
-      numSolution += placeNumber ( nextn[firstZero/9][firstZero%9] , sudoku );
+# pragma omp parallel
+  {
+# pragma omp     for reduction (+ : numSolution ) firstprivate ( sudoku )
+    for (int i = 1; i <= 9; i++) {
+      if(isLegal[i]){
+	sudoku [ firstZero / 9][ firstZero % 9] = i;
+	numSolution += placeNumber ( nextn[firstZero/9][firstZero%9] , sudoku );
+      }
     }
   }
   printf ("%d\n", numSolution );
