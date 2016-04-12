@@ -3,10 +3,12 @@
 #include <vector>
 #include <cstdlib>
 #include <unistd.h>
+#define MAX_TASK_NUM 15
 
 int main(int argc, char *argv[]){
-  std::vector<int> workPool;
-  workPool.clear();
+  int workPool[MAX_TASK_NUM];
+  int head = 0;
+  int size = 0;
   
   int p = atoi(argv[1]);
   int c = atoi(argv[2]);
@@ -17,15 +19,20 @@ int main(int argc, char *argv[]){
   {
 #pragma omp section
     {
-      fprintf(stderr, "producer\n");
       while(1){
-	if(workPool.size() < 15 && n > 0){
-#pragma omp critical
-	  n--;	
+	if(size < MAX_TASK_NUM && n > 0){
 	  int sleepTime = rand()%10+1;
 #pragma omp critical
-	  workPool.push_back(sleepTime);
-	  fprintf(stderr, "add task %d\n", sleepTime);
+	  {
+	  fprintf(stderr, "add task %d\n", sleepTime);	  	  	    
+	  n--;
+	  workPool[(head+size)%MAX_TASK_NUM] = sleepTime;	  	  
+	  size++;
+	  for(int j = 0; j < size; j++){
+	    fprintf(stderr, "%d ", workPool[(head+j)%MAX_TASK_NUM]);
+	  }
+	  fprintf(stderr, "\n");
+	  }
 	} else {
 	  sleep(1);
 	}
@@ -33,17 +40,22 @@ int main(int argc, char *argv[]){
     }
 #pragma omp section
     {
-      fprintf(stderr, "consumer\n");
+
       while(1){
-	if(workPool.size() > 5){
+	if(size > 5){
 	  int i;
 #pragma omp critical
 	  {
-	    i = workPool[0];
-	    workPool.erase(workPool.begin());
+	    i = workPool[head];
+	  fprintf(stderr, "sleep %d\n", i);	    	    	    
+	    head++;
+	    size--;
+	    for(int j = 0; j < size; j++){
+	      fprintf(stderr, "%d ", workPool[(head+j)%MAX_TASK_NUM]);
+	    }
+	    fprintf(stderr, "\n");
 	  }
-	  fprintf(stderr, "sleep %d\n", i);
-	  sleep(float(i)/10);
+	  sleep(float(i)/3);
 	} else {
 	  sleep(1);
 	}
