@@ -3,12 +3,13 @@
 #include <cassert>
 #include <stdint.h>
 #include <cstdlib>
-#define INF 2147483647
+#include <climits>
 
 // generate matrix, row-major
 #define UINT uint32_t
 UINT* rand_gen(UINT seed, int R, int C) {
-  UINT *m = (UINT *) malloc(sizeof(UINT) * R*C);
+  UINT* m;
+    m = (UINT *) malloc(sizeof(UINT) * R*C);
   UINT x = 2, n = R*C;
   for (int i = 0; i < R; i++) {
     for (int j = 0; j < C; j++) {
@@ -17,8 +18,9 @@ UINT* rand_gen(UINT seed, int R, int C) {
     }
   }
   return m;
+
 }
-UINT hash(UINT x) {
+inline UINT hash(UINT x) {
   return (x * 2654435761LU);
 }
 // output
@@ -32,7 +34,6 @@ UINT signature(UINT *A, int r, int c) {
 }
 
 int N;
-int dp[101][101];
 int cutpoint[101][101];
 int matrixSize[105];
 int matrixSeed[105];
@@ -41,29 +42,39 @@ int min(int a, int b){
   return (a<b)?a:b;
 }
 
-int connectCost(int start, int mid, int end){//only used in begin and mid, end in the cut point
+inline int connectCost(int start, int mid, int end){//only used in begin and mid, end in the cut point
+  //  if(start>=mid || mid>=end || start>=end)
+  //return 0;
   return matrixSize[start] * matrixSize[mid+1] * matrixSize[end+1];
 }
-int connectCost(int start, int end){//only used in begin and mid, end in the cut point
+inline int connectCost(int start, int end){//only used in begin and mid, end in the cut point
   return matrixSize[start] * matrixSize[end] * matrixSize[end+1];
 }
-int connect3Cost(int start, int end){//only used in begin and mid, end in the cut point
-  return min(matrixSize[start] * matrixSize[start+1] * matrixSize[start+2] + matrixSize[start] * matrixSize[start+2] * matrixSize[start+3], matrixSize[start+1] * matrixSize[start+2] * matrixSize[start+3] + matrixSize[start] * matrixSize[start+1] * matrixSize[start+3]);
+inline int connect3Cost(int start, int end){//only used in begin and mid, end in the cut point
+  int c1 =matrixSize[start] * matrixSize[start+1] * matrixSize[start+2] + matrixSize[start] * matrixSize[start+2] * matrixSize[start+3];
+  int c2 = matrixSize[start+1] * matrixSize[start+2] * matrixSize[start+3] + matrixSize[start] * matrixSize[start+1] * matrixSize[start+3];
+  if(c1 < c2){
+    cutpoint[start][end] = -1;
+    return c1;
+  } else {
+    cutpoint[start][end] = start;//not sure
+    return c2;
+  }
 }
 
-int getCost(int start, int end){
+long long getCost(int start, int end){
   if(start >= end)
     return 0;
   else if(start+1 == end)
     return connectCost(start, end);
   else if(start+2 == end)
     return connect3Cost(start, end);
-  int nowcost = INF;
+  long long nowcost = LLONG_MAX;
   for(int i = start+1; i < end; i++){//check
     //fprintf(stderr, "N=%d, start= %d, end=%d\n", N, start, end);
-    int newcost = getCost(start, i) + getCost(i+1, end) + connectCost(start, i, end);
+    long long newcost = getCost(start, i) + getCost(i+1, end) + connectCost(start, i, end);
     //if(start == 0 && end == N-1)
-      //fprintf(stderr, "cut point = %d, get cost = %d\n", i, newcost);
+    //fprintf(stderr, "cut point = %d, get cost = %d\n", i, newcost);
     if(nowcost > newcost){
       nowcost = newcost;
       cutpoint[start][end] = i;
@@ -73,18 +84,18 @@ int getCost(int start, int end){
   return nowcost;
 }
 
-UINT* multiply(UINT* A, UINT* B, UINT* C, int a, int b, int c){//a, b, c is size of matrixA, B
-  C = (UINT*) malloc(sizeof(UINT)*a*c);
-  //#pragma omp parallel for  
-  for (int i = 0; i < b; i++) {
-    for (int j = 0; j < a; j++) {
-      UINT sum = 0;    // overflow, let it go.//OR UNSINGED LONG?
-      for (int k = 0; k < c; k++){
-	C[j*a+k] += A[j*a+i] * B[i*b+k];
-	//printf("now C[%d]=%zu\n", j*a+k, C[j*a+k]);
+inline UINT* multiply(UINT* A, UINT* B, UINT* C, int a, int b, int c){//a, b, c is size of matrixA, B
+  C = (UINT*)malloc(sizeof(UINT)*a*c);
+  //fprintf(stderr, "for size %d, %d, %d\n", a, b, c);
+#pragma omp parallel for collapse(2)
+  for (int i = 0; i < a; i++)
+    for (int j = 0; j < c; j++){
+      int ci = i*c+j;
+      C[ci] = 0;
+      for (int k = 0; k < b; k++){
+	C[ci] += A[i*b+k] * B[k*c+j];
       }
     }
-  }
   return C;
 }
 
@@ -113,26 +124,25 @@ UINT* calculateSequenceMatrixs(int start, int end){
       }
       printf("\n");
       }*/
-    
     //free(startMatrix);
     startMatrix = outputMatrix;
   }
-
   return startMatrix;
 }
 
 UINT* calculateMatrixs(int start, int end){
   //find cut point, and start, mid, end
   int mid = cutpoint[start][end];
+  UINT* outputm;
   if(mid == -1){//no cut point, calcuate as normal
-    calculateSequenceMatrixs(start, end);
+    outputm = calculateSequenceMatrixs(start, end);
   } else {
-    UINT* m1 = calculateMatrixs(start, mid);//BUG: does mid = orignal cutpiont?
-    UINT* m2 = calculateMatrixs(mid+1, end);
-    UINT* outputm;
+    UINT *m1, *m2;
+    m1 = calculateMatrixs(start, mid);
+    m2 = calculateMatrixs(mid+1, end);
     outputm = multiply(m1, m2, outputm, matrixSize[start], matrixSize[mid+1], matrixSize[end+1]);
-    return outputm;
   }
+  return outputm;
 }
 
 int main(){
@@ -146,21 +156,21 @@ int main(){
       scanf("%d", &matrixSeed[i]);
 
     int start = 0, end = N-1;
-    int cost = getCost(start, end);
-    //printf("min cost: %d\n", cost);
-    //printf("cut point = %d\n", cutpoint[start][end]);
+    long long cost = getCost(start, end);
+    printf("min cost: %lld\n", cost);
+    printf("cut point = %d\n", cutpoint[start][end]);
   
     //start calculating
-    UINT* ans = calculateMatrixs(start, end);
+    UINT* ans;
+    ans = calculateMatrixs(start, end);
+
     /*for(int i = 0; i < matrixSize[start]; i++){
       for(int j = 0; j < matrixSize[end+1]; j++){
 	printf("%zu ", ans[i*matrixSize[start]+j]);
       }
       printf("\n");
-    }
-    
-    printf("final size=%d, %d\n", matrixSize[start], matrixSize[end+1]);*/
-    printf("%zu\n", signature(ans, matrixSize[start], matrixSize[end+1]));
+      }*/
+    printf("%u\n", signature(ans, matrixSize[start], matrixSize[end+1]));
   }
 return 0;
 }
