@@ -103,7 +103,7 @@ long long getCost(int start, int end){
 inline UINT* multiply(UINT* A, UINT* B, UINT* C, int a, int b, int c){//a, b, c is size of matrixA, B
   C = (UINT*)malloc(sizeof(UINT)*a*c);
   //fprintf(stderr, "for size %d, %d, %d\n", a, b, c);
-#pragma omp parallel for collapse(2)
+#pragma omp parallel for collapse(2) schedule(guided)
   for (int i = 0; i < a; i++)
     for (int j = 0; j < c; j++){
       int ci = i*c+j;
@@ -116,7 +116,7 @@ inline UINT* multiply(UINT* A, UINT* B, UINT* C, int a, int b, int c){//a, b, c 
 }
 
 UINT* calculateSequenceMatrixs(int start, int end){
-  UINT* startMatrix = rand_gen(matrixSeed[start], matrixSize[start], matrixSize[start+1]);
+  UINT* startMatrix = rand_gen(matrixSeed[start], matrixSize[start], matrixSize[start+1]);  
   for(int i = start+1; i <= end; i++){
     UINT* middleMatrix = rand_gen(matrixSeed[i], matrixSize[i], matrixSize[i+1]);
     UINT* outputMatrix;
@@ -144,7 +144,9 @@ UINT* calculateMatrixs(int start, int end){
 }
 
 int main(){
+  #ifdef OPENMP
   omp_set_num_threads(20);
+  #endif
   while(scanf("%d", &N) == 1){
     for(int i = 0; i < N; i++)
       for(int j = 0; j < N; j++)
