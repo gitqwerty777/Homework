@@ -18,7 +18,6 @@ UINT* rand_gen(UINT seed, int R, int C) {
     }
   }
   return m;
-
 }
 inline UINT hash(UINT x) {
   return (x * 2654435761LU);
@@ -117,31 +116,13 @@ inline UINT* multiply(UINT* A, UINT* B, UINT* C, int a, int b, int c){//a, b, c 
 }
 
 UINT* calculateSequenceMatrixs(int start, int end){
-  //cprintf("calculate sequence %d~%d\n", start, end);
   UINT* startMatrix = rand_gen(matrixSeed[start], matrixSize[start], matrixSize[start+1]);
-  /*for(int i = 0; i < matrixSize[start]; i++){
-    for(int j = 0; j < matrixSize[start+1]; j++){
-    printf("%zu ", startMatrix[i*matrixSize[start]+j]);
-    }
-    printf("\n");
-    }*/
   for(int i = start+1; i <= end; i++){
     UINT* middleMatrix = rand_gen(matrixSeed[i], matrixSize[i], matrixSize[i+1]);
-    /*for(int t = 0; t < matrixSize[start]; t++){
-      for(int j = 0; j < matrixSize[end+1]; j++){
-      printf("%zu ", middleMatrix[t*matrixSize[start]+j]);
-      }
-      printf("\n");
-      }*/
     UINT* outputMatrix;
     outputMatrix = multiply(startMatrix, middleMatrix, outputMatrix, matrixSize[start], matrixSize[i], matrixSize[i+1]);
-    /*for(int t = 0; t < matrixSize[start]; t++){
-      for(int j = 0; j < matrixSize[i+1]; j++){
-      printf("%zu ", outputMatrix[t*matrixSize[start]+j]);
-      }
-      printf("\n");
-      }*/
     free(startMatrix);
+    free(middleMatrix);    
     startMatrix = outputMatrix;
   }
   return startMatrix;
@@ -163,9 +144,7 @@ UINT* calculateMatrixs(int start, int end){
 }
 
 int main(){
-#ifdef OPENMP
   omp_set_num_threads(20);
-#endif
   while(scanf("%d", &N) == 1){
     for(int i = 0; i < N; i++)
       for(int j = 0; j < N; j++)
