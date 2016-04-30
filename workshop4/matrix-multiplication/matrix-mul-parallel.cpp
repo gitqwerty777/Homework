@@ -34,6 +34,7 @@ UINT signature(UINT *A, int r, int c) {
 }
 
 int N;
+long long minCost[101][101];
 int cutpoint[101][101];
 int matrixSize[105];
 int matrixSeed[105];
@@ -52,9 +53,10 @@ inline int connectCost(int start, int end){//only used in begin and mid, end in 
 }
 inline int connect3Cost(int start, int end){//only used in begin and mid, end in the cut point
   int c1 =matrixSize[start] * matrixSize[start+1] * matrixSize[start+2] + matrixSize[start] * matrixSize[start+2] * matrixSize[start+3];
+  //fprintf(stderr, "cut point = %d, get cost = %d\n", -1, c1);        
   int c2 = matrixSize[start+1] * matrixSize[start+2] * matrixSize[start+3] + matrixSize[start] * matrixSize[start+1] * matrixSize[start+3];
-  if(c1 < c2){
-    cutpoint[start][end] = -1;
+  //fprintf(stderr, "cut point = %d, get cost = %d\n", start, c2);            
+  if(c1 <= c2){
     return c1;
   } else {
     cutpoint[start][end] = start;//not sure
@@ -63,25 +65,24 @@ inline int connect3Cost(int start, int end){//only used in begin and mid, end in
 }
 
 long long getCost(int start, int end){
-  if(start >= end)
-    return 0;
-  else if(start+1 == end)
-    return connectCost(start, end);
-  else if(start+2 == end)
-    return connect3Cost(start, end);
-  long long nowcost = LLONG_MAX;
-  for(int i = start+1; i < end; i++){//check
-    //fprintf(stderr, "N=%d, start= %d, end=%d\n", N, start, end);
-    long long newcost = getCost(start, i) + getCost(i+1, end) + connectCost(start, i, end);
-    //if(start == 0 && end == N-1)
-    //fprintf(stderr, "cut point = %d, get cost = %d\n", i, newcost);
-    if(nowcost > newcost){
-      nowcost = newcost;
-      cutpoint[start][end] = i;
+  for(int i = 0; i < N; i++){
+    for(int j = i+1; j < N; j++){
+      #pragma omp parallel for
+      for(int k = i+1; k < j; k++){//iterate all mincost possibilities
+	int newcost = minCost[i][k]+minCost[k+1][j]+connectCost(i, k, j);
+	if (minCost[i][j] > newcost){
+#pragma omp critical
+	  {
+	    if (minCost[i][j] > newcost){
+	      minCost[i][j] = newcost;
+	      cutpoint[i][j] = k;
+	    }
+	  }
+	}
+      }
     }
   }
-  //fprintf(stderr, "start = %d, end = %d, nowcost = %d\n", start, end, nowcost);
-  return nowcost;
+  return minCost[start][end];
 }
 
 inline UINT* multiply(UINT* A, UINT* B, UINT* C, int a, int b, int c){//a, b, c is size of matrixA, B
@@ -124,7 +125,7 @@ UINT* calculateSequenceMatrixs(int start, int end){
       }
       printf("\n");
       }*/
-    //free(startMatrix);
+    free(startMatrix);
     startMatrix = outputMatrix;
   }
   return startMatrix;
@@ -146,10 +147,14 @@ UINT* calculateMatrixs(int start, int end){
 }
 
 int main(){
+  omp_set_num_threads(20);
   while(scanf("%d", &N) == 1){
     for(int i = 0; i < N; i++)
       for(int j = 0; j < N; j++)
 	cutpoint[i][j] = -1;
+    for(int i = 0; i < N; i++)
+      for(int j = 0; j < N; j++)
+	minCost[i][j] = 0;    
     for(int i = 0; i < N+1; i++)
       scanf("%d", &matrixSize[i]);
     for(int i = 0; i < N; i++)
@@ -157,8 +162,8 @@ int main(){
 
     int start = 0, end = N-1;
     long long cost = getCost(start, end);
-    printf("min cost: %lld\n", cost);
-    printf("cut point = %d\n", cutpoint[start][end]);
+    //fprintf(stderr, "min cost: %lld\n", cost);
+    //fprintf(stderr, "cut point = %d\n", cutpoint[start][end]);
   
     //start calculating
     UINT* ans;
