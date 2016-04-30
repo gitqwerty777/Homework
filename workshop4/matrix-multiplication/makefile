@@ -1,12 +1,14 @@
-main: parallel
+main: parallel sequential
 
 test:
-	./matrix-mul-parallel <input1
+	time ./matrix-mul-sequential <input1
+	time ./matrix-mul-parallel <input1
 test2:
-	./matrix-mul-parallel <input2
+	time ./matrix-mul-parallel <input2
+	time ./matrix-mul-sequential <input2
 
 sequential:
-	g++ matrix-mul-sequential.cpp -O2 -o ./matrix-mul-sequential
+	g++ matrix-mul-parallel.cpp -O2 -o ./matrix-mul-sequential 
 
 parallel:
 	g++ -g matrix-mul-parallel.cpp -O2 -o ./matrix-mul-parallel -fopenmp 
