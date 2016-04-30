@@ -9,7 +9,7 @@
 #define UINT uint32_t
 UINT* rand_gen(UINT seed, int R, int C) {
   UINT* m;
-    m = (UINT *) malloc(sizeof(UINT) * R*C);
+  m = (UINT *) malloc(sizeof(UINT) * R*C);
   UINT x = 2, n = R*C;
   for (int i = 0; i < R; i++) {
     for (int j = 0; j < C; j++) {
@@ -64,18 +64,34 @@ inline int connect3Cost(int start, int end){//only used in begin and mid, end in
   }
 }
 
+long long calculateCost(int start, int end){
+  long long cost = 0;
+  for(int i = start+1; i <= end; i++){
+    cost += matrixSize[start]*matrixSize[i]*matrixSize[i+1];
+  }
+  return cost;
+}
+
 long long getCost(int start, int end){
   for(int i = 1; i < N; i++){//interval
     for(int j = 0; j+i < N; j++){//want cutpoint[j][j+i]
-      #pragma omp parallel for
-      for(int k = j+1; k < j+i; k++){//iterate all mincost possibilities
-	int newcost = minCost[j][k]+minCost[k+1][j+i]+connectCost(j, k, j+i);
-	if (minCost[j][j+i] > newcost){
+      minCost[j][j+i] = calculateCost(j, j+i);
+      if(i == 1)
+	minCost[j][j+i] = connectCost(j, j+1);
+      if(i == 2)
+	minCost[j][j+i] = connect3Cost(j, j+i);
+      else{
+#pragma omp parallel for
+	for(int k = j+1; k < j+i; k++){//iterate all mincost possibilities
+	  long long newcost = minCost[j][k]+minCost[k+1][j+i]+connectCost(j, k, j+i);
+	  //fprintf(stderr, "(%d, %d) try breakpoint %d, cost = %lld\n", j, j+1, k, newcost);
+	  if (minCost[j][j+i] > newcost){
 #pragma omp critical
-	  {
-	    if (minCost[j][j+i] > newcost){
-	      minCost[j][j+i] = newcost;
-	      cutpoint[j][j+i] = k;
+	    {
+	      if (minCost[j][j+i] > newcost){
+		minCost[j][j+i] = newcost;
+		cutpoint[j][j+i] = k;
+	      }
 	    }
 	  }
 	}
@@ -105,7 +121,7 @@ UINT* calculateSequenceMatrixs(int start, int end){
   UINT* startMatrix = rand_gen(matrixSeed[start], matrixSize[start], matrixSize[start+1]);
   /*for(int i = 0; i < matrixSize[start]; i++){
     for(int j = 0; j < matrixSize[start+1]; j++){
-      printf("%zu ", startMatrix[i*matrixSize[start]+j]);
+    printf("%zu ", startMatrix[i*matrixSize[start]+j]);
     }
     printf("\n");
     }*/
@@ -113,7 +129,7 @@ UINT* calculateSequenceMatrixs(int start, int end){
     UINT* middleMatrix = rand_gen(matrixSeed[i], matrixSize[i], matrixSize[i+1]);
     /*for(int t = 0; t < matrixSize[start]; t++){
       for(int j = 0; j < matrixSize[end+1]; j++){
-	printf("%zu ", middleMatrix[t*matrixSize[start]+j]);
+      printf("%zu ", middleMatrix[t*matrixSize[start]+j]);
       }
       printf("\n");
       }*/
@@ -121,7 +137,7 @@ UINT* calculateSequenceMatrixs(int start, int end){
     outputMatrix = multiply(startMatrix, middleMatrix, outputMatrix, matrixSize[start], matrixSize[i], matrixSize[i+1]);
     /*for(int t = 0; t < matrixSize[start]; t++){
       for(int j = 0; j < matrixSize[i+1]; j++){
-	printf("%zu ", outputMatrix[t*matrixSize[start]+j]);
+      printf("%zu ", outputMatrix[t*matrixSize[start]+j]);
       }
       printf("\n");
       }*/
@@ -147,9 +163,9 @@ UINT* calculateMatrixs(int start, int end){
 }
 
 int main(){
-  #ifdef OPENMP
+#ifdef OPENMP
   omp_set_num_threads(20);
-  #endif
+#endif
   while(scanf("%d", &N) == 1){
     for(int i = 0; i < N; i++)
       for(int j = 0; j < N; j++)
@@ -164,8 +180,8 @@ int main(){
 
     int start = 0, end = N-1;
     long long cost = getCost(start, end);
-    fprintf(stderr, "min cost: %lld\n", cost);
-    fprintf(stderr, "cut point = %d\n", cutpoint[start][end]);
+    //fprintf(stderr, "min cost: %lld\n", cost);
+    //fprintf(stderr, "cut point = %d\n", cutpoint[start][end]);
   
     //start calculating
     UINT* ans;
@@ -173,12 +189,12 @@ int main(){
 
     /*for(int i = 0; i < matrixSize[start]; i++){
       for(int j = 0; j < matrixSize[end+1]; j++){
-	printf("%zu ", ans[i*matrixSize[start]+j]);
+      printf("%zu ", ans[i*matrixSize[start]+j]);
       }
       printf("\n");
       }*/
     printf("%u\n", signature(ans, matrixSize[start], matrixSize[end+1]));
   }
-return 0;
+  return 0;
 }
  
