@@ -65,17 +65,17 @@ inline int connect3Cost(int start, int end){//only used in begin and mid, end in
 }
 
 long long getCost(int start, int end){
-  for(int i = 0; i < N; i++){
-    for(int j = i+1; j < N; j++){
+  for(int i = 1; i < N; i++){//interval
+    for(int j = 0; j+i < N; j++){//want cutpoint[j][j+i]
       #pragma omp parallel for
-      for(int k = i+1; k < j; k++){//iterate all mincost possibilities
-	int newcost = minCost[i][k]+minCost[k+1][j]+connectCost(i, k, j);
-	if (minCost[i][j] > newcost){
+      for(int k = j+1; k < j+i; k++){//iterate all mincost possibilities
+	int newcost = minCost[j][k]+minCost[k+1][j+i]+connectCost(j, k, j+i);
+	if (minCost[j][j+i] > newcost){
 #pragma omp critical
 	  {
-	    if (minCost[i][j] > newcost){
-	      minCost[i][j] = newcost;
-	      cutpoint[i][j] = k;
+	    if (minCost[j][j+i] > newcost){
+	      minCost[j][j+i] = newcost;
+	      cutpoint[j][j+i] = k;
 	    }
 	  }
 	}
@@ -147,7 +147,9 @@ UINT* calculateMatrixs(int start, int end){
 }
 
 int main(){
+  #ifdef OPENMP
   omp_set_num_threads(20);
+  #endif
   while(scanf("%d", &N) == 1){
     for(int i = 0; i < N; i++)
       for(int j = 0; j < N; j++)
@@ -162,8 +164,8 @@ int main(){
 
     int start = 0, end = N-1;
     long long cost = getCost(start, end);
-    //fprintf(stderr, "min cost: %lld\n", cost);
-    //fprintf(stderr, "cut point = %d\n", cutpoint[start][end]);
+    fprintf(stderr, "min cost: %lld\n", cost);
+    fprintf(stderr, "cut point = %d\n", cutpoint[start][end]);
   
     //start calculating
     UINT* ans;
@@ -179,5 +181,4 @@ int main(){
   }
 return 0;
 }
-
  
