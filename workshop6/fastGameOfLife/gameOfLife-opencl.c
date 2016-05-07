@@ -8,7 +8,6 @@
 #define MAXK 10240
 #define MAXN 2003
 
-int N;
 int m, n;
 cl_mem countBuffer, arrayBuffer;
 cl_uint arr[MAXN*MAXN];
@@ -101,15 +100,23 @@ void executeOpenCL(){
   /* setarg */
   status = clSetKernelArg(kernel, 0, sizeof(int), (void*)&n);
   checkSuccess();
-  status = clSetKernelArg(kernel, 1, sizeof(int), (void*)&n);
-  checkSuccess();  
-  status = clSetKernelArg(kernel, 2, sizeof(cl_mem), (void*)&countBuffer);
+  int t = 1;
+  int r, c;
+  for(r = 1; r < n; r++)
+    for(c = 1; c < n; c++)
+      counts[((t+1)%2)*MAXN*MAXN+r*MAXN+c] = counts[(t%2)*MAXN*MAXN+r*MAXN+c];
+  status = clSetKernelArg(kernel, 1, sizeof(int), (void*)&t);
+  checkSuccess();
+  int maxn = MAXN;
+  status = clSetKernelArg(kernel, 2, sizeof(int), (void*)&maxn);
   checkSuccess();
   status = clSetKernelArg(kernel, 3, sizeof(cl_mem), (void*)&arrayBuffer);
+  checkSuccess();  
+  status = clSetKernelArg(kernel, 4, sizeof(cl_mem), (void*)&countBuffer);
   checkSuccess();
   writeLog("Set kernel arguments completes\n");
   /* setshape */
-  size_t globalThreads[] = {(size_t)N};
+  size_t globalThreads[] = {(size_t)n};
   size_t localThreads[] = {1};
 
   //for(int t = 0; t < m; t++){
@@ -121,8 +128,11 @@ void executeOpenCL(){
   //  }
   writeLog("Specify the shape of the domain completes.\n");
   /* getcvector */
-  clEnqueueReadBuffer(commandQueue, countBuffer, CL_TRUE, 
-		      0, MAXN*MAXN*2*sizeof(cl_uint), counts, 
+  clEnqueueReadBuffer(commandQueue, arrayBuffer, CL_TRUE, 
+		      0, MAXN*MAXN*sizeof(cl_uint), arr, 
+		      0, NULL, NULL);
+ clEnqueueReadBuffer(commandQueue, countBuffer, CL_TRUE, 
+		      0, 2*MAXN*MAXN*sizeof(cl_uint), counts, 
 		      0, NULL, NULL);
   writeLog("Kernel execution completes.\n");
 }
@@ -133,7 +143,7 @@ int main() {
   for(int i = 1; i <= n; i++){
     scanf("%s", s);
     for(int j = 1;j <= n; j++)
-      arr[i][j] = s[j-1]-'0';
+      arr[i*MAXN+j] = s[j-1]-'0';
   }
   omp_set_num_threads(20);
 
@@ -142,36 +152,64 @@ int main() {
   for(int i = 1; i <= n; i++){
     for(int j = 1; j <= n; j++){
       int count = 0;
-      if(arr[i-1][j])
+      if(arr[(i-1)*MAXN+j])
 	count++;
-      if(arr[i-1][j+1])
+      if(arr[(i-1)*MAXN+j+1])
 	count++;
-      if(arr[i-1][j-1])
+      if(arr[(i-1)*MAXN+j-1])
 	count++;    
-      if(arr[i][j-1])
+      if(arr[i*MAXN+j-1])
 	count++;
-      if(arr[i][j+1])
+      if(arr[i*MAXN+j+1])
 	count++;
-      if(arr[i+1][j+1])
+      if(arr[(i+1)*MAXN+j+1])
 	count++;
-      if(arr[i+1][j])
+      if(arr[(i+1)*MAXN+j])
 	count++;    
-      if(arr[i+1][j-1])
+      if(arr[(i+1)*MAXN+j-1])
 	count++;
-      counts[1][i][j] = count;
+      counts[1*MAXN*MAXN+i*MAXN+j] = count;
     }
+  }
+
+  int tt;
+  for(tt = 0; tt < 2; tt++){
+    printf("counts%d: \n", tt);
+    for(int j = 1; j <= n; j++){
+      for(int k = 1; k <= n; k++)
+	printf("%d ", counts[tt*MAXN*MAXN+j*MAXN+k]);
+      printf("\n");
+    }
+    printf("\n");
+  }
+  
+  for(int i = 1; i <= n; i++){
+    for(int j = 1; j <= n; j++){
+      putchar((arr[i*MAXN+j]==0)?'0':'1');
+    }
+    puts("");
   }
   
   initOpenCL();
   executeOpenCL();
 
-  for(int i = 0; i < n; i++){
-    for(int j = 0; j < n; j++){
-      putchar((arr[i][j]==0)?'0':'1');
+  for(int i = 1; i <= n; i++){
+    for(int j = 1; j <= n; j++){
+      putchar((arr[i*MAXN+j]==0)?'0':'1');
     }
     puts("");
   }
-  
+
+  for(tt = 0; tt < 2; tt++){
+    printf("counts%d: \n", tt);
+    for(int j = 1; j <= n; j++){
+      for(int k = 1; k <= n; k++)
+	printf("%d ", counts[tt*MAXN*MAXN+j*MAXN+k]);
+      printf("\n");
+    }
+    printf("\n");
+  }
+
   clReleaseContext(context);
   clReleaseCommandQueue(commandQueue);
   clReleaseProgram(program);
