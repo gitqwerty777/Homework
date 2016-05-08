@@ -5,6 +5,7 @@
 #include <stdint.h>
 #include <CL/cl.h>
 #define MAXGPU 10
+#define BSIDE 16
 #define MAXK 10240
 #define MAXN 2003
 
@@ -101,7 +102,7 @@ void executeOpenCL(){
 
   /* setshape */
   size_t globalThreads[] = {(size_t)n, (size_t)n};
-  size_t localThreads[] = {1, 1};
+  size_t localThreads[] = {(size_t)BSIDE, (size_t)BSIDE};
 
   for(int t = 1; t <= m; t++){
     //int t=0;
