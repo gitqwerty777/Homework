@@ -10,7 +10,7 @@
 
 int m, n;
 cl_mem countBuffer, arrayBuffer;
-cl_uint arr[MAXN*MAXN];
+cl_uint arr[2*MAXN*MAXN];
 cl_uint counts[2*MAXN*MAXN] = {0};
 //TODO: array with more dimension
 //TODO: thread with more dimension
@@ -88,13 +88,13 @@ void initOpenCL(){
 
 void executeOpenCL(){
   /* createbuffer */
-  countBuffer = clCreateBuffer(context, 
-			       CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR,
-			       2*MAXN*MAXN* sizeof(cl_uint), counts, &status);
-  checkSuccess();
+  //countBuffer = clCreateBuffer(context, 
+  //			       CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR,
+  //			       2*MAXN*MAXN* sizeof(cl_uint), counts, &status);
+  //checkSuccess();
   arrayBuffer = clCreateBuffer(context, 
 			       CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR,
-			       MAXN*MAXN * sizeof(cl_uint), arr, &status);
+			       2*MAXN*MAXN * sizeof(cl_uint), arr, &status);
   checkSuccess();
   writeLog("Build buffers completes\n");
   /* setarg */
@@ -105,58 +105,45 @@ void executeOpenCL(){
   size_t globalThreads[] = {(size_t)n, (size_t)n};
   size_t localThreads[] = {1, 1};
 
-  for(int t = 1; t <= m; t++){
-    for(int r = 1; r <= n; r++)
-      for(int c = 1; c <= n; c++)
-	counts[((t+1)%2)*MAXN*MAXN+r*MAXN+c] = counts[(t%2)*MAXN*MAXN+r*MAXN+c];
-    
+  //for(int t = 1; t <= m; t++){
+  int t=0;
     int maxn = MAXN;
-
-    #ifdef DEBUG
-    for(int tt = 0; tt < 2; tt++){
-      printf("counts %d at turn %d: \n", tt, t);
-      for(int j = 1; j <= n; j++){
-	for(int k = 1; k <= n; k++)
-	  printf("%d ", counts[tt*MAXN*MAXN+j*MAXN+k]);
-	printf("\n");
-      }
-      printf("\n");
-    }
-    #endif
       
     status = clSetKernelArg(kernel, 0, sizeof(int), (void*)&n);
     checkSuccess();
-    status = clSetKernelArg(kernel, 1, sizeof(int), (void*)&t);
+    status = clSetKernelArg(kernel, 1, sizeof(int), (void*)&m);
     checkSuccess();
     status = clSetKernelArg(kernel, 2, sizeof(int), (void*)&maxn);
     checkSuccess();
     status = clSetKernelArg(kernel, 3, sizeof(cl_mem), (void*)&arrayBuffer);
     checkSuccess();  
-    status = clSetKernelArg(kernel, 4, sizeof(cl_mem), (void*)&countBuffer);
-    checkSuccess();
+    //status = clSetKernelArg(kernel, 4, sizeof(cl_mem), (void*)&countBuffer);
+    //checkSuccess();
 
     status = clEnqueueNDRangeKernel(commandQueue, kernel, 2, NULL, 
 				    globalThreads, localThreads, 
 				    0, NULL, NULL);
     checkSuccess();
+    clFinish(commandQueue);
+    
     clEnqueueReadBuffer(commandQueue, arrayBuffer, CL_TRUE, 
-			0, MAXN*MAXN*sizeof(cl_uint), arr, 
-			0, NULL, NULL);
-    clEnqueueReadBuffer(commandQueue, countBuffer, CL_TRUE, 
-			0, 2*MAXN*MAXN*sizeof(cl_uint), counts, 
-			0, NULL, NULL);
+    0, 2*MAXN*MAXN*sizeof(cl_uint), arr, 
+    0, NULL, NULL);
+    //    clEnqueueReadBuffer(commandQueue, countBuffer, CL_TRUE, 
+    //    			0, 2*MAXN*MAXN*sizeof(cl_uint), counts, 
+    //    			0, NULL, NULL);
 
     #ifdef DEBUG
     printf("arr at turn %d\n", t);
   for(int i = 1; i <= n; i++){
     for(int j = 1; j <= n; j++){
-      putchar((arr[i*MAXN+j]==0)?'0':'1');
+      putchar((arr[(t%2)*MAXN*MAXN+i*MAXN+j]==0)?'0':'1');
     }
     puts("");
   }
   #endif
     
-  }
+  //}
   writeLog("Specify the shape of the domain completes.\n");
   /* getcvector */
   /*  clEnqueueReadBuffer(commandQueue, arrayBuffer, CL_TRUE, 
@@ -178,47 +165,21 @@ int main() {
   }
   omp_set_num_threads(20);
 
-  //init all the counts of surroundings
-#pragma omp parallel for collapse(2)
-  for(int i = 1; i <= n; i++){
-    for(int j = 1; j <= n; j++){
-      int count = 0;
-      if(arr[(i-1)*MAXN+j])
-	count++;
-      if(arr[(i-1)*MAXN+j+1])
-	count++;
-      if(arr[(i-1)*MAXN+j-1])
-	count++;    
-      if(arr[i*MAXN+j-1])
-	count++;
-      if(arr[i*MAXN+j+1])
-	count++;
-      if(arr[(i+1)*MAXN+j+1])
-	count++;
-      if(arr[(i+1)*MAXN+j])
-	count++;    
-      if(arr[(i+1)*MAXN+j-1])
-	count++;
-      counts[1*MAXN*MAXN+i*MAXN+j] = count;
-    }
-  }
-
   initOpenCL();
   executeOpenCL();
-
+  //TODO: change int to char
   for(int i = 1; i <= n; i++){
     for(int j = 1; j <= n; j++){
-      putchar((arr[i*MAXN+j]==0)?'0':'1');
+      putchar((arr[((n)%2)*MAXN*MAXN+i*MAXN+j]==0)?'0':'1');
     }
     puts("");
   }
-
 
   clReleaseContext(context);
   clReleaseCommandQueue(commandQueue);
   clReleaseProgram(program);
   clReleaseKernel(kernel);
-  clReleaseMemObject(countBuffer);	
+  //clReleaseMemObject(countBuffer);	
   clReleaseMemObject(arrayBuffer);
   
   return 0;
