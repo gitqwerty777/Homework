@@ -98,8 +98,6 @@ void executeOpenCL(){
   checkSuccess();
   writeLog("Build buffers completes\n");
   /* setarg */
-  
-
 
   /* setshape */
   size_t globalThreads[] = {(size_t)n, (size_t)n};
@@ -113,9 +111,7 @@ void executeOpenCL(){
     checkSuccess();
     status = clSetKernelArg(kernel, 1, sizeof(int), (void*)&t);
     checkSuccess();
-    status = clSetKernelArg(kernel, 2, sizeof(int), (void*)&maxn);
-    checkSuccess();
-    status = clSetKernelArg(kernel, 3, sizeof(cl_mem), (void*)&arrayBuffer);
+    status = clSetKernelArg(kernel, 2, sizeof(cl_mem), (void*)&arrayBuffer);
     checkSuccess();  
     //status = clSetKernelArg(kernel, 4, sizeof(cl_mem), (void*)&countBuffer);
     //checkSuccess();
