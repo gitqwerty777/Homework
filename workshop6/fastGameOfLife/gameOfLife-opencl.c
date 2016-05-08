@@ -105,13 +105,13 @@ void executeOpenCL(){
   size_t globalThreads[] = {(size_t)n, (size_t)n};
   size_t localThreads[] = {1, 1};
 
-  //for(int t = 1; t <= m; t++){
-  int t=0;
+  for(int t = 1; t <= m; t++){
+    //int t=0;
     int maxn = MAXN;
       
     status = clSetKernelArg(kernel, 0, sizeof(int), (void*)&n);
     checkSuccess();
-    status = clSetKernelArg(kernel, 1, sizeof(int), (void*)&m);
+    status = clSetKernelArg(kernel, 1, sizeof(int), (void*)&t);
     checkSuccess();
     status = clSetKernelArg(kernel, 2, sizeof(int), (void*)&maxn);
     checkSuccess();
@@ -143,7 +143,7 @@ void executeOpenCL(){
   }
   #endif
     
-  //}
+  }
   writeLog("Specify the shape of the domain completes.\n");
   /* getcvector */
   /*  clEnqueueReadBuffer(commandQueue, arrayBuffer, CL_TRUE, 
