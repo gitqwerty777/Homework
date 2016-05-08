@@ -13,9 +13,13 @@ test:
 	./main-debug < input1 > tempout
 	less tempout
 
+test2:
+	./main-debug < input2 > tempout
+	less tempout
+
 testans:
-	./main < input1 > tempout
-	diff tempout output1
+	./main < 1.in > tempout
+	diff tempout 1.out
 
 testref:
 	./reference < 1.in > tempout

@@ -98,42 +98,73 @@ void executeOpenCL(){
   checkSuccess();
   writeLog("Build buffers completes\n");
   /* setarg */
-  status = clSetKernelArg(kernel, 0, sizeof(int), (void*)&n);
-  checkSuccess();
-  int t = 1;
-  int r, c;
-  for(r = 1; r < n; r++)
-    for(c = 1; c < n; c++)
-      counts[((t+1)%2)*MAXN*MAXN+r*MAXN+c] = counts[(t%2)*MAXN*MAXN+r*MAXN+c];
-  status = clSetKernelArg(kernel, 1, sizeof(int), (void*)&t);
-  checkSuccess();
-  int maxn = MAXN;
-  status = clSetKernelArg(kernel, 2, sizeof(int), (void*)&maxn);
-  checkSuccess();
-  status = clSetKernelArg(kernel, 3, sizeof(cl_mem), (void*)&arrayBuffer);
-  checkSuccess();  
-  status = clSetKernelArg(kernel, 4, sizeof(cl_mem), (void*)&countBuffer);
-  checkSuccess();
-  writeLog("Set kernel arguments completes\n");
+  
+
+
   /* setshape */
-  size_t globalThreads[] = {(size_t)n};
-  size_t localThreads[] = {1};
+  size_t globalThreads[] = {(size_t)n, (size_t)n};
+  size_t localThreads[] = {1, 1};
 
-  //for(int t = 0; t < m; t++){
+  for(int t = 1; t <= m; t++){
+    for(int r = 1; r <= n; r++)
+      for(int c = 1; c <= n; c++)
+	counts[((t+1)%2)*MAXN*MAXN+r*MAXN+c] = counts[(t%2)*MAXN*MAXN+r*MAXN+c];
+    
+    int maxn = MAXN;
 
-  status = clEnqueueNDRangeKernel(commandQueue, kernel, 1, NULL, 
-				  globalThreads, localThreads, 
-				  0, NULL, NULL);
-  checkSuccess();
-  //  }
+    #ifdef DEBUG
+    for(int tt = 0; tt < 2; tt++){
+      printf("counts %d at turn %d: \n", tt, t);
+      for(int j = 1; j <= n; j++){
+	for(int k = 1; k <= n; k++)
+	  printf("%d ", counts[tt*MAXN*MAXN+j*MAXN+k]);
+	printf("\n");
+      }
+      printf("\n");
+    }
+    #endif
+      
+    status = clSetKernelArg(kernel, 0, sizeof(int), (void*)&n);
+    checkSuccess();
+    status = clSetKernelArg(kernel, 1, sizeof(int), (void*)&t);
+    checkSuccess();
+    status = clSetKernelArg(kernel, 2, sizeof(int), (void*)&maxn);
+    checkSuccess();
+    status = clSetKernelArg(kernel, 3, sizeof(cl_mem), (void*)&arrayBuffer);
+    checkSuccess();  
+    status = clSetKernelArg(kernel, 4, sizeof(cl_mem), (void*)&countBuffer);
+    checkSuccess();
+
+    status = clEnqueueNDRangeKernel(commandQueue, kernel, 2, NULL, 
+				    globalThreads, localThreads, 
+				    0, NULL, NULL);
+    checkSuccess();
+    clEnqueueReadBuffer(commandQueue, arrayBuffer, CL_TRUE, 
+			0, MAXN*MAXN*sizeof(cl_uint), arr, 
+			0, NULL, NULL);
+    clEnqueueReadBuffer(commandQueue, countBuffer, CL_TRUE, 
+			0, 2*MAXN*MAXN*sizeof(cl_uint), counts, 
+			0, NULL, NULL);
+
+    #ifdef DEBUG
+    printf("arr at turn %d\n", t);
+  for(int i = 1; i <= n; i++){
+    for(int j = 1; j <= n; j++){
+      putchar((arr[i*MAXN+j]==0)?'0':'1');
+    }
+    puts("");
+  }
+  #endif
+    
+  }
   writeLog("Specify the shape of the domain completes.\n");
   /* getcvector */
-  clEnqueueReadBuffer(commandQueue, arrayBuffer, CL_TRUE, 
-		      0, MAXN*MAXN*sizeof(cl_uint), arr, 
-		      0, NULL, NULL);
- clEnqueueReadBuffer(commandQueue, countBuffer, CL_TRUE, 
-		      0, 2*MAXN*MAXN*sizeof(cl_uint), counts, 
-		      0, NULL, NULL);
+  /*  clEnqueueReadBuffer(commandQueue, arrayBuffer, CL_TRUE, 
+      0, MAXN*MAXN*sizeof(cl_uint), arr, 
+      0, NULL, NULL);
+      clEnqueueReadBuffer(commandQueue, countBuffer, CL_TRUE, 
+      0, 2*MAXN*MAXN*sizeof(cl_uint), counts, 
+      0, NULL, NULL);*/
   writeLog("Kernel execution completes.\n");
 }
 
@@ -172,24 +203,6 @@ int main() {
     }
   }
 
-  int tt;
-  for(tt = 0; tt < 2; tt++){
-    printf("counts%d: \n", tt);
-    for(int j = 1; j <= n; j++){
-      for(int k = 1; k <= n; k++)
-	printf("%d ", counts[tt*MAXN*MAXN+j*MAXN+k]);
-      printf("\n");
-    }
-    printf("\n");
-  }
-  
-  for(int i = 1; i <= n; i++){
-    for(int j = 1; j <= n; j++){
-      putchar((arr[i*MAXN+j]==0)?'0':'1');
-    }
-    puts("");
-  }
-  
   initOpenCL();
   executeOpenCL();
 
@@ -200,15 +213,6 @@ int main() {
     puts("");
   }
 
-  for(tt = 0; tt < 2; tt++){
-    printf("counts%d: \n", tt);
-    for(int j = 1; j <= n; j++){
-      for(int k = 1; k <= n; k++)
-	printf("%d ", counts[tt*MAXN*MAXN+j*MAXN+k]);
-      printf("\n");
-    }
-    printf("\n");
-  }
 
   clReleaseContext(context);
   clReleaseCommandQueue(commandQueue);

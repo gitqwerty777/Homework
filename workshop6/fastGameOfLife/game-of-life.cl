@@ -2,11 +2,34 @@ __kernel void goNextState(int n, int t, int MAXN, __global unsigned int *arr, __
   int i, j=0, k;
   i = get_global_id(0);
   i++;//1~n
-  //j = get_global_id(1);//TODO:
-  printf("%d, %d, %d, %d\n", t, i, j, counts[0]);
+  j = get_global_id(1);
+  j++;
+  int count = 0;
 
-
-  for(j = 1; j <= n; j++){
+  if(arr[(i-1)*MAXN+j])
+    count++;
+  if(arr[(i-1)*MAXN+j+1])
+    count++;
+  if(arr[(i-1)*MAXN+j-1])
+    count++;    
+  if(arr[i*MAXN+j-1])
+    count++;
+  if(arr[i*MAXN+j+1])
+    count++;
+  if(arr[(i+1)*MAXN+j+1])
+    count++;
+  if(arr[(i+1)*MAXN+j])
+    count++;    
+  if(arr[(i+1)*MAXN+j-1])
+    count++;
+  counts[(t%2)*MAXN*MAXN+i*MAXN+j] = count;
+  
+  if((arr[i*MAXN+j] == 1) && !((counts[(t%2)*MAXN*MAXN+i*MAXN+j] == 2) || (counts[(t%2)*MAXN*MAXN+i*MAXN+j] == 3))){
+    arr[i*MAXN+j] = 0;
+  } else if((arr[i*MAXN+j] == 0) && (counts[(t%2)*MAXN*MAXN+i*MAXN+j] == 3)){
+    arr[i*MAXN+j] = 1;
+  }
+  /*for(j = 1; j <= n; j++){
     //TODO: opencl critical?
     if((arr[i*MAXN+j] == 1) && !((counts[(t%2)*MAXN*MAXN+i*MAXN+j] == 2) || (counts[(t%2)*MAXN*MAXN+i*MAXN+j] == 3))){
       printf("%d %d decrease", i, j);
@@ -31,5 +54,5 @@ __kernel void goNextState(int n, int t, int MAXN, __global unsigned int *arr, __
       counts[((t+1)%2)*MAXN*MAXN+(i+1)*MAXN+j]++;
       counts[((t+1)%2)*MAXN*MAXN+(i+1)*MAXN+j+1]++;
     }
-  }
+    }*/
 }
