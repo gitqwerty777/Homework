@@ -6,7 +6,7 @@
 #include <CL/cl.h>
 #define MAXGPU 10
 #define BSIDE 16
-#define MAXK 10240
+#define MAXK 40960
 #define MAXN 2003
 
 int m, n;
@@ -101,46 +101,42 @@ void executeOpenCL(){
   /* setarg */
 
   /* setshape */
-  size_t globalThreads[] = {(size_t)n, (size_t)n};
-  size_t localThreads[] = {(size_t)BSIDE, (size_t)BSIDE};
+  int globalN = n;
+  //global size should be multiply of local size
+  while(globalN % BSIDE){
+    globalN++;
+  }
+  size_t globalThreads[] = {globalN, globalN};
+  size_t localThreads[] = {BSIDE, BSIDE};
 
+  int maxn = MAXN;
+  status = clSetKernelArg(kernel, 0, sizeof(int), (void*)&n);
+  checkSuccess();
+  status = clSetKernelArg(kernel, 2, sizeof(cl_mem), (void*)&arrayBuffer);
+  checkSuccess();  
+  
   for(int t = 1; t <= m; t++){
-    //int t=0;
-    int maxn = MAXN;
-      
-    status = clSetKernelArg(kernel, 0, sizeof(int), (void*)&n);
-    checkSuccess();
     status = clSetKernelArg(kernel, 1, sizeof(int), (void*)&t);
     checkSuccess();
-    status = clSetKernelArg(kernel, 2, sizeof(cl_mem), (void*)&arrayBuffer);
-    checkSuccess();  
-    //status = clSetKernelArg(kernel, 4, sizeof(cl_mem), (void*)&countBuffer);
-    //checkSuccess();
-
-    status = clEnqueueNDRangeKernel(commandQueue, kernel, 2, NULL, 
-				    globalThreads, localThreads, 
-				    0, NULL, NULL);
+    status = clEnqueueNDRangeKernel(commandQueue, kernel, 2, NULL, globalThreads, localThreads, 0, NULL, NULL);
     checkSuccess();
     clFinish(commandQueue);
-    
-    clEnqueueReadBuffer(commandQueue, arrayBuffer, CL_TRUE, 
-    0, 2*MAXN*MAXN*sizeof(cl_uint), arr, 
-    0, NULL, NULL);
-    //    clEnqueueReadBuffer(commandQueue, countBuffer, CL_TRUE, 
-    //    			0, 2*MAXN*MAXN*sizeof(cl_uint), counts, 
-    //    			0, NULL, NULL);
 
-    #ifdef DEBUG
+#ifdef DEBUG
     printf("arr at turn %d\n", t);
-  for(int i = 1; i <= n; i++){
-    for(int j = 1; j <= n; j++){
-      putchar((arr[(t%2)*MAXN*MAXN+i*MAXN+j]==0)?'0':'1');
+    for(int i = 1; i <= n; i++){
+      for(int j = 1; j <= n; j++){
+	putchar((arr[(t%2)*MAXN*MAXN+i*MAXN+j]==0)?'0':'1');
+      }
+      puts("");
     }
-    puts("");
-  }
-  #endif
+#endif
     
   }
+
+  clEnqueueReadBuffer(commandQueue, arrayBuffer, CL_TRUE, 
+		      0, 2*MAXN*MAXN*sizeof(cl_uint), arr, 
+		      0, NULL, NULL);
   writeLog("Specify the shape of the domain completes.\n");
   /* getcvector */
   /*  clEnqueueReadBuffer(commandQueue, arrayBuffer, CL_TRUE, 
