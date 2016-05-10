@@ -19,15 +19,15 @@ test2:
 
 testans:
 	./main < 1.in > tempout
-	diff tempout 1.out
+	diff --brief tempout 1.out
 
 testans3:
 	./main < 3.in > tempout
-	diff tempout 3.out
+	diff --brief tempout 3.out
 
 testans2:
 	./main < 5.in > tempout
-	diff tempout 5.out
+	diff --brief tempout 5.out
 
 testref:
 	./reference < 1.in > tempout

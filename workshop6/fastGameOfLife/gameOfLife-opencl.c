@@ -12,7 +12,7 @@
 int m, n;
 cl_mem countBuffer, arrayBuffer;
 cl_uint arr[2*MAXN*MAXN];
-cl_uint counts[2*MAXN*MAXN] = {0};
+
 //TODO: array with more dimension
 //TODO: thread with more dimension
 // use 1 dimension first(1 row)
@@ -156,7 +156,6 @@ int main() {
     for(int j = 1;j <= n; j++)
       arr[i*MAXN+j] = s[j-1]-'0';
   }
-  omp_set_num_threads(20);
 
   initOpenCL();
   executeOpenCL();
