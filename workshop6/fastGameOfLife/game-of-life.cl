@@ -1,5 +1,5 @@
 #define MAXN 2003
-#define BSIDE 16
+#define BSIDE 8
 
 __kernel void goNextState(int n, int t, __global unsigned int *arr){
   int i = get_global_id(0)+1;
@@ -16,22 +16,22 @@ __kernel void goNextState(int n, int t, __global unsigned int *arr){
       sur[0][lj] = arr[((t+1)%2)*MAXN*MAXN+(i-1)*MAXN+j];
       if(lj == 1){//corner
 	sur[0][0] = arr[((t+1)%2)*MAXN*MAXN+(i-1)*MAXN+j-1];
-      } else if(lj == BSIDE){
-	sur[0][BSIDE+1] = arr[((t+1)%2)*MAXN*MAXN+(i-1)*MAXN+j+1];
+      } else if(lj == BSIDE || j == n){
+	sur[0][lj+1] = arr[((t+1)%2)*MAXN*MAXN+(i-1)*MAXN+j+1];
       }
-    } else if(li == BSIDE){
-      sur[BSIDE+1][lj] = arr[((t+1)%2)*MAXN*MAXN+(i+1)*MAXN+j];      
+    } else if(li == BSIDE || i == n){
+      sur[li+1][lj] = arr[((t+1)%2)*MAXN*MAXN+(i+1)*MAXN+j];      
       if(lj == 1){
-	sur[BSIDE+1][0] = arr[((t+1)%2)*MAXN*MAXN+(i+1)*MAXN+j-1];
-      } else if(lj == BSIDE){
-	sur[BSIDE+1][BSIDE+1] = arr[((t+1)%2)*MAXN*MAXN+(i+1)*MAXN+j+1];
+	sur[li+1][0] = arr[((t+1)%2)*MAXN*MAXN+(i+1)*MAXN+j-1];
+      } else if(lj == BSIDE || j == n){
+	sur[li+1][lj+1] = arr[((t+1)%2)*MAXN*MAXN+(i+1)*MAXN+j+1];
       }
     }
 
     if(lj == 1){
       sur[li][0] = arr[((t+1)%2)*MAXN*MAXN+i*MAXN+j-1];
-    } else if(lj == BSIDE){
-      sur[li][BSIDE+1] = arr[((t+1)%2)*MAXN*MAXN+i*MAXN+j+1];
+    } else if(lj == BSIDE || j == n){
+      sur[li][lj+1] = arr[((t+1)%2)*MAXN*MAXN+i*MAXN+j+1];
     }    
   }
 
@@ -69,32 +69,4 @@ __kernel void goNextState(int n, int t, __global unsigned int *arr){
     arr[((t)%2)*MAXN*MAXN+i*MAXN+j] = original;
   }
 
-  //    barrier ( CLK_GLOBAL_MEM_FENCE );
-  //  }
 }
-/*for(j = 1; j <= n; j++){
-//TODO: opencl critical?
-if((arr[i*MAXN+j] == 1) && !((counts[(t%2)*MAXN*MAXN+i*MAXN+j] == 2) || (counts[(t%2)*MAXN*MAXN+i*MAXN+j] == 3))){
-printf("%d %d decrease", i, j);
-arr[i*MAXN+j] = 0;
-counts[((t+1)%2)*MAXN*MAXN+(i-1)*MAXN+j-1]--;
-counts[((t+1)%2)*MAXN*MAXN+(i-1)*MAXN+j]--;
-counts[((t+1)%2)*MAXN*MAXN+(i-1)*MAXN+j+1]--;
-counts[((t+1)%2)*MAXN*MAXN+i*MAXN+j-1]--;
-counts[((t+1)%2)*MAXN*MAXN+i*MAXN+j+1]--;
-counts[((t+1)%2)*MAXN*MAXN+(i+1)*MAXN+j-1]--;
-counts[((t+1)%2)*MAXN*MAXN+(i+1)+j]--;
-counts[((t+1)%2)*MAXN*MAXN+(i+1)*MAXN+j+1]--;
-} else if((arr[i*MAXN+j] == 0) && (counts[(t%2)*MAXN*MAXN+i*MAXN+j] == 3)){
-printf("%d %d increase", i, j);
-arr[i*MAXN+j] = 1;
-counts[((t+1)%2)*MAXN*MAXN+(i-1)*MAXN+j-1]++;
-counts[((t+1)%2)*MAXN*MAXN+(i-1)*MAXN+j]++;
-counts[((t+1)%2)*MAXN*MAXN+(i-1)*MAXN+j+1]++;
-counts[((t+1)%2)*MAXN*MAXN+i*MAXN+j-1]++;
-counts[((t+1)%2)*MAXN*MAXN+i*MAXN+j+1]++;
-counts[((t+1)%2)*MAXN*MAXN+(i+1)*MAXN+j-1]++;
-counts[((t+1)%2)*MAXN*MAXN+(i+1)*MAXN+j]++;
-counts[((t+1)%2)*MAXN*MAXN+(i+1)*MAXN+j+1]++;
-}
-}*/

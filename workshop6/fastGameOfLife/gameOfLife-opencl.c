@@ -5,7 +5,7 @@
 #include <stdint.h>
 #include <CL/cl.h>
 #define MAXGPU 10
-#define BSIDE 16
+#define BSIDE 8
 #define MAXK 40960
 #define MAXN 2003
 
