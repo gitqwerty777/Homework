@@ -39,7 +39,7 @@ void initOpenCL(char* kernelFileName){
   commandQueue = clCreateCommandQueue(context, GPU[0], 0, &status);
   checkSuccess();
   /* kernelsource */
-  FILE *kernelfp = fopen(kernelFileName, "r");
+  FILE *kernelfp = fopen("./fastGameOfLife/game-of-life.cl", "r");
   char kernelBuffer[MAXK];
   const char *constKernelSource = kernelBuffer;
   size_t kernelLength = fread(kernelBuffer, 1, MAXK, kernelfp);
@@ -102,8 +102,8 @@ void executeOpenCL(){
   status = clEnqueueNDRangeKernel(commandQueue, kernel, 2, NULL, 
 				  globalThreads, localThreads, 
 				  0, NULL, NULL);
-  if(status != CL_SUCCESS && status == 54){
-    fprintf(stderr, "CL_INVALID_WORK_GROUP_SIZE error:54\n");
+  if(status != CL_SUCCESS){
+    fprintf(stderr, "CL_INVALID_WORK_GROUP_SIZE error:%d\n", status);
   }
   checkSuccess();
   printf("Specify the shape of the domain completes.\n");

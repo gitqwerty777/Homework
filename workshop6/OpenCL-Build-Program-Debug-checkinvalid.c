@@ -20,7 +20,7 @@ cl_context context;
 cl_program program;
 cl_command_queue commandQueue;
 cl_kernel kernel;
-cl_ulong maxworkgroup;
+cl_ulong maxworkgroup, maxdimsize;
 int globalN, localN;
 
 
@@ -43,7 +43,12 @@ void initOpenCL(){
   #define MAXB 256
   char buffer[MAXB];
   size_t length;
-  clGetDeviceInfo(GPU[0], CL_DEVICE_NAME, MAXB, buffer, &length);
+  size_t lengths[3];
+  clGetDeviceInfo(GPU[0], CL_DEVICE_MAX_WORK_ITEM_SIZES, 
+		  sizeof(size_t)*3, lengths, NULL);
+  printf("# of max work item sizes\n");
+  printf("%d %d %d\n", lengths[0], lengths[1], lengths[2]);
+  
   buffer[length] = '\0';
   clGetDeviceInfo(GPU[0], CL_DEVICE_MAX_WORK_GROUP_SIZE, 
 		  sizeof(cl_ulong), &maxworkgroup, NULL);
@@ -55,6 +60,9 @@ void initOpenCL(){
     exit(1);
   } else if (maxworkgroup < localN*localN){
     fprintf(stderr, "CL_INVALID_WORK_GROUP_SIZE error\n");
+    exit(1);    
+  } else if (length[0] < localN || length[1] < localN || length[2] < localN){
+    fprintf(stderr, "CL_DEVICE_MAX_WORK_ITEM_SIZES error\n");
     exit(1);    
   }
   

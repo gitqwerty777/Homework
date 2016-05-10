@@ -151,6 +151,10 @@ void executeOpenCL(){
 int main() {
   char s[2004];
   scanf("%d %d\n", &n, &m);
+  //  for(int i = 0; i < MAXN; i++)
+  //    for(int j = 0; j < MAXN; j++)
+  //      arr[i*MAXN+j] = 0;
+  
   for(int i = 1; i <= n; i++){
     scanf("%s", s);
     for(int j = 1;j <= n; j++)
@@ -162,7 +166,7 @@ int main() {
   //TODO: change int to char
   for(int i = 1; i <= n; i++){
     for(int j = 1; j <= n; j++){
-      putchar((arr[((n)%2)*MAXN*MAXN+i*MAXN+j]==0)?'0':'1');
+      putchar((arr[((m)%2)*MAXN*MAXN+i*MAXN+j]==0)?'0':'1');
     }
     puts("");
   }
