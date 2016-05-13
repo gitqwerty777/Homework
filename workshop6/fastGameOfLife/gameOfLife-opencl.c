@@ -7,11 +7,11 @@
 #define MAXGPU 10
 #define BSIDE 8
 #define MAXK 40960
-#define MAXN 2003
+#define MAXN 2048
 
 int m, n;
 cl_mem countBuffer, arrayBuffer;
-cl_uint arr[2*MAXN*MAXN];
+char arr[2*MAXN*MAXN];
 
 //TODO: array with more dimension
 //TODO: thread with more dimension
@@ -95,7 +95,7 @@ void executeOpenCL(){
   //checkSuccess();
   arrayBuffer = clCreateBuffer(context, 
 			       CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR,
-			       2*MAXN*MAXN * sizeof(cl_uint), arr, &status);
+			       2*MAXN*MAXN * sizeof(char), arr, &status);
   checkSuccess();
   writeLog("Build buffers completes\n");
   /* setarg */
@@ -121,21 +121,10 @@ void executeOpenCL(){
     status = clEnqueueNDRangeKernel(commandQueue, kernel, 2, NULL, globalThreads, localThreads, 0, NULL, NULL);
     checkSuccess();
     clFinish(commandQueue);
-
-#ifdef DEBUG
-    printf("arr at turn %d\n", t);
-    for(int i = 1; i <= n; i++){
-      for(int j = 1; j <= n; j++){
-	putchar((arr[(t%2)*MAXN*MAXN+i*MAXN+j]==0)?'0':'1');
-      }
-      puts("");
-    }
-#endif
-    
   }
 
   clEnqueueReadBuffer(commandQueue, arrayBuffer, CL_TRUE, 
-		      0, 2*MAXN*MAXN*sizeof(cl_uint), arr, 
+		      0, 2*MAXN*MAXN*sizeof(char), arr, 
 		      0, NULL, NULL);
   writeLog("Specify the shape of the domain completes.\n");
   /* getcvector */
@@ -158,7 +147,7 @@ int main() {
   for(int i = 1; i <= n; i++){
     scanf("%s", s);
     for(int j = 1;j <= n; j++)
-      arr[i*MAXN+j] = s[j-1]-'0';
+      arr[i*MAXN+j] = s[j-1];
   }
 
   initOpenCL();

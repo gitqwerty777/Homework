@@ -47,7 +47,8 @@ int main(int argc, char *argv[])
     runtest(buffer, length);    
     buffer[length] = '\0';
     printf("Platform profile %s\n", buffer);
-    /* getDeviceID */
+    /* getDeviceID
+ */
     cl_device_id devices[MAXDEVICE];
     cl_uint device_id_got;
     clGetDeviceIDs(platform_id[i], CL_DEVICE_TYPE_ALL, 

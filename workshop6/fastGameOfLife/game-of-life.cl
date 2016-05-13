@@ -1,5 +1,6 @@
-#define MAXN 2003
+#define MAXN 2048
 #define BSIDE 8
+
 
 inline void fillsur(__local unsigned int sur[][BSIDE+2], __global unsigned int * arr, int i, int j, int li, int lj, int n, int t){
   
@@ -47,28 +48,28 @@ __kernel void goNextState(int n, int t, __global unsigned int *arr){
   //printf("global (%d, %d), local (%d, %d)\n", i, j, li, lj);
   int count = 0;          
   //use add
-  if(sur[li-1][lj])
+  if(sur[li-1][lj] == '1')
     count++;
-  if(sur[li-1][lj+1])
+  if(sur[li-1][lj+1] == '1')
     count++;
-  if(sur[li-1][lj-1])
+  if(sur[li-1][lj-1] == '1')
     count++;    
-  if(sur[li][lj+1])
+  if(sur[li][lj+1] == '1')
     count++;
-  if(sur[li][lj-1])
+  if(sur[li][lj-1] == '1')
     count++;
-  if(sur[li+1][lj+1])
+  if(sur[li+1][lj+1] == '1')
     count++;
-  if(sur[li+1][lj])
+  if(sur[li+1][lj] == '1')
     count++;    
-  if(sur[li+1][lj-1])
+  if(sur[li+1][lj-1] == '1')
     count++;
 
-  if((original == 1) && !((count == 2) || (count == 3))){
-    arr[((t)%2)*MAXN*MAXN+i*MAXN+j] = 0;
+  if((original == '1') && !((count == 2) || (count == 3))){
+    arr[((t)%2)*MAXN*MAXN+i*MAXN+j] = '0';
     //counts[((t+1)%2)*MAXN*MAXN+i*MAXN+j] = 0;
-  } else if((original == 0) && (count == 3)){
-    arr[((t)%2)*MAXN*MAXN+i*MAXN+j] = 1;    
+  } else if((original == '0') && (count == 3)){
+    arr[((t)%2)*MAXN*MAXN+i*MAXN+j] = '1';    
     //counts[((t+1)%2)*MAXN*MAXN+i*MAXN+j] = 1;
   } else{
     arr[((t)%2)*MAXN*MAXN+i*MAXN+j] = original;
