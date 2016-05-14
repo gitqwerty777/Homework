@@ -1,5 +1,5 @@
 #define MAXN 1024
-#define BSIDE 16
+#define BSIDE 8
 
 __kernel void multiply(int N, int globalN, __global unsigned int A[MAXN][MAXN], __global unsigned int B[MAXN][MAXN], __global unsigned int C[MAXN][MAXN]){
   int i = get_global_id(0);
@@ -32,9 +32,9 @@ __kernel void multiply(int N, int globalN, __global unsigned int A[MAXN][MAXN], 
   C[i][j] = sum;
 }
 
-__kernel void add(int N, __global unsigned int A[MAXN][MAXN], __global unsigned int B[MAXN][MAXN], __global unsigned int C[MAXN][MAXN]){
+__kernel void add(__global unsigned int A[MAXN][MAXN], __global unsigned int B[MAXN][MAXN]){
   int i = get_global_id(0);
-  for (int j = 0; j < N; j++)
-	C[i][j] = A[i][j] + B[i][j];
+  int j = get_global_id(1);
+  B[i][j] += A[i][j];
 }
 

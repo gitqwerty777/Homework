@@ -9,7 +9,7 @@
 #define MAXK 10240
 #define UINT cl_uint
 #define MAXN 1024
-#define BSIDE 16
+#define BSIDE 8
 
 cl_int status;
 
@@ -122,54 +122,47 @@ cl_mem bufferA, bufferB, bufferC;
   clEnqueueReadBuffer(commandQueue, bufferC, CL_TRUE, 
 					  0, MAXN*MAXN * sizeof(UINT), C, 
 					  0, NULL, NULL);
-  clFinish(commandQueue);
 
   clReleaseMemObject(bufferA);	
   clReleaseMemObject(bufferB);
   clReleaseMemObject(bufferC);
 }
-void add(int N, UINT A[][MAXN], UINT B[][MAXN], UINT C[][MAXN]) {
-cl_mem bufferA, bufferB, bufferC;  
+void add(int N, UINT A[][MAXN], UINT B[][MAXN]) {
+cl_mem bufferA, bufferB;  
   bufferA = clCreateBuffer(context, 
 						   CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR,
 						   MAXN*MAXN * sizeof(UINT), A, &status);
   checkSuccess();
   bufferB = clCreateBuffer(context, 
-						   CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR,
+						   CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR,
 						   MAXN*MAXN * sizeof(UINT), B, &status);
   checkSuccess();
-  bufferC = clCreateBuffer(context, 
-						   CL_MEM_WRITE_ONLY | CL_MEM_USE_HOST_PTR,
-						   MAXN*MAXN * sizeof(UINT), C, &status);
-  checkSuccess();
+
   //printf("Build buffers completes\n");
   /* setarg */
-  status = clSetKernelArg(add_kernel, 0, sizeof(int), (void*)&N);
-  checkSuccess();  
-  status = clSetKernelArg(add_kernel, 1, sizeof(cl_mem), (void*)&bufferA);
+  status = clSetKernelArg(add_kernel, 0, sizeof(cl_mem), (void*)&bufferA);
   checkSuccess();
-  status = clSetKernelArg(add_kernel, 2, sizeof(cl_mem), (void*)&bufferB);
+  status = clSetKernelArg(add_kernel, 1, sizeof(cl_mem), (void*)&bufferB);
   checkSuccess();
-  status = clSetKernelArg(add_kernel, 3, sizeof(cl_mem), (void*)&bufferC);
-  checkSuccess();
+
   //printf("Set kernel arguments completes\n");
   /* setshape */
-  size_t globalThreads[] = {(size_t)N};
-  size_t localThreads[] = {1};  
-  status = clEnqueueNDRangeKernel(commandQueue, add_kernel, 1, NULL, 
+  size_t globalThreads[] = {(size_t)N, N};
+  size_t localThreads[] = {1, 1};  
+  status = clEnqueueNDRangeKernel(commandQueue, add_kernel, 2, NULL, 
 								  globalThreads, localThreads, 
 								  0, NULL, NULL);
   checkSuccess();
   //printf("Specify the shape of the domain completes.\n");
   /* getcvector */
-  clEnqueueReadBuffer(commandQueue, bufferC, CL_TRUE, 
-					  0, MAXN*MAXN * sizeof(UINT), C, 
+  clEnqueueReadBuffer(commandQueue, bufferB, CL_TRUE, 
+					  0, MAXN*MAXN * sizeof(UINT), B, 
 					  0, NULL, NULL);
-  clFinish(commandQueue);
+
 
   clReleaseMemObject(bufferA);	
   clReleaseMemObject(bufferB);
-  clReleaseMemObject(bufferC);
+
 }
 void rand_gen(UINT c, int N, UINT A[][MAXN]) {
   UINT x = 2, n = N*N;
@@ -248,7 +241,7 @@ int main() {
 	}
 
 	for(int j = 0; j < tmpindex-1; j++){
-	  add(N, TMP[j], TMP[j+1], TMP[j+1]);
+	  add(N, TMP[j], TMP[j+1]);
 	}
 	if(tmpindex == 0)
 	  printf("%u\n", signature(N, TMP[0]));
