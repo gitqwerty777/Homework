@@ -6,9 +6,10 @@
 #include <CL/cl.h>
 //#include <omp.h>
 #define MAXGPU 10
-#define MAXK 1024
+#define MAXK 10240
 #define UINT cl_uint
 #define MAXN 1024
+#define BSIDE 16
 
 cl_int status;
 
@@ -93,19 +94,26 @@ cl_mem bufferA, bufferB, bufferC;
   checkSuccess();
   //printf("Build buffers completes\n");
   /* setarg */
+  int globalN = N;
+  while(globalN % BSIDE)
+	globalN++;
+  
   status = clSetKernelArg(mul_kernel, 0, sizeof(int), (void*)&N);
-  checkSuccess();  
-  status = clSetKernelArg(mul_kernel, 1, sizeof(cl_mem), (void*)&bufferA);
   checkSuccess();
-  status = clSetKernelArg(mul_kernel, 2, sizeof(cl_mem), (void*)&bufferB);
+  status = clSetKernelArg(mul_kernel, 1, sizeof(int), (void*)&globalN);
+  checkSuccess();    
+  status = clSetKernelArg(mul_kernel, 2, sizeof(cl_mem), (void*)&bufferA);
   checkSuccess();
-  status = clSetKernelArg(mul_kernel, 3, sizeof(cl_mem), (void*)&bufferC);
+  status = clSetKernelArg(mul_kernel, 3, sizeof(cl_mem), (void*)&bufferB);
+  checkSuccess();
+  status = clSetKernelArg(mul_kernel, 4, sizeof(cl_mem), (void*)&bufferC);
   checkSuccess();
   //printf("Set kernel arguments completes\n");
   /* setshape */
-  size_t globalThreads[] = {(size_t)N};
-  size_t localThreads[] = {1};
-  status = clEnqueueNDRangeKernel(commandQueue, mul_kernel, 1, NULL, 
+  size_t globalThreads[] = {(size_t)globalN, globalN};
+  size_t localThreads[] = {BSIDE, BSIDE};
+
+  status = clEnqueueNDRangeKernel(commandQueue, mul_kernel, 2, NULL, 
 								  globalThreads, localThreads, 
 								  0, NULL, NULL);
   checkSuccess();
@@ -147,7 +155,7 @@ cl_mem bufferA, bufferB, bufferC;
   //printf("Set kernel arguments completes\n");
   /* setshape */
   size_t globalThreads[] = {(size_t)N};
-  size_t localThreads[] = {1};
+  size_t localThreads[] = {1};  
   status = clEnqueueNDRangeKernel(commandQueue, add_kernel, 1, NULL, 
 								  globalThreads, localThreads, 
 								  0, NULL, NULL);
@@ -228,7 +236,7 @@ int main() {
 	  }
 	}
 
-	#pragma omp parallel for
+	//#pragma omp parallel for
 	for(int j = 0; j < tmpindex; j++){
 	  memcpy(TMP[j], IN[toMultiply[j][0]], MAXN*MAXN*sizeof(UINT));
 	  int nowmulindex = 1;	  
