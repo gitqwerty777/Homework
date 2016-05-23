@@ -1,0 +1,31 @@
+* TODO naive bayes
+** P(label | document; model) = P(document | label; model) * P(label | model) / P(document | model)
+** P(document | label; model) * P(label | model) = P(label | model) * mul(P(words in document | label; model))
+** unigram model
+** with unlabel data
+* TODO EM
+** maximize likelihood of L(document | model)
+** do experiment on different size of labeled data, and make comparison with Naïve Bayes Classifier
+* TODO Implementation
+** TODO Vocabulary building
+Only alphabet? Or alphabet and digit?
+Low term frequency?
+High document frequency?
+Stopwords?
+Other condition?
+** TODO Smoothing for unseen words and its parameter
+additive smoothing and its constant
+* TODO Report
+** Describe your Naïve Bayes Classifier (ex: parameter’s meanin in text categorization, and how to estimate them)
+** Describe your EM algorithm (ex: How do you derive likelihood, Estep and M-step)
+** Result
+** Analysis on data’s size and performance
+** Some techniques in implementation and their impact
+* TODO IO Format
+** Each line contains document id and predicted topic
+First column: document_id, as filename
+Second column: class_name, as subdirectory name
+* TODO Shell
+** -i data-directory
+** -o outputfile
+** -n label-data-size
