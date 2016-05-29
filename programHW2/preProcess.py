@@ -1,6 +1,7 @@
 import os
 import re
 import copy
+import Stemmer
 from collections import Counter
 
 
@@ -29,6 +30,7 @@ class WordList:
         for label, counter in self.dict.iteritems():
             for word in self.stopList:
                 del counter[word]
+        # TODO: if key is number, delete it
 
     def read(self):
         with open("label.txt", "r") as labelFile:
@@ -92,9 +94,18 @@ class WordList:
 
 def processContent(content, label, wordList):
     counter = Counter()
-    words = re.findall(r"[\w']+", content)
+
+    stemmer = Stemmer.Stemmer('english')
+
+    words = re.findall("[\w']+", content)
     for word in words:
+        if word.isdigit() or len(word) <= 1:
+            continue
         word = word.lower()
+        try:
+            word = stemmer.stemWord(word)
+        except:
+            pass
         counter[word] += 1
     wordList.addCount(label, counter)
     

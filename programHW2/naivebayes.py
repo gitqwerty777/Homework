@@ -2,6 +2,7 @@ import sys
 import os
 import re
 import math
+import Stemmer
 from preProcess import WordList
 from collections import Counter
 
@@ -9,6 +10,7 @@ from collections import Counter
 class NaiveBayesClassifier:
     def __init__(self):
         self.loadWordCount()
+        self.stemmer = Stemmer.Stemmer('english')
 
     def loadWordCount(self):
         self.wordList = WordList()
@@ -25,10 +27,16 @@ class NaiveBayesClassifier:
             labelProbability = self.wordList.labelFrequency[label]
             words = re.findall("[\w']+", content)
             for word in words:
+                if word.isdigit() or len(word) <= 1:
+                    continue
+                try:
+                    word = self.stemmer.stemWord(word)
+                except:
+                    pass
                 wordFrequency = float(self.wordList.dict[label][word])/self.wordList.totalWordNumPerLabel[label]
                 # print "freq [%s] = %f" % (word, wordFrequency)
-                if wordFrequency == 0.0: # using log
-                    wordFrequency = -10  # TODO: normalize
+                if wordFrequency == 0.0:  # using log
+                    wordFrequency = -10  # TODO: other normalize function
                 else:
                     wordFrequency = math.log(wordFrequency)
                 labelProbability += wordFrequency
