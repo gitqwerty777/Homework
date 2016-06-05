@@ -16,6 +16,29 @@ class EMClassifier:
     """
     maximize likelihood of L(document | model)
     """
+    def trainModel(self):
+        # each word has multiple probability for different topicsy
+        self.wordTopicProbability = {}
+        self.wordLambda = [0.5 for label in self.labels] # TODO: sum = 1?
+
+        previousLambda = 0
+        while abs(previousLambda - self.wordLambda) < 0.001:
+            self.expectation()
+            self.maximization()
+
+    def expectation(self):
+        """
+        P(t1 | w) = lambda * p(w|t1) / (lambda * p(w|t1)
+        + (1-lambda) * p(w|t2) ...)
+        """
+        for word in self.wordList.words: # TODO: wordlist.words
+            for label in self.labels:
+                # self.wordTopicProbability[word][topic]
+
+
+    def maximization(self):
+        pass
+
     def labelDocument(self, content):
         labelProbabilities = Counter()
         for label in self.labels:
