@@ -13,18 +13,23 @@ class EMClassifier:
         self.wordList = WordList()
         self.labels = self.wordList.read()
 
+
+    def difference...
+        
+
     """
     maximize likelihood of L(document | model)
     """
-    def trainModel(self):
+    def trainModel(self, contents):
         # each word has multiple probability for different topicsy
         self.wordTopicProbability = {}
-        self.wordLambda = [0.5 for label in self.labels] # TODO: sum = 1?
+        self.wordLambdas = [1.0/len(self.labels) for label in self.labels] # TODO: sum = 1?
 
-        previousLambda = 0
-        while abs(previousLambda - self.wordLambda) < 0.001:
+        previousLambdas = self.wordLambdas
+        while difference(previousLambdas, self.wordLambdas) < 0.001:
             self.expectation()
             self.maximization()
+            previousLambdas = self.wordLambdas
 
     def expectation(self):
         """

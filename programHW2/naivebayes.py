@@ -51,7 +51,8 @@ class NaiveBayesClassifier:
             labelProbabilities[label] = labelProbability
         return labelProbabilities.most_common(1)[0][0]
 
-    def __
+    def getProb...
+        return labelProbabilities
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
