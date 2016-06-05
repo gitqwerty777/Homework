@@ -3,6 +3,7 @@ import os
 import re
 import math
 import Stemmer
+import argparse
 from preProcess import WordList
 from collections import Counter
 
@@ -29,14 +30,20 @@ class NaiveBayesClassifier:
             for word in words:
                 if word.isdigit() or len(word) <= 1:
                     continue
+                """
                 try:
                     word = self.stemmer.stemWord(word)
                 except:
                     pass
+                """
                 wordFrequency = float(self.wordList.dict[label][word])/self.wordList.totalWordNumPerLabel[label]
                 # print "freq [%s] = %f" % (word, wordFrequency)
                 if wordFrequency == 0.0:  # using log
-                    wordFrequency = -10  # TODO: other normalize function
+                    #wordFrequency = -10  # TODO: other normalize function
+                    #wordFrequency = float(0.1)/self.wordList.totalWordNumPerLabel[label]
+                    #wordFrequency = math.log(wordFrequency)
+                    #good turing
+                    
                 else:
                     wordFrequency = math.log(wordFrequency)
                 labelProbability += wordFrequency
@@ -44,13 +51,26 @@ class NaiveBayesClassifier:
             labelProbabilities[label] = labelProbability
         return labelProbabilities.most_common(1)[0][0]
 
+    def __
+
 if __name__ == "__main__":
+    parser = argparse.ArgumentParser()
+    parser.add_argument("-i", "--inputDirectory")
+    parser.add_argument("-o", "--outputFileName")
+    parser.add_argument("-n", "--labelDataSize")
+    args = parser.parse_args()
+    print "--- args\n"
+    print "i:", args.inputDirectory
+    print "o:", args.outputFileName
+    print "n:", args.labelDataSize
+    print "---"
+
     naiveBayesClassifier = NaiveBayesClassifier()
 
     predictLabel = {}
-    testDirectoryPath = "./20news/Test"
-    print('testDirectoryPath (absolute) = ' + os.path.abspath(testDirectoryPath))
-    for root, subdirs, files in os.walk(testDirectoryPath):
+    arg.inputDirectory = "./20news/Test"
+    print('arg.inputDirectory (absolute) = ' + os.path.abspath(arg.inputDirectory))
+    for root, subdirs, files in os.walk(arg.inputDirectory):
         for filename in files:
             file_path = os.path.join(root, filename)
             print "process test file:", file_path

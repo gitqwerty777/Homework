@@ -102,10 +102,12 @@ def processContent(content, label, wordList):
         if word.isdigit() or len(word) <= 1:
             continue
         word = word.lower()
+        """
         try:
             word = stemmer.stemWord(word)
         except:
             pass
+        """
         counter[word] += 1
     wordList.addCount(label, counter)
     
