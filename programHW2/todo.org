@@ -1,20 +1,51 @@
 * TODO naive bayes
-** P(label | document; model) = P(document | label; model) * P(label | model) / P(document | model)
-** P(document | label; model) * P(label | model) = P(label | model) * mul(P(words in document | label; model))
-** unigram model
-** with unlabel data
+** DONE P(label | document; model) = P(document | label; model) * P(label | model) / P(document | model)
+CLOSED: [2016-05-28 六 23:12]
+P(document | model) 不都一樣？
+** DONE P(document | label; model) * P(label | model) = P(label | model) * mul(P(words in document | label; model))
+CLOSED: [2016-05-28 六 23:12]
+** DONE unigram model
+CLOSED: [2016-05-28 六 23:12]
+** TODO with unlabel data
+How?
 * TODO EM
-** maximize likelihood of L(document | model)
-** do experiment on different size of labeled data, and make comparison with Naïve Bayes Classifier
+** TODO maximize likelihood of L(document | model)
+*** assign a document with equal probability of each category
+*** calculate expected probability of document
+*** init 
+lambda_i = sum(c(w, d)p(w|t_i))/sum(c(w, d))
+sum(lambda_i) = 1
+*** E:
+P(t_i | w) = lambda_i * p(w|t_i) / (lambda_1 * p(w|t_1)
+ + (lambda_2) * p(w|t_2) ...)
+*** M: Max Lambda
+new lambda_i = Max(sum(c(w, d)p(w|t_i))/
+sum(c(w, d))
+
+** TODO do experiment on different size of labeled data
 * TODO Implementation
 ** TODO Vocabulary building
-Only alphabet? Or alphabet and digit?
-Low term frequency?
-High document frequency?
-Stopwords?
-Other condition?
+only english is better(I think) because there's email and user name
+*** Low term frequency
+?
+*** High document frequency
+?
+*** Stopwords
+test with and without
+*** ONGOING Stem
+remove full digits, remove single character: the same performance 
+*** analyze exclude format 
+In article
+Quoting
+detect human name?
 ** TODO Smoothing for unseen words and its parameter
-additive smoothing and its constant
+1. add unseen as constant probability
+   0.67
+2. add one as unseen words
+   1 0.126
+0.5 0.187
+0.1 0.36
+3. good-turing
 * TODO Report
 ** Describe your Naïve Bayes Classifier (ex: parameter’s meanin in text categorization, and how to estimate them)
 ** Describe your EM algorithm (ex: How do you derive likelihood, Estep and M-step)
