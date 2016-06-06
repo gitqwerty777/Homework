@@ -2,12 +2,14 @@ import sys
 import os
 import re
 import math
+import NaiveBayesClassifier
 from preProcess import WordList
 from collections import Counter
 
 class EMClassifier:
     def __init__(self):
         self.loadWordCount()
+        self.naiveBayesClassifier = NaiveBayesClassifier()
 
     def loadWordCount(self):
         self.wordList = WordList()
@@ -15,21 +17,28 @@ class EMClassifier:
 
 
     def difference...
-        
+        pass
+
+    def getDocumentProbabilities(self):
+        self.docProbabilities = []
+        for doc in self.documents:
+            self.docProbabilities.append(self.naiveBayesClassifier.getLabelprobabilities())
+
 
     """
     maximize likelihood of L(document | model)
     """
-    def trainModel(self, contents):
+    def trainModel(self, documents):
         # each word has multiple probability for different topicsy
-        self.wordTopicProbability = {}
-        self.wordLambdas = [1.0/len(self.labels) for label in self.labels] # TODO: sum = 1?
+        self.documents = documents
+        self.getDocumentProbabilities()
+        self.docLambdas = [1.0/len(documents) for doc in documents] # TODO: sum = 1?
 
-        previousLambdas = self.wordLambdas
-        while difference(previousLambdas, self.wordLambdas) < 0.001:
+        previousLambdas = self.docLambdas
+        while difference(previousLambdas, self.docLambdas) < 0.001:
             self.expectation()
             self.maximization()
-            previousLambdas = self.wordLambdas
+            previousLambdas = self.docLambdas
 
     def expectation(self):
         """
@@ -39,7 +48,6 @@ class EMClassifier:
         for word in self.wordList.words: # TODO: wordlist.words
             for label in self.labels:
                 # self.wordTopicProbability[word][topic]
-
 
     def maximization(self):
         pass
