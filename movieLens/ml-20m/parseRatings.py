@@ -58,11 +58,11 @@ class DataAnalyzer:
 
         id2word = gensim.corpora.Dictionary.load('dictionary-rating.dict')
         mm = gensim.corpora.MmCorpus('corpus-rating.mm')
-        print "make lsimodel"
+        print ("make lsimodel")
         N = 100
         #lsi = gensim.models.lsimodel.LsiModel(corpus=mm, id2word=id2word, num_topics=N)
         lsi = gensim.models.lsimodel.LsiModel(corpus=mm, id2word=id2word, num_topics=N)
-        print "lsi topic"
+        print ("lsi topic")
         lsi.print_topics(N)
         
 
@@ -130,13 +130,13 @@ class DataAnalyzer:
 class DataReader:
     def __init__(self, ratingfilename, moviefilename, tagfilename, linkfilename):
         self.data = Data()
-        print "readRatings"
+        print ("readRatings")
         self.readRatings(ratingfilename)
-        print "readMovies"
+        print ("readMovies")
         self.readMovies(moviefilename)
-        print "readTags"
+        print ("readTags")
         self.readTags(tagfilename)
-        print "readLinks"
+        print ("readLinks")
         self.readLinks(linkfilename)
         
     def readRatings(self, ratingfilename):
