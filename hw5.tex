@@ -150,12 +150,11 @@
 
     add collection size into consideration: \\
 
-    new score = $(1-a) \times original_score$(like F1, MAP, which with precision and recall) $ + (a) \times \log{collection_size} $, 
-    a is the parameter such that $0 \leq a \leq 1$
-
-    The new score can properly reflect the collection size in evaluation
-    
-    But I think we should use the same collection to compare evaluation score in the regular basis.
+    new score = $(1-a) \times originalScore$(like F1, MAP, which with precision and recall) $ + (a) \times \log{collectionSize}$, 
+    a is the parameter such that $0 \leq a \leq 1$\\
+    \\
+    The new score can properly reflect the collection size in evaluation by tuning the parameter a.\\
+    Finally, I think we should use the same collection to compare evaluation score in the regular basis.
     
   \end{CJK}
 \end{homeworkProblem}
@@ -210,7 +209,7 @@
         \end{array}
       \right)\]
 
-    L^TL = \[ \left(
+    $L^TL$ = \[ \left(
         \begin{array}{ccccc}
           0 & 0 & 0 & 0 & 0\\
           0 & 2 & 1 & 0 & 0\\
@@ -220,7 +219,7 @@
         \end{array}
       \right)\]         
 
-    LL^T = \[ \left(
+    $LL^T$ = \[ \left(
         \begin{array}{ccccc}
           2 & 0 & 1 & 1 & 0\\
           0 & 2 & 0 & 0 & 1\\
@@ -230,7 +229,25 @@
         \end{array}
       \right)\] 
 
-    
+    \textbf{2.}
+
+    a =\[ \left(
+        \begin{array}{ccccc}
+          0.0 & 0.3379694019471488 & 0.3379694019471488 & 0.20027816411682894 & 0.12378303198887344\\
+        \end{array}
+      \right)\]
+
+    h =\[ \left(
+        \begin{array}{ccccc}
+          0.3677639046538025 & 0.16345062429057888 & 0.18388195232690124 & 0.18388195232690124 & 0.1010215664018161\\          
+        \end{array}
+      \right)\]     
+
+    code link: http://ppt.cc/1wfY2
+
+    \textbf{3.}
+
+    hits seems to be having more information about the node. For example, pagerank score in node 1 is 0 because no other nodes refer to it. But hits set hub score to node 1, which give fair evaluation of nodes.
 
   \end{CJK} % 結束 CJK 環境 
 \end{homeworkProblem}
