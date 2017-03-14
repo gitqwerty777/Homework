@@ -8,38 +8,20 @@
 #define MAXN 2048
 
 int m, n;
-unsigned int arr[2*MAXN*MAXN];
-/*struct DebugInfo{
-  int blockidx, blockidy, threadidx, threadidy;
-  int i, j, li, lj, globalValue, localValue, count;
-  };
-  struct DebugInfo debugInfo[2*MAXN*MAXN];
-*/
+float arr[2*MAXN*MAXN];
 
-__global__ void goNextState(int n, int t, unsigned int *arr){
+__global__ void goNextState(int n, int t, float *arr){
   //global and local
   int i = blockDim.x*blockIdx.x+threadIdx.x+1;
   int j = blockDim.y*blockIdx.y+threadIdx.y+1;
   int li = threadIdx.x+1;
   int lj = threadIdx.y+1;
-#ifdef DEBUG
-  debugInfo[i*MAXN+j].i = blockDim.x*blockIdx.x + threadIdx.x;
-  debugInfo[i*MAXN+j].j = blockDim.y*blockIdx.y + threadIdx.y;
-  debugInfo[i*MAXN+j].blockidx = blockIdx.x;
-  debugInfo[i*MAXN+j].blockidy = blockIdx.y;
-  debugInfo[i*MAXN+j].threadidx = threadIdx.x;
-  debugInfo[i*MAXN+j].threadidy = threadIdx.y;
-#endif
   
-  __shared__ unsigned int sur[BSIDE+2][BSIDE+2];//surroundings
+  __shared__ float sur[BSIDE+2][BSIDE+2];//surroundings
 
-
-  
-  unsigned int original = arr[((t+1)%2)*MAXN*MAXN+(i)*MAXN+j];
+  float original = arr[((t+1)%2)*MAXN*MAXN+(i)*MAXN+j];
   sur[li][lj] = original;
   //debugInfo[i*MAXN+j].globalValue = original;
-
-
 
   if(li == 1){
 	sur[0][lj] = arr[((t+1)%2)*MAXN*MAXN+(i-1)*MAXN+j];
@@ -69,47 +51,24 @@ __global__ void goNextState(int n, int t, unsigned int *arr){
   if(!(i <= n && j <= n)) return;  
   
   //printf("global (%d, %d), local (%d, %d)\n", i, j, li, lj);
-  int count = 0;          
+  float sum = 0;          
   //use add
-  if(sur[li-1][lj] == 1)
-    count++;
-  if(sur[li-1][lj+1] == 1)
-    count++;
-  if(sur[li-1][lj-1] == 1)
-    count++;    
-  if(sur[li][lj+1] == 1)
-    count++;
-  if(sur[li][lj-1] == 1)
-    count++;
-  if(sur[li+1][lj+1] == 1)
-    count++;
-  if(sur[li+1][lj] == 1)
-    count++;    
-  if(sur[li+1][lj-1] == 1)
-    count++;
-
-  //debugInfo[i*MAXN+j].count = count;
-  
-  if((original == 1) && !((count == 2) || (count == 3))){
-	arr[((t)%2)*MAXN*MAXN+i*MAXN+j] = 0;
-    //counts[((t+1)%2)*MAXN*MAXN+i*MAXN+j] = 0;
-  } else if((original == 0) && (count == 3)){
-    arr[((t)%2)*MAXN*MAXN+i*MAXN+j] = 1;    
-    //counts[((t+1)%2)*MAXN*MAXN+i*MAXN+j] = 1;
-  } else{
-	arr[((t)%2)*MAXN*MAXN+i*MAXN+j] = original;
-  }
-  
+  sum += sur[li-1][lj] + 
+	+ sur[li-1][lj+1]
+	+ sur[li-1][lj-1]
+	+ sur[li][lj+1]
+	+ sur[li][lj-1]
+	+ sur[li+1][lj+1]
+	+ sur[li+1][lj]
+	+ sur[li+1][lj-1];
+  arr[((t)%2)*MAXN*MAXN+(i)*MAXN+j] = sum/8;
 }
 
 int main() {
-  char s[2004];
-  scanf("%d %d\n", &n, &m);
-  for(int i = 1; i <= n; i++){
-    scanf("%s", s);
+  scanf("%d %d", &n, &m);
+  for(int i = 1; i <= n; i++)
     for(int j = 1;j <= n; j++)
-      arr[i*MAXN+j] = s[j-1]-'0';
-  }
+      arr[i*MAXN+j] = (i-1)*MAXN+(j-1);
   
   //網格和區塊大小設定
   int globalN = n;
@@ -119,23 +78,11 @@ int main() {
   dim3 grid=dim3(gridNum,gridNum,1);
   dim3 block=dim3(BSIDE,BSIDE,1);
 
-  //計算總執行緒數
-  int num=grid.x*grid.y*grid.z*block.x*block.y*block.z;
-
-  /*  for(int i = 1; i <= n; i++){
-	  for(int j = 1; j <= n; j++){
-	  debugInfo[i*MAXN+j].i = -1;
-	  debugInfo[i*MAXN+j].j = -1;
-	  debugInfo[i*MAXN+j].li = -1;
-	  debugInfo[i*MAXN+j].lj = -1;	  
-	  }
-	  }*/
-  
   //配置裝置記憶體
-  unsigned int* arr_device;
+  float* arr_device;
   struct DebugInfo *debuginfo_device;
-  cudaMalloc((void**) &arr_device, 2*MAXN*MAXN*sizeof(unsigned int));
-  cudaMemcpy(arr_device, arr, 2*MAXN*MAXN*sizeof(unsigned int), cudaMemcpyHostToDevice);
+  cudaMalloc((void**) &arr_device, 2*MAXN*MAXN*sizeof(float));
+  cudaMemcpy(arr_device, arr, 2*MAXN*MAXN*sizeof(float), cudaMemcpyHostToDevice);
 #ifdef DEBUG
   cudaMalloc((void**) &debuginfo_device, 2*MAXN*MAXN*sizeof(struct DebugInfo));
   cudaMemcpy(debuginfo_device, debugInfo, 2*MAXN*MAXN*sizeof(struct DebugInfo), cudaMemcpyHostToDevice);
@@ -151,7 +98,7 @@ int main() {
   }
 
   //下載裝置記憶體內容到主機上.
-  cudaMemcpy(arr, arr_device, 2*MAXN*MAXN*sizeof(unsigned int), cudaMemcpyDeviceToHost);
+  cudaMemcpy(arr, arr_device, 2*MAXN*MAXN*sizeof(float), cudaMemcpyDeviceToHost);
   //下載裝置記憶體內容到主機上.
 #ifdef DEBUG  
   cudaMemcpy(debugInfo, debuginfo_device, 2*MAXN*MAXN*sizeof(struct DebugInfo), cudaMemcpyDeviceToHost);
@@ -166,7 +113,7 @@ int main() {
   //顯示內容
   for(int i = 1; i <= n; i++){
     for(int j = 1; j <= n; j++){
-      putchar((arr[((m)%2)*MAXN*MAXN+i*MAXN+j]==0)?'0':'1');
+      printf("%f ", arr[((m)%2)*MAXN*MAXN+i*MAXN+j]);
     }
     puts("");
   }  

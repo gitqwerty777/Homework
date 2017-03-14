@@ -7,6 +7,8 @@
 #define MAXK 1024
 #define UINT cl_uint
 #define MAXN 1024
+#define DEVICENUM 2
+#define MAXLOG 10250
 
 cl_int status;
 
@@ -17,7 +19,7 @@ cl_uint GPU_id_got;
 
 cl_context context;
 cl_program program;
-cl_command_queue commandQueue;
+  cl_command_queue commandQueue[DEVICENUM];
 cl_kernel mul_kernel, add_kernel;
 
 
@@ -33,36 +35,48 @@ void initOpenCL(){
   status = clGetDeviceIDs(platform_id, CL_DEVICE_TYPE_GPU, MAXGPU, GPU, &GPU_id_got);
   checkSuccess();
   //printf("There are %d GPU devices\n", GPU_id_got); 
-  /* getcontext */
-  context = clCreateContext(NULL, GPU_id_got, GPU, NULL, NULL, &status);
-  checkSuccess();
+  context = 
+    clCreateContext(NULL, DEVICENUM, GPU, NULL, NULL, 
+					&status);
+  //assert(status == CL_SUCCESS);
   /* commandqueue */
-  commandQueue = clCreateCommandQueue(context, GPU[0], 0, &status);
-  checkSuccess();
+
+  for (int device = 0; device < DEVICENUM; device++) {
+    commandQueue[device] = 
+      clCreateCommandQueue(context, GPU[device],
+						   CL_QUEUE_PROFILING_ENABLE, 
+						   &status);
+    //assert(status == CL_SUCCESS);
+  }
   /* kernelsource */
   FILE *kernelfp = fopen("matrix-lib.cl", "r");
+  //assert(kernelfp != NULL);
   char kernelBuffer[MAXK];
   const char *constKernelSource = kernelBuffer;
-  size_t kernelLength = fread(kernelBuffer, 1, MAXK, kernelfp);
+  size_t kernelLength = 
+    fread(kernelBuffer, 1, MAXK, kernelfp);
   //printf("The size of kernel source is %zu\n", kernelLength);
-  program = clCreateProgramWithSource(context, 1, &constKernelSource, &kernelLength, &status);
-  checkSuccess();
+  program =
+    clCreateProgramWithSource(context, 1, &constKernelSource, 
+							  &kernelLength, &status);
+  //assert(status == CL_SUCCESS);
   /* buildprogram */
-  status = clBuildProgram(program, GPU_id_got, GPU, NULL, NULL, NULL);
-  /* check if .cl file has compile error or not */
-  if(status != CL_SUCCESS){
-    if(status == CL_BUILD_PROGRAM_FAILURE){
-      size_t log_size;
-      clGetProgramBuildInfo(program, GPU[0], CL_PROGRAM_BUILD_LOG, 0, NULL, &log_size);
-      // Allocate memory for the log
-      char *log = (char *) malloc(log_size);
-      // Get the log
-      clGetProgramBuildInfo(program, GPU[0], CL_PROGRAM_BUILD_LOG, log_size, log, NULL);
-      // Print the log
-      printf("error: %s\n", log);
+  status = 
+    clBuildProgram(program, DEVICENUM, GPU, NULL, 
+				   NULL, NULL);
+  if (status != CL_SUCCESS) {
+    char log[MAXLOG];
+    size_t logLength;
+    for (int device = 0; device < DEVICENUM; device++) {
+      clGetProgramBuildInfo(program, GPU[device], 
+							CL_PROGRAM_BUILD_LOG,
+							MAXLOG, log, &logLength);
+      puts(log);
     }
-    exit(1);
+    exit(-1);
   }
+  //printf("Build program completes\n");
+  
   //printf("Build program completes\n");
   /* createkernel */
   mul_kernel = clCreateKernel(program, "multiply", &status);
@@ -73,7 +87,7 @@ void initOpenCL(){
 
 cl_mem bufferA, bufferB, bufferC;
 
-void multiply(int N, UINT A[][MAXN], UINT B[][MAXN], UINT C[][MAXN]) {
+void multiply(int device, int N, UINT A[][MAXN], UINT B[][MAXN], UINT C[][MAXN]) {
   bufferA = clCreateBuffer(context, 
 			   CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR,
 			   MAXN*MAXN * sizeof(UINT), A, &status);
@@ -100,18 +114,17 @@ void multiply(int N, UINT A[][MAXN], UINT B[][MAXN], UINT C[][MAXN]) {
   /* setshape */
   size_t globalThreads[] = {(size_t)N};
   size_t localThreads[] = {1};
-  status = clEnqueueNDRangeKernel(commandQueue, mul_kernel, 1, NULL, 
+  status = clEnqueueNDRangeKernel(commandQueue[device], mul_kernel, 1, NULL, 
 				  globalThreads, localThreads, 
 				  0, NULL, NULL);
   checkSuccess();
   //printf("Specify the shape of the domain completes.\n");
   /* getcvector */
-  clEnqueueReadBuffer(commandQueue, bufferC, CL_TRUE, 
+  clEnqueueReadBuffer(commandQueue[device], bufferC, CL_TRUE, 
 		      0, MAXN*MAXN * sizeof(UINT), C, 
 		      0, NULL, NULL);
-  clFinish(commandQueue);
 }
-void add(int N, UINT A[][MAXN], UINT B[][MAXN], UINT C[][MAXN]) {
+void add(int device, int N, UINT A[][MAXN], UINT B[][MAXN], UINT C[][MAXN]) {
   bufferA = clCreateBuffer(context, 
 			   CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR,
 			   MAXN*MAXN * sizeof(UINT), A, &status);
@@ -138,16 +151,16 @@ void add(int N, UINT A[][MAXN], UINT B[][MAXN], UINT C[][MAXN]) {
   /* setshape */
   size_t globalThreads[] = {(size_t)N};
   size_t localThreads[] = {1};
-  status = clEnqueueNDRangeKernel(commandQueue, add_kernel, 1, NULL, 
+  status = clEnqueueNDRangeKernel(commandQueue[device], add_kernel, 1, NULL, 
 				  globalThreads, localThreads, 
 				  0, NULL, NULL);
   checkSuccess();
   //printf("Specify the shape of the domain completes.\n");
   /* getcvector */
-  clEnqueueReadBuffer(commandQueue, bufferC, CL_TRUE, 
+  clEnqueueReadBuffer(commandQueue[device], bufferC, CL_TRUE, 
 		      0, MAXN*MAXN * sizeof(UINT), C, 
 		      0, NULL, NULL);
-  clFinish(commandQueue);
+
 }
 void rand_gen(UINT c, int N, UINT A[][MAXN]) {
   UINT x = 2, n = N*N;
@@ -188,26 +201,32 @@ int main() {
   initOpenCL();
   //executeOpenCL();//execute mul, add
 
-
   // AB
-  multiply(N, IN[0], IN[1], TMP[0]);
+  multiply(0, N, IN[0], IN[1], TMP[0]);
   // CD
-  multiply(N, IN[2], IN[3], TMP[1]);
-  // AB+CD
-  add(N, TMP[0], TMP[1], TMP[2]);
-  printf("%u\n", signature(N, TMP[2]));
- 
+  multiply(1, N, IN[2], IN[3], TMP[1]);
+  clFinish(commandQueue[0]);
+  clFinish(commandQueue[1]);  
   // ABE
-  multiply(N, TMP[0], IN[4], TMP[3]);
+  multiply(0, N, TMP[0], IN[4], TMP[3]);
   // CDF
-  multiply(N, TMP[1], IN[5], TMP[4]);
+  multiply(1, N, TMP[1], IN[5], TMP[4]);
+  clFinish(commandQueue[0]);
+  clFinish(commandQueue[1]);    
+
+  // AB+CD
+  add(0, N, TMP[0], TMP[1], TMP[2]);
   // ABE+CDF
-  add(N, TMP[3], TMP[4], TMP[5]);
+  add(1, N, TMP[3], TMP[4], TMP[5]);
+  clFinish(commandQueue[0]);
+  clFinish(commandQueue[1]);    
+  printf("%u\n", signature(N, TMP[2]));
   printf("%u\n", signature(N, TMP[5]));
 
 
   clReleaseContext(context);	
-  clReleaseCommandQueue(commandQueue);
+  clReleaseCommandQueue(commandQueue[0]);
+  clReleaseCommandQueue(commandQueue[1]);  
   clReleaseProgram(program);
   clReleaseKernel(add_kernel);
   clReleaseKernel(mul_kernel);

@@ -20,8 +20,7 @@ __global__ void goNextState(int n, int t, unsigned int *arr){
   //global and local
   int i = blockDim.x*blockIdx.x+threadIdx.x+1;
   int j = blockDim.y*blockIdx.y+threadIdx.y+1;
-  int li = threadIdx.x+1;
-  int lj = threadIdx.y+1;
+
 #ifdef DEBUG
   debugInfo[i*MAXN+j].i = blockDim.x*blockIdx.x + threadIdx.x;
   debugInfo[i*MAXN+j].j = blockDim.y*blockIdx.y + threadIdx.y;
@@ -31,64 +30,28 @@ __global__ void goNextState(int n, int t, unsigned int *arr){
   debugInfo[i*MAXN+j].threadidy = threadIdx.y;
 #endif
   
-  __shared__ unsigned int sur[BSIDE+2][BSIDE+2];//surroundings
-
-
-  
-  unsigned int original = arr[((t+1)%2)*MAXN*MAXN+(i)*MAXN+j];
-  sur[li][lj] = original;
-  //debugInfo[i*MAXN+j].globalValue = original;
-
-
-
-  if(li == 1){
-	sur[0][lj] = arr[((t+1)%2)*MAXN*MAXN+(i-1)*MAXN+j];
-	if(lj == 1){//corner
-	  sur[0][0] = arr[((t+1)%2)*MAXN*MAXN+(i-1)*MAXN+j-1];
-	} else if(lj == BSIDE || j == n){
-	  sur[0][lj+1] = arr[((t+1)%2)*MAXN*MAXN+(i-1)*MAXN+j+1];
-	}
-  }
-  if(lj == 1){
-	sur[li][0] = arr[((t+1)%2)*MAXN*MAXN+i*MAXN+j-1];
-  }
-  if(lj == BSIDE || j == n){
-	sur[li][lj+1] = arr[((t+1)%2)*MAXN*MAXN+i*MAXN+j+1];
-  }    
-  if(li == BSIDE || i == n){
-	sur[li+1][lj] = arr[((t+1)%2)*MAXN*MAXN+(i+1)*MAXN+j];      
-	if(lj == 1){
-	  sur[li+1][0] = arr[((t+1)%2)*MAXN*MAXN+(i+1)*MAXN+j-1];
-	} else if(lj == BSIDE || j == n){
-	  sur[li+1][lj+1] = arr[((t+1)%2)*MAXN*MAXN+(i+1)*MAXN+j+1];
-	}
-  }
-
-  __syncthreads();
-
-  if(!(i <= n && j <= n)) return;  
-  
   //printf("global (%d, %d), local (%d, %d)\n", i, j, li, lj);
   int count = 0;          
   //use add
-  if(sur[li-1][lj] == 1)
+  if(arr[((t+1)%2)*MAXN*MAXN+(i-1)*MAXN+j] == 1)
     count++;
-  if(sur[li-1][lj+1] == 1)
+  if(arr[((t+1)%2)*MAXN*MAXN+(i-1)*MAXN+j+1] == 1)
     count++;
-  if(sur[li-1][lj-1] == 1)
+  if(arr[((t+1)%2)*MAXN*MAXN+(i-1)*MAXN+j-1] == 1)
     count++;    
-  if(sur[li][lj+1] == 1)
+  if(arr[((t+1)%2)*MAXN*MAXN+(i)*MAXN+j+1] == 1)
     count++;
-  if(sur[li][lj-1] == 1)
+  if(arr[((t+1)%2)*MAXN*MAXN+(i)*MAXN+j-1] == 1)
     count++;
-  if(sur[li+1][lj+1] == 1)
+  if(arr[((t+1)%2)*MAXN*MAXN+(i+1)*MAXN+j+1] == 1)
     count++;
-  if(sur[li+1][lj] == 1)
+  if(arr[((t+1)%2)*MAXN*MAXN+(i+1)*MAXN+j] == 1)
     count++;    
-  if(sur[li+1][lj-1] == 1)
+  if(arr[((t+1)%2)*MAXN*MAXN+(i+1)*MAXN+j-1] == 1)
     count++;
 
   //debugInfo[i*MAXN+j].count = count;
+  int original = arr[((t+1)%2)*MAXN*MAXN+(i)*MAXN+j];
   
   if((original == 1) && !((count == 2) || (count == 3))){
 	arr[((t)%2)*MAXN*MAXN+i*MAXN+j] = 0;
@@ -112,12 +75,8 @@ int main() {
   }
   
   //網格和區塊大小設定
-  int globalN = n;
-  while(globalN % BSIDE)
-	globalN++;
-  int gridNum = globalN/BSIDE;
-  dim3 grid=dim3(gridNum,gridNum,1);
-  dim3 block=dim3(BSIDE,BSIDE,1);
+  dim3 grid=dim3(n,n,1);
+  dim3 block=dim3(1,1,1);
 
   //計算總執行緒數
   int num=grid.x*grid.y*grid.z*block.x*block.y*block.z;

@@ -9,6 +9,9 @@
 #define NUM_THREAD 4
 uint32_t prefix_sum[MAXN];
 int section[NUM_THREAD+1];
+
+
+
 int main() {
   int n;
   uint32_t key;
