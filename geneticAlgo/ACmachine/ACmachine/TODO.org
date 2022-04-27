@@ -1,0 +1,3 @@
+* new type of problem
+** target fitness in class chromosome
+** evaluation() in class chromosome

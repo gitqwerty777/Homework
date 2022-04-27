@@ -1,0 +1,16 @@
+g++ -O0 -Wall -std=c++11 -g  -c main.cpp
+g++ -O0 -Wall -std=c++11 -g  -c baseTM.cpp
+g++ -O0 -Wall -std=c++11 -g  -c brainFuck.cpp
+g++ -O0 -Wall -std=c++11 -g  -c ga.cpp
+g++ -O0 -Wall -std=c++11 -g  -c chromosome.cpp
+Makefile:13: recipe for target 'main.o' failed
+make: *** [main.o] 中斷
+Makefile:13: recipe for target 'baseTM.o' failed
+make: *** [baseTM.o] 中斷
+Makefile:13: recipe for target 'brainFuck.o' failed
+make: *** [brainFuck.o] 中斷
+Makefile:13: recipe for target 'chromosome.o' failed
+make: *** [chromosome.o] 中斷
+make: *** wait: 沒有子程序存在.  Stop.
+make: *** Waiting for unfinished jobs....
+make: *** wait: 沒有子程序存在.  Stop.
