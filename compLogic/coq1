@@ -1,0 +1,94 @@
+Check False .
+Check 0 .
+Check nat .
+
+Section Simple .
+Hypothesis P Q: Prop .
+
+Lemma one_line : P -> P .
+Proof .
+intros HP .
+exact HP .
+Qed .
+
+Check one_line .
+Print one_line .
+
+Lemma NP : P -> (P -> Q) -> Q .
+Proof .
+intros HP HPQ .
+apply HPQ .
+exact HP .
+Qed .
+
+Lemma conj : P /\ Q -> Q /\ P .
+Proof .
+intros HPandQ .
+elim HPandQ .
+intros HP HQ .
+split .
+exact HQ .
+exact HP .
+Qed .
+
+Lemma disj : P \/ Q -> Q \/ P .
+Proof .
+intros HPorQ .
+elim HPorQ .
+intros HP .
+right .
+exact HP .
+intros HQ .
+left .
+exact HQ .
+Qed .
+
+Lemma DoubleNegation: P -> ~~P .
+Proof .
+intros HP .
+red .
+intros HNP .
+absurd P .
+trivial .
+trivial .
+
+Qed .
+
+Require Import Classical .
+
+Hypothesis bar : Set .
+Hypothesis Joe : bar .
+Hypothesis drinks : bar -> Prop .
+
+Lemma drinker : exists x : bar, drinks x -> forall y : bar, drinks y .
+elim(classic (exists x : bar, ~drinks x)) .
+
+intros HXNotDrink .
+elim HXNotDrink .
+intros Jane JaneNotDrinks .
+exists Jane .
+intros JaneDrinks .
+absurd (drinks Jane) .
+trivial .
+trivial .
+
+intros AllDrinks .
+exists Joe .
+intros JoeDrinks .
+intros y0 .
+elim (classic (drinks y0)) .
+tauto .
+intros yDontDrinks .
+absurd (exists x: bar, ~drinks x) .
+trivial .
+exists y0 .
+trivial .
+Qed .
+
+
+
+Lemma homeowrk : ~P .
+Proof .
+tauto .
+Qed .
+Print homeowrk

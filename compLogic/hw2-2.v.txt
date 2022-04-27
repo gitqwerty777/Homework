@@ -1,0 +1,110 @@
+
+Section SimpleChineseRemainder .
+
+Require Import Znumtheory .
+Require Import Zdiv .
+Require Import ZArith .
+
+Open Scope Z_scope .
+
+Definition modulo (a b n : Z) : Prop := (n | (a - b)) .
+Notation "( a == b [ n ])" := (modulo a b n) .
+
+Lemma modulo_refl : forall a n : Z, (a == a [ n ]) .
+intros a n .
+red .
+rewrite Zminus_diag .
+apply Zdivide_0 .
+Qed .
+
+Lemma modulo_symm : forall a b n : Z, (a == b [ n ]) -> (b == a [ n ]) .
+intros a b n Hab .
+red in Hab |- * .
+apply Zdivide_opp_r_rev .
+cut (- (b - a) = a - b) . 
+  intros H . 
+  rewrite H . 
+  trivial .
+
+  unfold Zminus .
+  rewrite Zopp_plus_distr .
+  rewrite Zopp_involutive .
+  rewrite Zplus_comm .
+  trivial .
+Qed .
+
+Lemma modulo_tran : forall a b c n : Z, 
+  (a == b [ n ]) -> (b == c [ n ]) -> (a == c [ n ]) .
+intros a b c n Hab Hbc .
+red in Hab, Hbc |- * .
+cut (a - c = a - b + (b - c)) .
+  intros H .
+  rewrite H .
+  apply Zdivide_plus_r .
+    trivial .
+    trivial .
+
+  auto with * .
+Qed .
+
+Lemma modulo_plus_comm : forall a b n : Z, (a + b == b + a [ n ]) .
+intros a b c .
+red .
+rewrite Zplus_comm .
+rewrite Zminus_diag .
+auto with * .
+Qed .
+
+Lemma modulo_plus_assoc : forall a b c n : Z, (a + b + c == a + (b + c) [ n ]) .
+intros a b c n .
+red .
+rewrite Zplus_assoc .
+rewrite Zminus_diag .
+auto with * .
+Qed .
+
+Lemma modulo_plus_subst : forall a b c n : Z,
+  (a == b [ n ]) -> (a + c == b + c [ n ]) .
+intros a b c n Hab .
+red in Hab |- * .
+cut (a + c - (b + c) = a - b) .
+  intros H .
+  rewrite H .
+  trivial .
+
+  auto with * .
+Qed .
+
+(* more lemmae and theorems here *)
+
+Hypothesis m n : Z .
+Hypothesis co_prime : rel_prime m n .
+
+Theorem modulo_inv : forall m n : Z, rel_prime m n ->
+  exists x : Z, (m * x == 1 [ n ]) .
+Proof .
+intros m0 n0 x .
+red in x . 
+elim x .
+intros Hm Hn x0 .
+red in x0 .
+
+apply modulo_plus_subst .
+intros x0 .
+'' elim Hm . ''
+'' elim Hn . ''
+
+elim Hm0 .
+elim Hn0 .
+
+
+Theorem SimpleChineseRemainder : forall a b : Z,
+  exists x : Z, (x == a [ m ]) /\ (x == b [ n ]) .
+Proof .
+intros a b .
+elim co_prime .
+
+
+
+
+End SimpleChineseRemainder .

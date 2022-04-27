@@ -1,0 +1,9 @@
+use the makefile on linux OS
+
+compiler: g++ (Ubuntu 5.4.0-6ubuntu1~16.04.2) 5.4.0 20160609
+
+"make && make run" to produce DIMACS SAT file for (m, n) = (3, 3) and (3, 4)
+filename are pigeonhole33 and pigeonhole34
+
+"make test" to print output by running MINISAT
+output file name are minisat33 and minisat34
