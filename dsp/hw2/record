@@ -1,0 +1,21 @@
+baseline 0.7414
+iteration 0~9 0.7693
+9state+iteration 0~9 0.9125
+allmixture=3 0.9304
+allmixture=4 0.9367
+allmixture=5+1 0.9396
+allmixture=5 0.9407
+allmixture=5 2-9 0.9407
+allmixture=5 2-9 15iter 0.9373
+allmixture=5 2-9 8iter for all 3 loops 0.9419
+allmixture=5 2-9 10iter for all 3 loops 0.9430
+11state allmixture=5 2-9 10iter for all 3 loops 0.9661
+11state allmixture=5 2-10 10iter for all 3 loops 0.9649
+11state allmixture=5 1-5 5-10 10iter for all 3 loops 0.9522
+11state allmixture=5 1-5 5-10 10iter for all 3 loops 0.9574
+11state allmixture=7 10iter for all 3 loops 0.9614
+11state allmixture=9 2-10 10iter for all 3 loops 0.9638
+15state allmixture=9 2-10 10iter for all 3 loops 0.9701
+15state allmixture=9 2-14 10iter for all 3 loops 0.9735
+allmixture=6 0.9396
+allmixture=8 2-8 0.9315

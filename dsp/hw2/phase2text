@@ -1,0 +1,43 @@
+
+HTK Configuration Parameters[13]
+  Module/Tool     Parameter                  Value
+#                 NATURALWRITEORDER              TRUE
+#                 NATURALREADORDER              TRUE
+#                 ENORMALIZE                  TRUE
+#                 NUMCEPS                       12
+#                 CEPLIFTER                     22
+#                 NUMCHANS                      26
+#                 PREEMCOEF               0.970000
+#                 USEHAMMING                  TRUE
+#                 WINDOWSIZE         320000.000000
+#                 SAVEWITHCRC                FALSE
+#                 SAVECOMPRESSED             FALSE
+#                 TARGETRATE         100000.000000
+#                 TARGETKIND          MFCC_Z_E_D_A
+
+Stream 1
+ Mean Vector 
+      -0.00    -0.00    -0.00    -0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00    -0.00 ...
+ Variance Vector 
+      48.72    87.94    44.68    59.86    46.55    55.48    52.33    52.39    46.24    42.86    45.54    40.66 ...
+
+HTK Configuration Parameters[13]
+  Module/Tool     Parameter                  Value
+                  NATURALWRITEORDER              TRUE
+                  NATURALREADORDER              TRUE
+#                 ENORMALIZE                  TRUE
+                  NUMCEPS                       12
+                  CEPLIFTER                     22
+                  NUMCHANS                      26
+                  PREEMCOEF               0.970000
+                  USEHAMMING                  TRUE
+                  WINDOWSIZE         320000.000000
+                  SAVEWITHCRC                FALSE
+                  SAVECOMPRESSED             FALSE
+                  TARGETRATE         100000.000000
+                  TARGETKIND          MFCC_Z_E_D_A
+
+gcc -Wall -o spmodel_gen spmodel_gen.c
+gcc -Wall -o models_1mixsil models_1mixsil.c
+gcc -Wall -o macro macro.c
+CREATING SILENCE MODEL

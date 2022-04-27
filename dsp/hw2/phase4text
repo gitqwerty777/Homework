@@ -1,0 +1,35 @@
+
+HTK Configuration Parameters[13]
+  Module/Tool     Parameter                  Value
+#                 NATURALWRITEORDER              TRUE
+#                 NATURALREADORDER              TRUE
+#                 ENORMALIZE                  TRUE
+#                 NUMCEPS                       12
+#                 CEPLIFTER                     22
+#                 NUMCHANS                      26
+#                 PREEMCOEF               0.970000
+#                 USEHAMMING                  TRUE
+#                 WINDOWSIZE         320000.000000
+#                 SAVEWITHCRC                FALSE
+#                 SAVECOMPRESSED             FALSE
+#                 TARGETRATE         100000.000000
+#                 TARGETKIND          MFCC_Z_E_D_A
+
+ WARNING [-8232]  ExpandWordNet: Pronunciation 1 of sp is 'tee' word in HVite
+
+HTK Configuration Parameters[13]
+  Module/Tool     Parameter                  Value
+                  NATURALWRITEORDER              TRUE
+                  NATURALREADORDER              TRUE
+#                 ENORMALIZE                  TRUE
+                  NUMCEPS                       12
+                  CEPLIFTER                     22
+                  NUMCHANS                      26
+                  PREEMCOEF               0.970000
+                  USEHAMMING                  TRUE
+                  WINDOWSIZE         320000.000000
+                  SAVEWITHCRC                FALSE
+                  SAVECOMPRESSED             FALSE
+                  TARGETRATE         100000.000000
+                  TARGETKIND          MFCC_Z_E_D_A
+
