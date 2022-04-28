@@ -1,0 +1,233 @@
+\documentclass{article}
+
+\usepackage{fancyhdr}
+\usepackage{extramarks}
+\usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage{amsfonts}
+\usepackage{tikz}
+\usepackage[plain]{algorithm}
+\usepackage{algpseudocode}
+\usepackage[encapsulated]{CJK}
+\usepackage{graphicx}
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage{graphics, tikz, tkz-berge, tkz-graph}
+\graphicspath{ {./images/} }
+
+\usetikzlibrary{automata,positioning}
+
+%
+% Basic Document Settings
+%
+
+\topmargin=-0.45in
+\evensidemargin=0in
+\oddsidemargin=0in
+\textwidth=6.5in
+\textheight=9.0in
+\headsep=0.25in
+
+\linespread{1.1}
+
+\pagestyle{fancy}
+\lhead{\hmwkAuthorName}
+\chead{\hmwkClass\:\hmwkTitle}
+\rhead{\firstxmark}
+\lfoot{\lastxmark}
+\cfoot{\thepage}
+
+\renewcommand\headrulewidth{0.4pt}
+\renewcommand\footrulewidth{0.4pt}
+
+\setlength\parindent{0pt}
+
+%
+% Create Problem Sections
+%
+
+\newcommand{\enterProblemHeader}[1]{
+    \nobreak\extramarks{}{Problem \arabic{#1} continued on next page\ldots}\nobreak{}
+    \nobreak\extramarks{Problem \arabic{#1} (continued)}{Problem \arabic{#1} continued on next page\ldots}\nobreak{}
+}
+
+\newcommand{\exitProblemHeader}[1]{
+    \nobreak\extramarks{Problem \arabic{#1} (continued)}{Problem \arabic{#1} continued on next page\ldots}\nobreak{}
+    \stepcounter{#1}
+    \nobreak\extramarks{Problem \arabic{#1}}{}\nobreak{}
+}
+
+\setcounter{secnumdepth}{0}
+\newcounter{partCounter}
+\newcounter{homeworkProblemCounter}
+\setcounter{homeworkProblemCounter}{1}
+\nobreak\extramarks{Problem \arabic{homeworkProblemCounter}}{}\nobreak{}
+
+%
+% Homework Problem Environment
+%
+% This environment takes an optional argument. When given, it will adjust the
+% problem counter. This is useful for when the problems given for your
+% assignment aren't sequential. See the last 3 problems of this template for an
+% example.
+%
+\newenvironment{homeworkProblem}[1][-1]{
+    \ifnum#1>0
+        \setcounter{homeworkProblemCounter}{#1}
+    \fi
+    \section{Problem \arabic{homeworkProblemCounter}}
+    \setcounter{partCounter}{1}
+    \enterProblemHeader{homeworkProblemCounter}
+}{
+    \exitProblemHeader{homeworkProblemCounter}
+}
+
+%
+% Homework Details
+%   - Title
+%   - Due date
+%   - Class
+%   - Section/Time
+%   - Instructor
+%   - Author
+%
+
+\newcommand{\hmwkTitle}{Homework\ \#16}
+%\newcommand{\hmwkDueDate}{September 17, 2015}
+\newcommand{\hmwkClass}{Graph Theory}
+\newcommand{\hmwkClassTime}{}
+\newcommand{\hmwkClassInstructor}{}
+\newcommand{\hmwkAuthorName}{Lin Hung Cheng B01902059}
+
+%
+% Title Page
+
+\title{
+    \vspace{2in}
+    \textmd{\textbf{\hmwkClass:\ \hmwkTitle}}\\
+    %\normalsize\vspace{0.1in}\small{Due\ on\ \hmwkDueDate\ at 3:10pm}\\
+    %\vspace{0.1in}\large{\textit{\hmwkClassInstructor\ \hmwkClassTime}}
+    \vspace{3in}
+}
+
+\author{\textbf{\hmwkAuthorName}}
+\date{}
+
+\renewcommand{\part}[1]{\textbf{\large Part \Alph{partCounter}}\stepcounter{partCounter}\\}
+
+%
+% Various Helper Commands
+%
+
+% Useful for algorithms
+\newcommand{\alg}[1]{\textsc{\bfseries \footnotesize #1}}
+
+% For derivatives
+\newcommand{\deriv}[1]{\frac{\mathrm{d}}{\mathrm{d}x} (#1)}
+
+% For partial derivatives
+\newcommand{\pderiv}[2]{\frac{\partial}{\partial #1} (#2)}
+
+% Integral dx
+\newcommand{\dx}{\mathrm{d}x}
+
+% Alias for the Solution section header
+\newcommand{\solution}{\textbf{\large Solution}}
+
+% Probability commands: Expectation, Variance, Covariance, Bias
+\newcommand{\E}{\mathrm{E}}
+\newcommand{\Var}{\mathrm{Var}}
+\newcommand{\Cov}{\mathrm{Cov}}
+\newcommand{\Bias}{\mathrm{Bias}}
+
+\begin{document}
+
+\maketitle
+
+\pagebreak
+
+\begin{homeworkProblem}
+  \begin{CJK}{UTF8}{bsmi} % 開始 CJK1
+
+    $(1)\rightarrow(2)$\\
+    由(1)可知$deg(u), deg(v) \geq \frac{n}{2}$\\
+    ，所以$deg(u) + deg(v) \geq n$
+
+    $(2)\rightarrow(3)$\\
+    若(2)成立時，$d_k <= k, 1 \leq k < \frac{n}{2}$\\
+    則可以找到$d_i, d_j, ij \notin G, 1 \leq i, j < \frac{n}{2}$使deg(i)+deg(j) $<$ n\\
+    (因為$deg(i)< \frac{n}{2}$，i不可能連至所有$d_j\{j < \frac{n}{2}\}$)，矛盾。
+
+    $(3)\rightarrow(4)$\\
+    由(3)知，若$d_j < j$，則$j \geq \frac{n}{2}$，所以j, k都大於$\frac{n}{2}$，因此$d_j, d_k > d_{\frac{n}{2}}$，$d_j + d_k \geq n$。
+
+    $(4)\rightarrow(5)$\\
+    (5)的k, n-k代入(4)，可得$k < n-k$，$d_k \leq k$，若$d_{n-k} < n-k$，則$d_k + d_{n-k} \geq n$，$d_{n-k} \geq n-k$，矛盾。所以$d_{n-k} \geq n-k$。
+
+    $(5)\rightarrow(6)$\\
+    設符合條件(6)時會使$d_i + d_j < n$\\
+    考慮符合(6)條件的$(i, j) = (k, n-k)$(若i+j = n時成立, j更大的情況也會成立)，且令$i \leq j$。\\
+    則若$i < \frac{n}{2}$，由(5)可知，$d_j \geq n-k$，與(6)的條件矛盾。\\
+    所以$i \geq \frac{n}{2}$，此時$d_i < i, d_j < j$，且因為G不包含ij，\\
+    ...
+    
+    $(6)\rightarrow(7)$\\
+
+
+\end{CJK} % 結束 CJK 環境 
+\end{homeworkProblem}
+
+\begin{homeworkProblem}
+  \begin{CJK}{UTF8}{bsmi} % 開始 CJK2
+
+    \solution
+
+    取3-邊著色中的兩色為邊的$G'$，此時所有點的度數皆為2，即為一圈，且每一點皆經過，為一hamilton圈。
+    
+\end{CJK} % 結束 CJK 環境 
+\end{homeworkProblem}
+
+\pagebreak
+
+\begin{homeworkProblem}
+  \begin{CJK}{UTF8}{bsmi} % 開始 CJK3
+
+    \solution
+    
+    
+  \end{CJK} % 結束 CJK 環境 
+\end{homeworkProblem}
+
+\begin{homeworkProblem}
+  \begin{CJK}{UTF8}{bsmi} % 開始 CJK4
+
+    \solution
+    圖一有1個八邊的面，6個四邊的面。\\
+    由Grinberg定理可知，$6(f_8-g_8) + 4(f_6-g_6) = 0$\\
+    由於八邊的面為外邊，可寫成$4(f_6-g_6) = 6$。\\
+    不成立，所以無hamilton圈。
+
+    圖二有3個四邊的面，6個六邊的面。\\
+    由Grinberg定理可知，$4(f_6-g_6) + 2(f_4-g_4) = 0$\\
+    可由下圖路徑得到hamilton圈。
+    
+  \end{CJK} % 結束 CJK 環境    
+\end{homeworkProblem}
+
+\begin{homeworkProblem}
+  \begin{CJK}{UTF8}{bsmi} % 開始 CJK5
+
+    \proof
+
+    21個五邊的面，3個八邊的面，1個九邊的面。\\
+    由Grinberg定理可知，3($f_5-g_5$) + 6($f_8-g_8$) + 7($f_9-g_9$) = 0，而因為九邊的面必為外邊，$f_9-g_9=-1$。\\
+    所以3($f_5-g_5$) + 6($f_8-g_8$) = 7，不可能成立。
+    
+  \end{CJK} % 結束 CJK 環境    
+\end{homeworkProblem}
+
+\end{document}
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: t
+%%% End:

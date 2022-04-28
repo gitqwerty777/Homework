@@ -1,0 +1,261 @@
+\documentclass{article}
+
+\usepackage{fancyhdr}
+\usepackage{extramarks}
+\usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage{amsfonts}
+\usepackage{tikz}
+\usepackage[plain]{algorithm}
+\usepackage{algpseudocode}
+\usepackage[encapsulated]{CJK}
+\usepackage{graphicx}
+\usepackage{caption}
+\usepackage{subcaption}
+\graphicspath{ {./images/} }
+
+\usetikzlibrary{automata,positioning}
+
+%
+% Basic Document Settings
+%
+
+\topmargin=-0.45in
+\evensidemargin=0in
+\oddsidemargin=0in
+\textwidth=6.5in
+\textheight=9.0in
+\headsep=0.25in
+
+\linespread{1.1}
+
+\pagestyle{fancy}
+\lhead{\hmwkAuthorName}
+\chead{\hmwkClass\:\hmwkTitle}
+\rhead{\firstxmark}
+\lfoot{\lastxmark}
+\cfoot{\thepage}
+
+\renewcommand\headrulewidth{0.4pt}
+\renewcommand\footrulewidth{0.4pt}
+
+\setlength\parindent{0pt}
+
+%
+% Create Problem Sections
+%
+
+\newcommand{\enterProblemHeader}[1]{
+    \nobreak\extramarks{}{Problem \arabic{#1} continued on next page\ldots}\nobreak{}
+    \nobreak\extramarks{Problem \arabic{#1} (continued)}{Problem \arabic{#1} continued on next page\ldots}\nobreak{}
+}
+
+\newcommand{\exitProblemHeader}[1]{
+    \nobreak\extramarks{Problem \arabic{#1} (continued)}{Problem \arabic{#1} continued on next page\ldots}\nobreak{}
+    \stepcounter{#1}
+    \nobreak\extramarks{Problem \arabic{#1}}{}\nobreak{}
+}
+
+\setcounter{secnumdepth}{0}
+\newcounter{partCounter}
+\newcounter{homeworkProblemCounter}
+\setcounter{homeworkProblemCounter}{1}
+\nobreak\extramarks{Problem \arabic{homeworkProblemCounter}}{}\nobreak{}
+
+%
+% Homework Problem Environment
+%
+% This environment takes an optional argument. When given, it will adjust the
+% problem counter. This is useful for when the problems given for your
+% assignment aren't sequential. See the last 3 problems of this template for an
+% example.
+%
+\newenvironment{homeworkProblem}[1][-1]{
+    \ifnum#1>0
+        \setcounter{homeworkProblemCounter}{#1}
+    \fi
+    \section{Problem \arabic{homeworkProblemCounter}}
+    \setcounter{partCounter}{1}
+    \enterProblemHeader{homeworkProblemCounter}
+}{
+    \exitProblemHeader{homeworkProblemCounter}
+}
+
+%
+% Homework Details
+%   - Title
+%   - Due date
+%   - Class
+%   - Section/Time
+%   - Instructor
+%   - Author
+%
+
+\newcommand{\hmwkTitle}{Homework\ \#6}
+%\newcommand{\hmwkDueDate}{September 17, 2015}
+\newcommand{\hmwkClass}{Graph Theory}
+\newcommand{\hmwkClassTime}{}
+\newcommand{\hmwkClassInstructor}{}
+\newcommand{\hmwkAuthorName}{Lin Hung Cheng B01902059}
+
+%
+% Title Page
+
+
+\title{
+    \vspace{2in}
+    \textmd{\textbf{\hmwkClass:\ \hmwkTitle}}\\
+    %\normalsize\vspace{0.1in}\small{Due\ on\ \hmwkDueDate\ at 3:10pm}\\
+    %\vspace{0.1in}\large{\textit{\hmwkClassInstructor\ \hmwkClassTime}}
+    \vspace{3in}
+}
+
+\author{\textbf{\hmwkAuthorName}}
+\date{}
+
+\renewcommand{\part}[1]{\textbf{\large Part \Alph{partCounter}}\stepcounter{partCounter}\\}
+
+%
+% Various Helper Commands
+%
+
+% Useful for algorithms
+\newcommand{\alg}[1]{\textsc{\bfseries \footnotesize #1}}
+
+% For derivatives
+\newcommand{\deriv}[1]{\frac{\mathrm{d}}{\mathrm{d}x} (#1)}
+
+% For partial derivatives
+\newcommand{\pderiv}[2]{\frac{\partial}{\partial #1} (#2)}
+
+% Integral dx
+\newcommand{\dx}{\mathrm{d}x}
+
+% Alias for the Solution section header
+\newcommand{\solution}{\textbf{\large Solution}}
+
+% Probability commands: Expectation, Variance, Covariance, Bias
+\newcommand{\E}{\mathrm{E}}
+\newcommand{\Var}{\mathrm{Var}}
+\newcommand{\Cov}{\mathrm{Cov}}
+\newcommand{\Bias}{\mathrm{Bias}}
+
+\begin{document}
+
+\maketitle
+
+\pagebreak
+
+\begin{homeworkProblem}
+  \begin{CJK}{UTF8}{bsmi} % 開始 CJK
+    針對下面各個問題， 設計出對應的演算法。\\
+    (1) 求出一個連通圖中兩點x 和y 的距離。\\
+    (2) 判斷一個圖是否為二分圖。
+    
+    \solution
+
+    \textbf{1.}
+    對x作BFS，若找到y，回傳目前深度
+
+    \textbf{2.}
+
+    \begin{algorithm}[]
+      \begin{algorithmic}[1]
+        \Function{isBipartite}{n}
+        \For{each node v in G}
+        \If{visit[v] = false}
+        \If{visit(v, BLACK) = false}
+        \State \Return{false}
+        \EndIf
+        \EndIf
+        \EndFor
+        \State \Return{true}
+        \EndFunction
+
+        \Function{visit}{v, color}
+        \If{visit[v] = true}
+        \State \Return{true}
+        \EndIf
+        \State visit[v] $\gets$ true;
+        \State anotherColor $\gets$ (color = BLACK)?WHITE:BLACK;
+        \If{color[v] = anotherColor}
+        \State \Return{false}
+        \EndIf
+        \State color[v] $\gets$ color
+        \For{each neighbor n of v}
+        \If{cannot visit(n, anotherColor)}
+        \State \Return{false}
+        \EndIf
+        \EndFor
+        \State \Return{true}
+        \EndFunction
+
+      \end{algorithmic}
+      \caption{isBipartite}
+    \end{algorithm}
+
+  \end{CJK}
+\end{homeworkProblem}
+
+\begin{homeworkProblem}
+  \begin{CJK}{UTF8}{bsmi} % 開始 CJK
+    求圖3.12 中有16 點16 邊的圖的生成樹個數。
+    
+    \solution
+    
+    用矩陣-樹定理計算(by matlab)\\
+    ans = 2000
+   
+\end{CJK} % 結束 CJK 環境 
+\end{homeworkProblem}
+
+\pagebreak
+
+\begin{homeworkProblem}
+  \begin{CJK}{UTF8}{bsmi} % 開始 CJK
+    令Gn 是如圖3.13 所示具有2n 點和3n − 2 邊的圖。證明當n ≥ 3 時，
+    τ (Gn) = 4τ (Gn−1− τ (Gn−2)。當n ≥ 1 時，求τ (Gn)。
+
+    \proof
+    
+    從Gn到Gn+1，會多2個點和3個邊，而從$T_n$到$T_{n+1}$，會多2個點和2個邊。\\
+    多2個邊的情況有3種，多3個邊、少1個邊的情況有一種。\\
+    這四種情況使生成樹數目為$\tau(G_{n+1}) = \tau(G_n) \times 4$，但在少1個邊的情況時，會使$T_n$最後1個方塊的情況減少一種，所以需減掉$\tau(Gn-1)$。\\
+
+  \end{CJK} % 結束 CJK 環境 
+\end{homeworkProblem}
+
+\begin{homeworkProblem}
+  \begin{CJK}{UTF8}{bsmi} % 開始 CJK
+    若T 和T是連通圖G 的兩生成樹， 證明存在e∈ E(T\E(T) 使得T - e + e'和T + e - e'都是G 的生成樹。
+
+    \proof
+
+    令$e = \{x, y\}$，$T'$必存在路徑 x, v1, v2, ..., vk, y，可以找到$e'=(v_i, v_{i+1}) \notin$ T(否則T產生圈)。\\
+    此時$T'$ - $e'$ + e無圈(因為去除$e'$，圈仍未產生)，且邊數為n-1，為生成樹。\\
+    同理可證 T - e + $e'$ 也為生成樹。\\
+
+  \end{CJK} % 結束 CJK 環境    
+\end{homeworkProblem}
+
+\begin{homeworkProblem}
+  \begin{CJK}{UTF8}{bsmi} % 開始 CJK
+    Prim 演算法以下面方法產生一邊賦權連通圖G 的最小生成樹：試證明當演算法結束時， E 是G 的最小生成樹。
+
+    \proof
+    
+    設$T=\{V, E\}$為G的最小生成樹。使用prim algorithm生成的樹是$T'$:\\
+    假設$T \neq T'$:\\
+    令$e'$是prim algorithm第一個選擇到不在T的邊，而T選擇e，則$T-e+e'$也是生成樹，因為$e'$必為可連接的邊中權重最小的邊，e的權重w(e)大於等於$e'$的權重$w(e')$。\\
+    若$w(e) = w(e')$，則$w(T-e+e')=w(T')$，否則$w(e)>w(e')$使$w(T-e+e')<w(T)$，與T是最小生成樹的假設矛盾。\\
+    使用此方法在所有T和$T'$不同的邊，可推得$w(T)=w(T')$。
+    
+  \end{CJK} % 結束 CJK 環境    
+\end{homeworkProblem}
+
+\end{document}
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: t
+%%% End:

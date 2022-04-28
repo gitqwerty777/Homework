@@ -1,0 +1,239 @@
+\documentclass{article}
+
+\usepackage{fancyhdr}
+\usepackage{extramarks}
+\usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage{amsfonts}
+\usepackage{tikz}
+\usepackage[plain]{algorithm}
+\usepackage{algpseudocode}
+\usepackage[encapsulated]{CJK}
+\usepackage{graphicx}
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage{graphics, tikz, tkz-berge, tkz-graph}
+\graphicspath{ {./images/} }
+
+\usetikzlibrary{automata,positioning}
+
+%
+% Basic Document Settings
+%
+
+\topmargin=-0.45in
+\evensidemargin=0in
+\oddsidemargin=0in
+\textwidth=6.5in
+\textheight=9.0in
+\headsep=0.25in
+
+\linespread{1.1}
+
+\pagestyle{fancy}
+\lhead{\hmwkAuthorName}
+\chead{\hmwkClass\:\hmwkTitle}
+\rhead{\firstxmark}
+\lfoot{\lastxmark}
+\cfoot{\thepage}
+
+\renewcommand\headrulewidth{0.4pt}
+\renewcommand\footrulewidth{0.4pt}
+
+\setlength\parindent{0pt}
+
+%
+% Create Problem Sections
+%
+
+\newcommand{\enterProblemHeader}[1]{
+    \nobreak\extramarks{}{Problem \arabic{#1} continued on next page\ldots}\nobreak{}
+    \nobreak\extramarks{Problem \arabic{#1} (continued)}{Problem \arabic{#1} continued on next page\ldots}\nobreak{}
+}
+
+\newcommand{\exitProblemHeader}[1]{
+    \nobreak\extramarks{Problem \arabic{#1} (continued)}{Problem \arabic{#1} continued on next page\ldots}\nobreak{}
+    \stepcounter{#1}
+    \nobreak\extramarks{Problem \arabic{#1}}{}\nobreak{}
+}
+
+\setcounter{secnumdepth}{0}
+\newcounter{partCounter}
+\newcounter{homeworkProblemCounter}
+\setcounter{homeworkProblemCounter}{1}
+\nobreak\extramarks{Problem \arabic{homeworkProblemCounter}}{}\nobreak{}
+
+%
+% Homework Problem Environment
+%
+% This environment takes an optional argument. When given, it will adjust the
+% problem counter. This is useful for when the problems given for your
+% assignment aren't sequential. See the last 3 problems of this template for an
+% example.
+%
+\newenvironment{homeworkProblem}[1][-1]{
+    \ifnum#1>0
+        \setcounter{homeworkProblemCounter}{#1}
+    \fi
+    \section{Problem \arabic{homeworkProblemCounter}}
+    \setcounter{partCounter}{1}
+    \enterProblemHeader{homeworkProblemCounter}
+}{
+    \exitProblemHeader{homeworkProblemCounter}
+}
+
+%
+% Homework Details
+%   - Title
+%   - Due date
+%   - Class
+%   - Section/Time
+%   - Instructor
+%   - Author
+%
+
+\newcommand{\hmwkTitle}{Homework\ \#15}
+%\newcommand{\hmwkDueDate}{September 17, 2015}
+\newcommand{\hmwkClass}{Graph Theory}
+\newcommand{\hmwkClassTime}{}
+\newcommand{\hmwkClassInstructor}{}
+\newcommand{\hmwkAuthorName}{Lin Hung Cheng B01902059}
+
+%
+% Title Page
+
+\title{
+    \vspace{2in}
+    \textmd{\textbf{\hmwkClass:\ \hmwkTitle}}\\
+    %\normalsize\vspace{0.1in}\small{Due\ on\ \hmwkDueDate\ at 3:10pm}\\
+    %\vspace{0.1in}\large{\textit{\hmwkClassInstructor\ \hmwkClassTime}}
+    \vspace{3in}
+}
+
+\author{\textbf{\hmwkAuthorName}}
+\date{}
+
+\renewcommand{\part}[1]{\textbf{\large Part \Alph{partCounter}}\stepcounter{partCounter}\\}
+
+%
+% Various Helper Commands
+%
+
+% Useful for algorithms
+\newcommand{\alg}[1]{\textsc{\bfseries \footnotesize #1}}
+
+% For derivatives
+\newcommand{\deriv}[1]{\frac{\mathrm{d}}{\mathrm{d}x} (#1)}
+
+% For partial derivatives
+\newcommand{\pderiv}[2]{\frac{\partial}{\partial #1} (#2)}
+
+% Integral dx
+\newcommand{\dx}{\mathrm{d}x}
+
+% Alias for the Solution section header
+\newcommand{\solution}{\textbf{\large Solution}}
+
+% Probability commands: Expectation, Variance, Covariance, Bias
+\newcommand{\E}{\mathrm{E}}
+\newcommand{\Var}{\mathrm{Var}}
+\newcommand{\Cov}{\mathrm{Cov}}
+\newcommand{\Bias}{\mathrm{Bias}}
+
+\begin{document}
+
+\maketitle
+
+\pagebreak
+
+\begin{homeworkProblem}
+  \begin{CJK}{UTF8}{bsmi} % 開始 CJK1
+
+    \textbf{1.}
+
+    令n$\geq$m，令n部份的點為$n_1$, $n_2$，... $n_i$。$n_i$的連邊所著的顏色表示為$\{$$n_i$$m_1$, $n_i$$m_2$, ... $n_i$$m_m$$\}$（為方便，都表示成n=m的形式，在$n>m$的情況下，只需減少$n_i$的長度即可），著色值由1開始計算\\
+    在n = 1時，$n_1$ = $\{$1$\}$\\
+    在n = 2時，$n_1$ = $\{$1, 2$\}$，$n_2$ = $\{$2, 1$\}$\\
+    在n = 3時，$n_1$ =$\{$1, 2, 3$\}$，$n_2$ = $\{$3, 1, 2$\}$，$n_3$ = $\{$2, 3, 1$\}$\\
+    在n = 4時，$n_1$ =$\{$1, 2, 3, 4$\}$，$n_2$ = $\{$4, 1, 2, 3$\}$，$n_3$ = $\{$2, 3, 4, 1$\}$, $n_4$ = $\{$3, 4, 1, 2$\}$\\
+    在n = 5時，$n_1$ =$\{$1, 2, 3, 4, 5$\}$，$n_2$ = $\{$2, 3, 4, 5, 1$\}$，$n_3$ = $\{$3, 4, 5, 1, 2$\}$, $n_4$ = $\{$4, 5, 1, 2, 3$\}$, $n_5$ = $\{$5, 1, 2, 3, 4, 5$\}$\\
+    在n = 6時，$n_1$ =$\{$1, 2, 3, 4, 5, 6$\}$，$n_2$ = $\{$2, 3, 4, 5, 6, 1$\}$，$n_3$ = $\{$3, 4, 5, 6, 1, 2$\}$, $n_4$ = $\{$4, 5, 6, 1, 2, 3$\}$, $n_5$ = $\{$5, 6, 1, 2, 3, 4$\}$, $n_6$ = $\{$6, 1, 2, 3, 4, 5$\}$\\
+    以此類推，可得證。
+
+    \textbf{2.}
+    
+    $Q_1$：明顯成立\\
+    $Q_n$(n$\geq$2): 將其拆分成二分圖，由(1)可知二分圖的邊著色數等於最大度數，其邊著色數為n，成立。\\
+    
+\end{CJK} % 結束 CJK 環境 
+\end{homeworkProblem}
+
+\begin{homeworkProblem}
+  \begin{CJK}{UTF8}{bsmi} % 開始 CJK2
+
+    設G的邊著色數為最大度數，且G有截點v，G-v的連通部份為$C_1$, $C_2$, ...，其相接點分別為$v_1$, $v_2$, $v_3$...。\\
+    因為邊著色數為最大度數，令連到截點的邊的顏色為a，任何連通部份顏色a之外，任何一色的邊均形成完美匹配，其點個數為偶數。\\
+    考慮a的完美匹配，可發現$C_i-v_i$為顏色a的完美匹配，所以$C_i-v_i$有偶數個點，與上述條件矛盾。
+
+    %\footnote{https://math.dartmouth.edu/archive/m38s04/public_html/7126.pdf}
+    
+\end{CJK} % 結束 CJK 環境 
+\end{homeworkProblem}
+
+\pagebreak
+
+\begin{homeworkProblem}
+  \begin{CJK}{UTF8}{bsmi} % 開始 CJK3
+    \solution
+
+    \textbf{(a)}
+    
+    設G沒有一種2-邊著色使(a)條件成立。\\
+    則此時至少有一點v的度數$\geq$2且其相連邊的顏色都相同。\\
+    若圖G除去v及其鄰邊後產生兩個以上連通部份，則將其中一個連通部份和其連至v的邊換成另一顏色即可。\\
+    若圖G除去v及其鄰邊後產生一個連通部份：\\
+    (1)若$v1, v2, ... , vn$其中一點的度數$>$2且除了連至v的邊的c(v)=2，\\
+    或是度數=2，均可將連至v的邊換色使條件成立。\\
+    (2)若$v1, v2, ... , vn$所有點的度數$>$2且除了連至v的邊的c($v_i$)=1，則可以找到G中包含v的偶圈，令其長度為2m，則在偶圈中和v相距最遠的點w，其在偶圈中的兩邊顏色相同。將其中一邊換色即可使c(v) = 2。\\
+    若除了v之外，尚有其他點不合條件，則使用同方法換色即可。
+
+    % http://u.cs.biu.ac.il/~louzouy/courses/graphs/chap6.pdf
+
+    \textbf{(b)}
+    
+    設H沒有奇圈，則將H用(a)的方法重新著色，可得比f更高的c(v)和，矛盾，所以H有奇圈。
+
+    \textbf{(c)}
+
+    若著色數大於最大度數，設f是$\Delta$-最佳著色，則必有一點u使顏色a出現至少兩次，顏色b沒有出現(因為著色數$>\Delta$)。\\
+    由(b)可知，G中存在奇圈，與二分圖矛盾，得證。
+    
+  \end{CJK} % 結束 CJK 環境 
+\end{homeworkProblem}
+
+\begin{homeworkProblem}
+  \begin{CJK}{UTF8}{bsmi} % 開始 CJK4
+
+  \end{CJK} % 結束 CJK 環境    
+\end{homeworkProblem}
+
+\begin{homeworkProblem}
+  \begin{CJK}{UTF8}{bsmi} % 開始 CJK5
+    % http://www.iwr.uni-heidelberg.de/groups/comopt/teaching/ws05/graph-theory/graph-theory-4.pdf
+    不失一般性，設G為樹；在點個數n=1時，條件成立。\\
+    設n=N-1時，條件成立；則n=N時，令x，y是Gn中的兩點。\\
+    若xy相連，則移除此邊，G-xy = $G_x$ + $G_y$，且$G_x$和$G_y$符合條件。\\
+    令$x'$為x的任一鄰居, $y'$為y的任一鄰居，則$x'$和x，$y'$和y，$y'$和$x'$在$G_3$為鄰居。\\
+    此時有一個hamilton圈的路徑為$x-...-x'-y'-...-y-x$。(和G相同處省略)\\
+    若xy不相連，則令路徑P為x到y的路徑。取一點x的鄰居z。\\
+    令$x'$為x的任一鄰居, $y'$為y的任一鄰居，則$x'$和z在$G_3$為鄰居。\\
+    此時有一個hamilton圈的路徑為$x-...-x'-z-...-y'-...-y-x$。(和G相同處省略)\\
+    
+  \end{CJK} % 結束 CJK 環境    
+\end{homeworkProblem}
+
+\end{document}
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: t
+%%% End:

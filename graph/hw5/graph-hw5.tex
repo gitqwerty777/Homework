@@ -1,0 +1,247 @@
+\documentclass{article}
+
+\usepackage{fancyhdr}
+\usepackage{extramarks}
+\usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage{amsfonts}
+\usepackage{tikz}
+\usepackage[plain]{algorithm}
+\usepackage{algpseudocode}
+\usepackage[encapsulated]{CJK}
+\usepackage{graphicx}
+\usepackage{caption}
+\usepackage{subcaption}
+\graphicspath{ {./images/} }
+
+\usetikzlibrary{automata,positioning}
+
+%
+% Basic Document Settings
+%
+
+\topmargin=-0.45in
+\evensidemargin=0in
+\oddsidemargin=0in
+\textwidth=6.5in
+\textheight=9.0in
+\headsep=0.25in
+
+\linespread{1.1}
+
+\pagestyle{fancy}
+\lhead{\hmwkAuthorName}
+\chead{\hmwkClass\:\hmwkTitle}
+\rhead{\firstxmark}
+\lfoot{\lastxmark}
+\cfoot{\thepage}
+
+\renewcommand\headrulewidth{0.4pt}
+\renewcommand\footrulewidth{0.4pt}
+
+\setlength\parindent{0pt}
+
+%
+% Create Problem Sections
+%
+
+\newcommand{\enterProblemHeader}[1]{
+    \nobreak\extramarks{}{Problem \arabic{#1} continued on next page\ldots}\nobreak{}
+    \nobreak\extramarks{Problem \arabic{#1} (continued)}{Problem \arabic{#1} continued on next page\ldots}\nobreak{}
+}
+
+\newcommand{\exitProblemHeader}[1]{
+    \nobreak\extramarks{Problem \arabic{#1} (continued)}{Problem \arabic{#1} continued on next page\ldots}\nobreak{}
+    \stepcounter{#1}
+    \nobreak\extramarks{Problem \arabic{#1}}{}\nobreak{}
+}
+
+\setcounter{secnumdepth}{0}
+\newcounter{partCounter}
+\newcounter{homeworkProblemCounter}
+\setcounter{homeworkProblemCounter}{1}
+\nobreak\extramarks{Problem \arabic{homeworkProblemCounter}}{}\nobreak{}
+
+%
+% Homework Problem Environment
+%
+% This environment takes an optional argument. When given, it will adjust the
+% problem counter. This is useful for when the problems given for your
+% assignment aren't sequential. See the last 3 problems of this template for an
+% example.
+%
+\newenvironment{homeworkProblem}[1][-1]{
+    \ifnum#1>0
+        \setcounter{homeworkProblemCounter}{#1}
+    \fi
+    \section{Problem \arabic{homeworkProblemCounter}}
+    \setcounter{partCounter}{1}
+    \enterProblemHeader{homeworkProblemCounter}
+}{
+    \exitProblemHeader{homeworkProblemCounter}
+}
+
+%
+% Homework Details
+%   - Title
+%   - Due date
+%   - Class
+%   - Section/Time
+%   - Instructor
+%   - Author
+%
+
+\newcommand{\hmwkTitle}{Homework\ \#5}
+%\newcommand{\hmwkDueDate}{September 17, 2015}
+\newcommand{\hmwkClass}{Graph Theory}
+\newcommand{\hmwkClassTime}{}
+\newcommand{\hmwkClassInstructor}{}
+\newcommand{\hmwkAuthorName}{Lin Hung Cheng B01902059}
+
+%
+% Title Page
+
+
+\title{
+    \vspace{2in}
+    \textmd{\textbf{\hmwkClass:\ \hmwkTitle}}\\
+    %\normalsize\vspace{0.1in}\small{Due\ on\ \hmwkDueDate\ at 3:10pm}\\
+    %\vspace{0.1in}\large{\textit{\hmwkClassInstructor\ \hmwkClassTime}}
+    \vspace{3in}
+}
+
+\author{\textbf{\hmwkAuthorName}}
+\date{}
+
+\renewcommand{\part}[1]{\textbf{\large Part \Alph{partCounter}}\stepcounter{partCounter}\\}
+
+%
+% Various Helper Commands
+%
+
+% Useful for algorithms
+\newcommand{\alg}[1]{\textsc{\bfseries \footnotesize #1}}
+
+% For derivatives
+\newcommand{\deriv}[1]{\frac{\mathrm{d}}{\mathrm{d}x} (#1)}
+
+% For partial derivatives
+\newcommand{\pderiv}[2]{\frac{\partial}{\partial #1} (#2)}
+
+% Integral dx
+\newcommand{\dx}{\mathrm{d}x}
+
+% Alias for the Solution section header
+\newcommand{\solution}{\textbf{\large Solution}}
+
+% Probability commands: Expectation, Variance, Covariance, Bias
+\newcommand{\E}{\mathrm{E}}
+\newcommand{\Var}{\mathrm{Var}}
+\newcommand{\Cov}{\mathrm{Cov}}
+\newcommand{\Bias}{\mathrm{Bias}}
+
+\begin{document}
+
+\maketitle
+
+\pagebreak
+
+\begin{homeworkProblem}
+  \begin{CJK}{UTF8}{bsmi} % 開始 CJK
+    試證明定理3.7 的(5) 與(6) 和其他四個敘述等價。\\
+    \solution
+
+    已知(1)(2)(3)(4)等價
+    
+    (5)$\rightarrow$(1)\\
+已知G無圈，設G不連通，可以找到一邊e，其兩點分別屬於二個不同的連通部份，使G+e仍不會產生圈，矛盾。所以G必連通，符合(1)的條件。\\
+    (6)$\rightarrow$(1)\\
+    已知G連通，設G有圈，可以找到一邊e，為圈的其中一邊，使G-e仍連通，矛盾。所以G必無圈，符合(1)的條件。\\
+    (1)$\rightarrow$(5)\\
+   樹的定義即包含無圈，設任意加入一條新的邊不會使G有圈，則再任意加入一條邊後的圖G'仍然是樹，可以以此方法加入邊，產生樹$G_1, G_2, G_3$...，使$G_n$產生圈，矛盾。所以任意加入一條新的邊會使G有圈。\\
+    (1)$\rightarrow$(6)\\
+    樹的定義即包含連通，設任意刪除一條邊不會使G不連通，則刪除一條邊後的圖G'仍是樹，可以以此方法刪除邊，直到圖中沒有任何邊，與連通的假設矛盾。所以任意刪除一條邊會使G不連通。\\
+  \end{CJK}
+\end{homeworkProblem}
+
+\begin{homeworkProblem}
+  \begin{CJK}{UTF8}{bsmi} % 開始 CJK
+    若圖G 有n $\geq$ 3 點， 且從G 中去掉任一點均成樹， 試求G 的邊數， 並藉此求G。
+    
+    \solution
+    
+    若此時G有n個點，則去掉任一點後的G'會有n-1個點，因為G'是樹，有n-2條邊。\\
+    因為去掉任一點之後的邊數相同，可知每個點的度數相同，設其為d。\\
+    此時去掉一點會使度數減2d，由總度數變化的式子 dn - 2d = 2(n-2)，可求得d = 2。\\
+    G會有2n條邊，形成環的形狀。
+   
+\end{CJK} % 結束 CJK 環境 
+\end{homeworkProblem}
+
+\begin{homeworkProblem}
+  \begin{CJK}{UTF8}{bsmi} % 開始 CJK
+    試證當n ≥ 2 時正整數序列d1, d2, . . . , dn 是某棵樹的度序列之充分必要條件。
+    
+    \solution
+    
+    ($\Rightarrow$)\\
+    由性質3.6可知n個點的樹有n-1個邊，其度數和即為2(n-1) = 2n-2。\\
+    ($\Leftarrow$)\\
+    已知度數和為2n-2，在點序列為 $\{v_1 = 1, v_2 = 2,  ... ,v_{n-1} = 2, v_n = 1/}$ 的情況下，必可以找到一棵樹T = {V, E}，E為$\{(v_i, v_{i+1}), 1 \leq i \leq n-1\}$。
+  \end{CJK} % 結束 CJK 環境 
+\end{homeworkProblem}
+
+\begin{homeworkProblem}
+  \begin{CJK}{UTF8}{bsmi} % 開始 CJK
+    圖G 的中段（median）是指由s(x)最小的所有x所構成的集合。證明樹T的中段恰含一點或恰含相鄰兩點。
+    
+    \solution
+    
+    %設樹T的中段為x, y二個不相鄰的點，則可以在x-y路徑之間找到一點z使得\\
+    %\begin{equation}
+    %  d(z, v)=
+    %  \begin{cases}
+    %    d(z, v), & \text{if}\ d(z, v) < min(d(x, v)+d(x, z), d(y, v)+d(x, y)) \\
+    %    min(d(x, v)+d(x, z), d(y, v)+d(x, y)) , & \text{otherwise}
+    %  \end{cases}
+    %\end{equation}
+
+    設樹T的中段為x, y二個不相鄰的點，則可以在x-y路徑之間找到如下的z, w。\\
+    
+    設z為x-y路徑中，最靠近x的點，令x包含z的分支共有a個點，其他分支(不含x)共有b個點，則s(z) = s(x) + b - a\\
+    因為$s(x)=s(y)<s(z)$, $b > a$\\
+
+    設w為x-y路徑中，最靠近y的點，令x-y路徑(不含x, y)和x-y路徑中，除了x, y以外的分支共有c個點($0 < c < a$)，則s(w) = s(y) + (a-c) - (b+c)\\
+    因為$s(x)=s(y)<s(w)$, $a-c > b+c$, $a > b + 2c$\\
+
+    將兩個不等式列出，得$b > a > b+2c$，因為$c > 0$, 矛盾 ；所以x, y必相鄰。
+
+    %s(z') = s(z) + z另(= x另-1) - z(= x+1)
+    
+    %因為x到y的路徑是唯一的，若d(v, z)的路徑經過x，則d(v, y)也經過x，則d(y, v) > d(v, x) + d(x, z)，同理經過y時…。
+    %因為所有d(z, v) <= max(d(x, v), d(y, v))所以$\sum{d(z, v)} < \sum{d(x, v)}$，矛盾。
+  \end{CJK} % 結束 CJK 環境    
+\end{homeworkProblem}
+
+\begin{homeworkProblem}
+  \begin{CJK}{UTF8}{bsmi} % 開始 CJK
+    設G 是有n 點的連通圖， 定義一個新圖G 其點集為G 的所有生成樹所成的集合， 而兩生成樹相鄰若且唯若它們在G 中有n − 2 條共用邊。證明G是連通圖， 並決定G的直徑。
+
+    \proof
+    
+    G中任意兩個生成樹T和$T'$，距離為$d \leq n-1$，可以找到在T中一邊$e\notinT'$，和$T'$中一邊$e'\notinT$，如此可以產生一個新樹$T_1$ = T - e + $e'$，$d(T_1, T')$ = d-1，由此方法可以產生$T_2, T_3$...，直到$T_d$使 $ d(T_d, T') = 0$。\\
+    由此可知T和T'是連通的，所以G是連通圖。
+
+    % 證每條邊都可換 -> 直徑為n
+    因為生成樹每經過一個鄰居可使兩個生成樹的一條邊相同，生成樹最多只有n-1個邊不同，所以只須n-1個鄰居，直徑為n-1。
+
+    %    https://www.math.hmc.edu/~kindred/cuc-only/math104/hmwk-solns/hm3sol.pdf
+  \end{CJK} % 結束 CJK 環境    
+\end{homeworkProblem}
+
+\end{document}
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: t
+%%% End:

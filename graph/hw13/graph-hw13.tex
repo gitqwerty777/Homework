@@ -1,0 +1,222 @@
+n\documentclass{article}
+
+\usepackage{fancyhdr}
+\usepackage{extramarks}
+\usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage{amsfonts}
+\usepackage{tikz}
+\usepackage[plain]{algorithm}
+\usepackage{algpseudocode}
+\usepackage[encapsulated]{CJK}
+\usepackage{graphicx}
+\usepackage{caption}
+\usepackage{subcaption}
+\graphicspath{ {./images/} }
+
+\usetikzlibrary{automata,positioning}
+
+%
+% Basic Document Settings
+%
+
+\topmargin=-0.45in
+\evensidemargin=0in
+\oddsidemargin=0in
+\textwidth=6.5in
+\textheight=9.0in
+\headsep=0.25in
+
+\linespread{1.1}
+
+\pagestyle{fancy}
+\lhead{\hmwkAuthorName}
+\chead{\hmwkClass\:\hmwkTitle}
+\rhead{\firstxmark}
+\lfoot{\lastxmark}
+\cfoot{\thepage}
+
+\renewcommand\headrulewidth{0.4pt}
+\renewcommand\footrulewidth{0.4pt}
+
+\setlength\parindent{0pt}
+
+%
+% Create Problem Sections
+%
+
+\newcommand{\enterProblemHeader}[1]{
+    \nobreak\extramarks{}{Problem \arabic{#1} continued on next page\ldots}\nobreak{}
+    \nobreak\extramarks{Problem \arabic{#1} (continued)}{Problem \arabic{#1} continued on next page\ldots}\nobreak{}
+}
+
+\newcommand{\exitProblemHeader}[1]{
+    \nobreak\extramarks{Problem \arabic{#1} (continued)}{Problem \arabic{#1} continued on next page\ldots}\nobreak{}
+    \stepcounter{#1}
+    \nobreak\extramarks{Problem \arabic{#1}}{}\nobreak{}
+}
+
+\setcounter{secnumdepth}{0}
+\newcounter{partCounter}
+\newcounter{homeworkProblemCounter}
+\setcounter{homeworkProblemCounter}{1}
+\nobreak\extramarks{Problem \arabic{homeworkProblemCounter}}{}\nobreak{}
+
+%
+% Homework Problem Environment
+%
+% This environment takes an optional argument. When given, it will adjust the
+% problem counter. This is useful for when the problems given for your
+% assignment aren't sequential. See the last 3 problems of this template for an
+% example.
+%
+\newenvironment{homeworkProblem}[1][-1]{
+    \ifnum#1>0
+        \setcounter{homeworkProblemCounter}{#1}
+    \fi
+    \section{Problem \arabic{homeworkProblemCounter}}
+    \setcounter{partCounter}{1}
+    \enterProblemHeader{homeworkProblemCounter}
+}{
+    \exitProblemHeader{homeworkProblemCounter}
+}
+
+%
+% Homework Details
+%   - Title
+%   - Due date
+%   - Class
+%   - Section/Time
+%   - Instructor
+%   - Author
+%
+
+\newcommand{\hmwkTitle}{Homework\ \#13}
+%\newcommand{\hmwkDueDate}{September 17, 2015}
+\newcommand{\hmwkClass}{Graph Theory}
+\newcommand{\hmwkClassTime}{}
+\newcommand{\hmwkClassInstructor}{}
+\newcommand{\hmwkAuthorName}{Lin Hung Cheng B01902059}
+
+%
+% Title Page
+
+
+\title{
+    \vspace{2in}
+    \textmd{\textbf{\hmwkClass:\ \hmwkTitle}}\\
+    %\normalsize\vspace{0.1in}\small{Due\ on\ \hmwkDueDate\ at 3:10pm}\\
+    %\vspace{0.1in}\large{\textit{\hmwkClassInstructor\ \hmwkClassTime}}
+    \vspace{3in}
+}
+
+\author{\textbf{\hmwkAuthorName}}
+\date{}
+
+\renewcommand{\part}[1]{\textbf{\large Part \Alph{partCounter}}\stepcounter{partCounter}\\}
+
+%
+% Various Helper Commands
+%
+
+% Useful for algorithms
+\newcommand{\alg}[1]{\textsc{\bfseries \footnotesize #1}}
+
+% For derivatives
+\newcommand{\deriv}[1]{\frac{\mathrm{d}}{\mathrm{d}x} (#1)}
+
+% For partial derivatives
+\newcommand{\pderiv}[2]{\frac{\partial}{\partial #1} (#2)}
+
+% Integral dx
+\newcommand{\dx}{\mathrm{d}x}
+
+% Alias for the Solution section header
+\newcommand{\solution}{\textbf{\large Solution}}
+
+% Probability commands: Expectation, Variance, Covariance, Bias
+\newcommand{\E}{\mathrm{E}}
+\newcommand{\Var}{\mathrm{Var}}
+\newcommand{\Cov}{\mathrm{Cov}}
+\newcommand{\Bias}{\mathrm{Bias}}
+
+\begin{document}
+
+\maketitle
+
+\pagebreak
+
+\begin{homeworkProblem}
+  \begin{CJK}{UTF8}{bsmi} % 開始 CJK1
+
+    \solution
+    
+    
+
+    
+  \end{CJK}
+\end{homeworkProblem}
+
+\begin{homeworkProblem}
+  \begin{CJK}{UTF8}{bsmi} % 開始 CJK2
+    \proof
+    \textbf{(1)}
+    一個面f的鄰居彼此不相鄰，若相鄰，則其分界邊會分割f為兩個面，矛盾。\\
+    因此可將所有面分為兩個獨立集，分別著兩種顏色。\\
+    
+    \textbf{(2)}
+    考慮三條邊互相交叉形成的三角形，可知著色數最小為3。\\
+    以座標值的和排序以著色，則著色時最多只有2個鄰居被著色。所以著色數小於3。
+    
+\end{CJK} % 結束 CJK 環境 
+\end{homeworkProblem}
+
+\pagebreak
+
+\begin{homeworkProblem}
+  \begin{CJK}{UTF8}{bsmi} % 開始 CJK3
+    \solution
+    % Prove that i = 1, which implies there is a k-clique
+    %　證明所有貪求的著色都可換成一樣的。
+    令v1, v2, ... vn為一種貪求著色順序，其著色結果為S。\\
+    可知任何貪求著色都可用交換顏色的方法轉換成S。\\
+    % 使用p4=free
+    
+  \end{CJK} % 結束 CJK 環境 
+\end{homeworkProblem}
+
+\begin{homeworkProblem}
+  \begin{CJK}{UTF8}{bsmi} % 開始 CJK4
+
+    \solution
+    
+    $G_{n, k}$包含$K_{k+1}$，所以著色數最少為k+1。\\
+    且因為在$G_{n, k}$的外環中的任k+1個連續點，都要彼此著色不同(因為這k+1個點的導出子圖為$K_{k+1}$)，\\
+    所以依外環順時針方向貪求著色，即可得最佳著色。\\
+    若n能被k+1整除，則依照順時針方向貪求著色，可得著色數為k+1。\\
+    若n不能被k+1整除，則依照順時針方向貪求著色，可得著色數為k+2。
+
+  \end{CJK} % 結束 CJK 環境    
+\end{homeworkProblem}
+
+\begin{homeworkProblem}
+  \begin{CJK}{UTF8}{bsmi} % 開始 CJK5
+
+    \solution
+    
+    %為Hadwiger-Nelson定理:\\
+    取一點v，作向外延伸的六個正三角形，邊長均為1，可發現最少需著色數3。\\
+    取一點v，作向外延伸的一個正三角形，令其他兩點為v1, v2，則取經過此兩點，半徑為1的另一個圓，其圓心為w。\\
+    因為v1, v2顏色已確定，w的顏色會和v相同。再用同方法作一點y，和w的距離為1，則w, y顏色相同且距離為1，矛盾。\\
+    所以著色數最小為4。\\
+    將平面切為邊長=0.999的正六邊形，以七種顏色填上，此時著色成立。所以著色數最大為7。
+    
+  \end{CJK} % 結束 CJK 環境    
+\end{homeworkProblem}
+
+\end{document}
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: t
+%%% End:

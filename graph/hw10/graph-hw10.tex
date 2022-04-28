@@ -1,0 +1,270 @@
+\documentclass{article}
+
+\usepackage{fancyhdr}
+\usepackage{extramarks}
+\usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage{amsfonts}
+\usepackage{tikz}
+\usepackage[plain]{algorithm}
+\usepackage{algpseudocode}
+\usepackage[encapsulated]{CJK}
+\usepackage{graphicx}
+\usepackage{caption}
+\usepackage{subcaption}
+\graphicspath{ {./images/} }
+
+\usetikzlibrary{automata,positioning}
+
+%
+% Basic Document Settings
+%
+
+\topmargin=-0.45in
+\evensidemargin=0in
+\oddsidemargin=0in
+\textwidth=6.5in
+\textheight=9.0in
+\headsep=0.25in
+
+\linespread{1.1}
+
+\pagestyle{fancy}
+\lhead{\hmwkAuthorName}
+\chead{\hmwkClass\:\hmwkTitle}
+\rhead{\firstxmark}
+\lfoot{\lastxmark}
+\cfoot{\thepage}
+
+\renewcommand\headrulewidth{0.4pt}
+\renewcommand\footrulewidth{0.4pt}
+
+\setlength\parindent{0pt}
+
+%
+% Create Problem Sections
+%
+
+\newcommand{\enterProblemHeader}[1]{
+    \nobreak\extramarks{}{Problem \arabic{#1} continued on next page\ldots}\nobreak{}
+    \nobreak\extramarks{Problem \arabic{#1} (continued)}{Problem \arabic{#1} continued on next page\ldots}\nobreak{}
+}
+
+\newcommand{\exitProblemHeader}[1]{
+    \nobreak\extramarks{Problem \arabic{#1} (continued)}{Problem \arabic{#1} continued on next page\ldots}\nobreak{}
+    \stepcounter{#1}
+    \nobreak\extramarks{Problem \arabic{#1}}{}\nobreak{}
+}
+
+\setcounter{secnumdepth}{0}
+\newcounter{partCounter}
+\newcounter{homeworkProblemCounter}
+\setcounter{homeworkProblemCounter}{1}
+\nobreak\extramarks{Problem \arabic{homeworkProblemCounter}}{}\nobreak{}
+
+%
+% Homework Problem Environment
+%
+% This environment takes an optional argument. When given, it will adjust the
+% problem counter. This is useful for when the problems given for your
+% assignment aren't sequential. See the last 3 problems of this template for an
+% example.
+%
+\newenvironment{homeworkProblem}[1][-1]{
+    \ifnum#1>0
+        \setcounter{homeworkProblemCounter}{#1}
+    \fi
+    \section{Problem \arabic{homeworkProblemCounter}}
+    \setcounter{partCounter}{1}
+    \enterProblemHeader{homeworkProblemCounter}
+}{
+    \exitProblemHeader{homeworkProblemCounter}
+}
+
+%
+% Homework Details
+%   - Title
+%   - Due date
+%   - Class
+%   - Section/Time
+%   - Instructor
+%   - Author
+%
+
+\newcommand{\hmwkTitle}{Homework\ \#10}
+%\newcommand{\hmwkDueDate}{September 17, 2015}
+\newcommand{\hmwkClass}{Graph Theory}
+\newcommand{\hmwkClassTime}{}
+\newcommand{\hmwkClassInstructor}{}
+\newcommand{\hmwkAuthorName}{Lin Hung Cheng B01902059}
+
+%
+% Title Page
+
+
+\title{
+    \vspace{2in}
+    \textmd{\textbf{\hmwkClass:\ \hmwkTitle}}\\
+    %\normalsize\vspace{0.1in}\small{Due\ on\ \hmwkDueDate\ at 3:10pm}\\
+    %\vspace{0.1in}\large{\textit{\hmwkClassInstructor\ \hmwkClassTime}}
+    \vspace{3in}
+}
+
+\author{\textbf{\hmwkAuthorName}}
+\date{}
+
+\renewcommand{\part}[1]{\textbf{\large Part \Alph{partCounter}}\stepcounter{partCounter}\\}
+
+%
+% Various Helper Commands
+%
+
+% Useful for algorithms
+\newcommand{\alg}[1]{\textsc{\bfseries \footnotesize #1}}
+
+% For derivatives
+\newcommand{\deriv}[1]{\frac{\mathrm{d}}{\mathrm{d}x} (#1)}
+
+% For partial derivatives
+\newcommand{\pderiv}[2]{\frac{\partial}{\partial #1} (#2)}
+
+% Integral dx
+\newcommand{\dx}{\mathrm{d}x}
+
+% Alias for the Solution section header
+\newcommand{\solution}{\textbf{\large Solution}}
+
+% Probability commands: Expectation, Variance, Covariance, Bias
+\newcommand{\E}{\mathrm{E}}
+\newcommand{\Var}{\mathrm{Var}}
+\newcommand{\Cov}{\mathrm{Cov}}
+\newcommand{\Bias}{\mathrm{Bias}}
+
+\begin{document}
+
+\maketitle
+
+\pagebreak
+
+\begin{homeworkProblem}
+  \begin{CJK}{UTF8}{bsmi} % 開始 CJK1
+
+    \solution
+
+    \textbf{1.}
+    
+    對2-連通圖G進行貪求耳分解，形成$p_1$, $p_2$, $p_3$ ... $p_n$。\\
+    只考慮$p_1$時，則依圈的方向組合成$P_3$，明顯條件成立。\\
+
+    考慮$p_1$+$p_2$，先將$p_2$的點排成兩兩相斥的$P_3$，若無多餘點，因為$p_1$, $p_2$都符合條件，條件成立；若有多餘點(最多兩個)，則可和$p_1$的點排成$P_3$，剩下的$p_1$仍為$P_N$，組合成$P_3$後，最多只會剩餘兩個點，條件成立。\\
+    
+    考慮$p_1$+$p_2$+$p_3$，先將$p_3$的點排成兩兩相斥的$P_3$，若$p_3$無多餘的點，條件成立；若$p_3$有多餘點：\\
+    
+    1. 若$p_3$的端點皆屬於$p_1$：\\
+    若$p_1$+$p_2$時，$p_2$沒有多餘點，則將$p_1$+$p_3$用$p_1$+$p_2$的方式組合，條件成立。\\
+    否則，$p_2$也有多餘點，因為G是claw-free的圖，此時$p_2$的端點和$p_3$的端點兩兩不同，令$p_2$的端點為$v_1$, $v_2$，$p_3$的端點為$v_3$, $v_4$，\\
+    不失一般性，可將$p_1$分為４個點集：b1 = $v_1$~$v_2$(不含$v_1$, $v_2$), $a_1$ = $v_2$~$v_3$, $b_2$ = $v_3$~$v_4$(不含$v_3$, $v_4$), $a_2 = v_4~v_1，|a_1, a_2| \geq 0$, 因為是貪求耳分解，$|p_2| \leq |b_1|$, 且$p_2$有多餘點，$|p_2|>0, |b_1, b_2| > 0$。\\
+    先從$p_2$, $p_3$開始組合$P_3$，從$p_2$, $p_3$取$v_1$ = Neighbor(端點)為起始點組合出$P_3$，因為$p_2$, $p_3$各有兩個端點，有2*2 = 4種組合方法，此時$p_1$的兩個連通部分的點集分別為\\
+    $\{(a_1), (a_2, b_1, b_2)\}, \{(a_1, b_1), (a_2, b_2)\}, \{(a_1, b_2), (a_2, b_1)\}, \{(a_2), (a_1, b_1, b_2)\}$(若$p_2$, $p_3$只剩一點，需要額外對其中一個連通部分去除一點，以形成$P_3$)，經列舉可知，必有一種方法可使兩個連通部分剩餘的點數目 $\leq 2$，條件成立。\\
+    
+    2. 若$p_3$的端點皆屬於$p_2$，則剩下的$p_2$可能會不連通，令其點集為$r_1$, $r_2$；，在$p_1$以$v_1$和$v_2$為起始/結束點的路徑的點集為$q_1$, $q_2$, 可和$p_2$的點排成$P_3$，$r_1$, $r_2$可和$q_1$, $q_2$排成$P_3$，使$r_1$, $r_2$的點完全用完，由和1.相似的方法列舉可知，必有一種方法可使$q_1$, $q_2$剩餘的點數目$ \leq $2，條件成立。\\
+
+    3. 若$p_3$的端點分別屬於$p_1$, $p_2$，則從$v_1$ = Neighbor(屬於$p_1$的端點)為起始點組合成$P_3$，其餘組合方法與2. 的方法相同。\\
+
+    其餘耳朵也可用此方法遞迴證明條件成立。
+
+   %其實只要證一筆劃問題
+    
+  \end{CJK}
+\end{homeworkProblem}
+
+\begin{homeworkProblem}
+  \begin{CJK}{UTF8}{bsmi} % 開始 CJK2
+
+    \proof
+    
+    區塊可能為一條邊或是2-連通圖。\\
+    且因G無偶圈，區塊中無偶圈。\\
+    若區塊$G'$為2-連通圖，且無偶圈，此時$G'$的耳分解為$p_1$, $p_2$, ... $p_n$。\\
+    $p_1$必為奇圈，若$p_2$的端點為$v_1$, $v_2$：\\
+    因為$p_1$為奇圈，$v_1$, $v_2$必有一奇數距離$P_1$，一偶數距離的路徑$P_2$。\\
+    若$p_2$上有偶數個邊，則 $P_2$$p_2$ 形成一偶圈；若$p_2$上有奇數個邊，則$v_1$, $P_1$$p_2$ 形成一偶圈；所以$G'$沒有$p_1$以外的耳分解，即$G'$為奇圈。\\
+    所以在無偶圈的情況下，區塊只可能為一條邊或是奇圈。
+    
+\end{CJK} % 結束 CJK 環境 
+\end{homeworkProblem}
+
+\pagebreak
+
+\begin{homeworkProblem}
+  \begin{CJK}{UTF8}{bsmi} % 開始 CJK3
+
+    \solution
+    
+    %參考資料：http://web.stanford.edu/class/cme305/Midterm/midterm_soln_2012.pdf\\
+    
+    不失一般性，可設從X為原點，到$Y=\{0, 1\} \times  k$。\\
+    k條路徑的第一條邊分別為(1, 0, ..., 0), (0, 1, ..., 0), (0, 0, ... , 1)，分別屬於路徑$p_1$, $p_2$, $p_3$..., $p_k$。\\
+    $p_i$的路徑產生方法為：先將第i個座標的值設為1，然後從i+1個座標軸開始，依序將每個座標軸的值修正成和Y相同的值，直到和Y完全相同或是修正到第i個座標軸。\\
+    若$Y_i$ = 1，$p_j$(j $\neq$i)必不包含$p_i$經過的邊，因為$p_j$在修正到i時才會使第i個座標軸的值為1，此時已經修正過第j~i座標軸的值。\\
+    若$Y_i$ = 0，$p_j$(j $\neq$ i)必不經過$p_i$經過的點，因為$p_j$的第i個座標軸的值永遠為0。\\
+    
+  \end{CJK} % 結束 CJK 環境 
+\end{homeworkProblem}
+
+\begin{homeworkProblem}
+  \begin{CJK}{UTF8}{bsmi} % 開始 CJK4
+
+    \solution
+
+    \textbf{1.}
+    
+    令G為極小2連通圖，此時$\delta(G) \geq \kappa(G) = 2$，而因為G為2-connected，所以有耳分解。\\
+    設耳分解的耳朵為$p_1$, $p_2$, $p_3$ ... $p_n$。若$\delta(G) > 2$，則G中的每個點至少都屬於一個耳朵的端點。\\
+    此時除去一條邊產生圖$G'$，設邊為$p_i$上的$v_1$$v_2$：\\
+    若有$p_j$為$v_1$, $v_2$作為端點，則可將$p_j$放入$p_i$中，取代原本的$v_1$$v_2$，並移除$p_j$；因為此時$p_1$, $p_2$,...$p_i$-$v_1$$v_2$+$p_j$, ... $p_j-1$, $p_j+1$ ...$p_n$為圖$G'$的耳分解；\\
+    若無$v_1$, $v_2$作為端點的耳分解，則可找到以$v_1$作端點的$p_j$和以$v_2$作端點的pk，將$p_i$中與$v_1$連通的部分$p_{i1}$放入$p_j$中，將$p_i$中與$v_2$連通的部分$p_{i2}$放入$p_k$中，並移除$p_i$，此時$p_1$, $p_2$,... $p_j$+$p_{i1}$, ... $p_k$+$p_{i2}$ ...$p_n$為圖$G'$的耳分解；\\
+    所以$G'$必為2-連通，與G為極小2連通圖的條件矛盾。因為$2 = \kappa(G) \leq \delta(G) \leq 2$，$\delta(G) = 2$。
+
+    \textbf{2.}
+    
+    令G為極小k邊連通圖，其$\kappa '(G) = k \leq \delta(G)$。\\
+    若$\delta(G) > k$，不失一般性，令$\delta(G) = k+1$，則從G中去除一邊，形成圖$G'$，因為...，圖$G'$是k-邊連通，矛盾。
+    
+    % 證g'是k邊連通
+
+%http://www.math.wvu.edu/~milans/teaching/fa14/math573/hw/hw6.pdf
+    
+  \end{CJK} % 結束 CJK 環境    
+\end{homeworkProblem}
+
+\begin{homeworkProblem}
+  \begin{CJK}{UTF8}{bsmi} % 開始 CJK5
+    %http://math.stackexchange.com/questions/287063/problem-of-graph-connectivity-with-degree-sequences
+
+    \solution
+
+    \textbf{1.}
+    
+    令圖G符合k = m時的條件，移除m個點時產生圖$G'$，依所給的條件可知，$G'$中$d_j$的度數 $\geq$ j，$G'$的度序列符合k=0的條件。\\
+    %證k=0連通
+    若k=0時的圖不連通，不失一般性，設有兩個連通部份A, B, 且A包含$d_n$對應的點, 則A最少有$d_n$+1個點；此時B最多只有n-1-$d_n$個點，因為$d_{n-1-d_n} \geq n-1-d_n$，B的最大點度數的最小值為n-1-$d_n$，與B為一連通部分的假設矛盾，k=0時圖連通。\\
+    因為移除m個點後依然連通，k=m時，圖G為m+1連通，得證。
+
+    \textbf{2.}
+
+    $V = \{a, b, c, d\}$\\
+    $E = \{ab, ac, ad, bd, cd\}$\\
+    j = 1, k = 2\\
+    
+    若移除k個度數為n-1的點，則G剩下j個度數為j-1的點，n-j-k個度數為n-j-k-1。
+    
+  \end{CJK} % 結束 CJK 環境    
+\end{homeworkProblem}
+
+\end{document}
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: t
+%%% End:

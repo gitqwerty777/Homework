@@ -1,0 +1,273 @@
+\documentclass{article}
+
+\usepackage{fancyhdr}
+\usepackage{extramarks}
+\usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage{amsfonts}
+\usepackage{tikz}
+\usepackage[plain]{algorithm}
+\usepackage{algpseudocode}
+\usepackage[encapsulated]{CJK}
+\usepackage{graphicx}
+\usepackage{caption}
+\usepackage{subcaption}
+\graphicspath{ {./images/} }
+
+\usetikzlibrary{automata,positioning}
+
+%
+% Basic Document Settings
+%
+
+\topmargin=-0.45in
+\evensidemargin=0in
+\oddsidemargin=0in
+\textwidth=6.5in
+\textheight=9.0in
+\headsep=0.25in
+
+\linespread{1.1}
+
+\pagestyle{fancy}
+\lhead{\hmwkAuthorName}
+\chead{\hmwkClass\:\hmwkTitle}
+\rhead{\firstxmark}
+\lfoot{\lastxmark}
+\cfoot{\thepage}
+
+\renewcommand\headrulewidth{0.4pt}
+\renewcommand\footrulewidth{0.4pt}
+
+\setlength\parindent{0pt}
+
+%
+% Create Problem Sections
+%
+
+\newcommand{\enterProblemHeader}[1]{
+    \nobreak\extramarks{}{Problem \arabic{#1} continued on next page\ldots}\nobreak{}
+    \nobreak\extramarks{Problem \arabic{#1} (continued)}{Problem \arabic{#1} continued on next page\ldots}\nobreak{}
+}
+
+\newcommand{\exitProblemHeader}[1]{
+    \nobreak\extramarks{Problem \arabic{#1} (continued)}{Problem \arabic{#1} continued on next page\ldots}\nobreak{}
+    \stepcounter{#1}
+    \nobreak\extramarks{Problem \arabic{#1}}{}\nobreak{}
+}
+
+\setcounter{secnumdepth}{0}
+\newcounter{partCounter}
+\newcounter{homeworkProblemCounter}
+\setcounter{homeworkProblemCounter}{1}
+\nobreak\extramarks{Problem \arabic{homeworkProblemCounter}}{}\nobreak{}
+
+%
+% Homework Problem Environment
+%
+% This environment takes an optional argument. When given, it will adjust the
+% problem counter. This is useful for when the problems given for your
+% assignment aren't sequential. See the last 3 problems of this template for an
+% example.
+%
+\newenvironment{homeworkProblem}[1][-1]{
+    \ifnum#1>0
+        \setcounter{homeworkProblemCounter}{#1}
+    \fi
+    \section{Problem \arabic{homeworkProblemCounter}}
+    \setcounter{partCounter}{1}
+    \enterProblemHeader{homeworkProblemCounter}
+}{
+    \exitProblemHeader{homeworkProblemCounter}
+}
+
+%
+% Homework Details
+%   - Title
+%   - Due date
+%   - Class
+%   - Section/Time
+%   - Instructor
+%   - Author
+%
+
+\newcommand{\hmwkTitle}{Homework\ \#4}
+%\newcommand{\hmwkDueDate}{September 17, 2015}
+\newcommand{\hmwkClass}{Graph Theory}
+\newcommand{\hmwkClassTime}{}
+\newcommand{\hmwkClassInstructor}{}
+\newcommand{\hmwkAuthorName}{Lin Hung Cheng B01902059}
+
+%
+% Title Page
+%
+
+\title{
+    \vspace{2in}
+    \textmd{\textbf{\hmwkClass:\ \hmwkTitle}}\\
+    %\normalsize\vspace{0.1in}\small{Due\ on\ \hmwkDueDate\ at 3:10pm}\\
+    %\vspace{0.1in}\large{\textit{\hmwkClassInstructor\ \hmwkClassTime}}
+    \vspace{3in}
+}
+
+\author{\textbf{\hmwkAuthorName}}
+\date{}
+
+\renewcommand{\part}[1]{\textbf{\large Part \Alph{partCounter}}\stepcounter{partCounter}\\}
+
+%
+% Various Helper Commands
+%
+
+% Useful for algorithms
+\newcommand{\alg}[1]{\textsc{\bfseries \footnotesize #1}}
+
+% For derivatives
+\newcommand{\deriv}[1]{\frac{\mathrm{d}}{\mathrm{d}x} (#1)}
+
+% For partial derivatives
+\newcommand{\pderiv}[2]{\frac{\partial}{\partial #1} (#2)}
+
+% Integral dx
+\newcommand{\dx}{\mathrm{d}x}
+
+% Alias for the Solution section header
+\newcommand{\solution}{\textbf{\large Solution}}
+
+% Probability commands: Expectation, Variance, Covariance, Bias
+\newcommand{\E}{\mathrm{E}}
+\newcommand{\Var}{\mathrm{Var}}
+\newcommand{\Cov}{\mathrm{Cov}}
+\newcommand{\Bias}{\mathrm{Bias}}
+
+\begin{document}
+
+\maketitle
+
+\pagebreak
+
+\begin{homeworkProblem}
+  \begin{CJK}{UTF8}{bsmi} % 開始 CJK
+    在第2.5 節Euler 迴路的案例中， 改用連續空間表示圖2.10 的圖、但同時要含SAME 和MARK 兩個欄位。
+    
+    \solution
+
+    說明： First element of DATA is index 1. Elements in DATA: [data, same, mark]\\
+    BEG: [1, 5, 11, 15]\\
+    DATA: [[4, 18, 0], [2, 8, 0], [2, 9, 0], [2, 10, 0], [4, 17, 0], [3, 13, 0], [3, 14, 0], [1, 2, 0], [1, 3, 0], [1, 4, 0], [4, 15, 0], [4, 16, 0], [2, 6, 0], [2, 7, 0], [3, 11, 0], [3, 12, 0], [2, 5, 0], [1, 1, 0]]\\
+    
+  \end{CJK}
+\end{homeworkProblem}
+
+\begin{homeworkProblem}
+  \begin{CJK}{UTF8}{bsmi} % 開始 CJK
+    在第2.5 節Euler迴路的案例中，利用連續空間表示圖、據以改寫程式inputgraph。
+
+    \begin{algorithm}[]
+      \begin{algorithmic}[1]
+        \Function{INPUTGRAPH}{$V, E$}   \Comment{array index start from 1}
+        \State{} $DATA \gets array(E.length*2)$ \Comment{use DATA to represent [data, same, mark]}
+        \For{each element d in DATA}
+        \State $d.mark \gets 0$
+        \State $d.same \gets 0$
+        \EndFor
+        \State{} $BEG \gets array(E.length*2)$
+        \For{edge in E}
+        \State{} $v[edge.first].push(edge.second)$ \Comment{first and second are two vertex in the edge}
+        \State{} $v[edge.second].push(edge.first)$
+        \EndFor
+        \State{} $BEG[i] \gets 1$
+        \For{$i \gets 2, n$}
+        \State{} $BEG[i] \gets BEG[i-1]+v[i-1].length$
+        \EndFor
+        \State{} $index \gets 1$
+
+        \For{$i \gets 1, n$}
+        \For{each node N in v[i]}
+        \State{} $DATA[index].data \gets N$
+        \State{} $index \gets index + 1$
+        \EndFor
+        \EndFor
+
+        \For{$i \gets 1, n$}
+        \For{$j \gets 1, v[i].length$}
+        \If{$v[i][j].same = 0$}
+        \State $sameIndex \gets findSameIndex(v[i][j].data, i)$
+        \State \Comment{findSameIndex: goto BEG=v[i][j].data and return the nearest index which same = 0 and data = i}
+        \State $myIndex \gets BEG[i]+j-1$
+        \State $DATA[sameIndex].same \gets myIndex$
+        \State $DATA[myIndex].same \gets sameIndex$
+        \EndIf
+        \EndFor
+        \EndFor
+        
+        \State \Return{BEG, DATA}
+        \EndFunction
+      \end{algorithmic}
+      \caption{inputGraph}
+    \end{algorithm}
+
+\end{CJK} % 結束 CJK 環境 
+\end{homeworkProblem}
+
+\pagebreak
+
+\begin{homeworkProblem}
+  \begin{CJK}{UTF8}{bsmi} % 開始 CJK
+    在第2.5 節Euler 迴路的案例中， 利用連續空間表示圖、據以改寫程式Eulertour。
+
+    \begin{algorithm}[]
+      \begin{algorithmic}[1]
+        \Function{EULERTOUR}{$V, E, BEG, DATA$}
+        \State $tour \gets array(E.length)$
+        \State $tournext \gets array(E.length)$
+        \State $tourprev \gets array(E.length)$
+        \State $new \gets 1$
+        \State $cur \gets new$
+        \State $tour[new] \gets 1$
+        \State $tournext[new] \gets 0$
+        \State $tourprev[new] \gets 0$
+        \While{$cur \neq 0$}
+        \State $i \gets tour[cur]$
+        \If{$BEG[i] \neq 0$} \Comment{BEG has the same usage as ADJ}
+        \State $new \gets new+1$
+        \State $tour[new] \gets data[BEG[i]]$
+        \State $tournext[new] \gets tournext[cur]$
+        \State $tourprev[new] \gets cur$
+        \State $cur \gets new$
+        \State $mark[BEG[i]] \gets 1$
+        \State $mark[DATA[BEG[i]].same] \gets 1$
+        \State $j \gets DATA[BEG[i]].next$
+        \While{$j \neq 0$ and $mark[j] = 1$}
+        \State $j \gets DATA[j].next$
+        \EndWhile
+        \Else
+        \State $cur \gets tourprev[cur]$
+        \EndIf
+        \EndWhile
+        \State \Return{tour, tourprev, tournext}
+        \EndFunction
+      \end{algorithmic}
+      \caption{Euler Tour}
+    \end{algorithm}
+    
+  \end{CJK} % 結束 CJK 環境 
+\end{homeworkProblem}
+
+\begin{homeworkProblem}
+  \begin{CJK}{UTF8}{bsmi} % 開始 CJK
+    在聯集尋找問題中， 我們若採用NAME、集合表列與SIZE 的方法， 試證明，若演算法總共做了n-1 次聯集的運算， 那需時會是O(n log n)
+
+    \solution
+    
+    考慮最差情況(使計算量最多)，最後一次運算應為$\frac{n}{2}$ 和$\frac{n}{2}$ 的聯集；而要形成$\frac{n}{2}$，最差的情況是 $\frac{n}{4}$ 和 $\frac{n}{4}$　的聯集……，以此類推。\\
+    直到 1 和 1的聯集，可知$\frac{n}{2}$最多出現1次，$\frac{n}{4}$最多出現2次...，最多共需要$\frac{n}{2} * 1 + \frac{n}{4} * 2 + \frac{n}{8} * 4 + ... + 1 * \frac{n}{2}$次計算，因為此式共有$\log_2{n}$項，每項和均為$\frac{n}{2}$，所以其和$\frac{n}{2}\log_2{n} \leq n\log_2{n}$
+  \end{CJK} % 結束 CJK 環境    
+\end{homeworkProblem}
+
+\end{document}
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: t
+%%% End:

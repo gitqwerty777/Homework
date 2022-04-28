@@ -1,0 +1,250 @@
+\documentclass{article}
+
+\usepackage{fancyhdr}
+\usepackage{extramarks}
+\usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage{amsfonts}
+\usepackage{tikz}
+\usepackage[plain]{algorithm}
+\usepackage{algpseudocode}
+\usepackage[encapsulated]{CJK}
+\usepackage{graphicx}
+\usepackage{caption}
+\usepackage{subcaption}
+\graphicspath{ {./images/} }
+
+\usetikzlibrary{automata,positioning}
+
+%
+% Basic Document Settings
+%
+
+\topmargin=-0.45in
+\evensidemargin=0in
+\oddsidemargin=0in
+\textwidth=6.5in
+\textheight=9.0in
+\headsep=0.25in
+
+\linespread{1.1}
+
+\pagestyle{fancy}
+\lhead{\hmwkAuthorName}
+\chead{\hmwkClass\:\hmwkTitle}
+\rhead{\firstxmark}
+\lfoot{\lastxmark}
+\cfoot{\thepage}
+
+\renewcommand\headrulewidth{0.4pt}
+\renewcommand\footrulewidth{0.4pt}
+
+\setlength\parindent{0pt}
+
+%
+% Create Problem Sections
+%
+
+\newcommand{\enterProblemHeader}[1]{
+    \nobreak\extramarks{}{Problem \arabic{#1} continued on next page\ldots}\nobreak{}
+    \nobreak\extramarks{Problem \arabic{#1} (continued)}{Problem \arabic{#1} continued on next page\ldots}\nobreak{}
+}
+
+\newcommand{\exitProblemHeader}[1]{
+    \nobreak\extramarks{Problem \arabic{#1} (continued)}{Problem \arabic{#1} continued on next page\ldots}\nobreak{}
+    \stepcounter{#1}
+    \nobreak\extramarks{Problem \arabic{#1}}{}\nobreak{}
+}
+
+\setcounter{secnumdepth}{0}
+\newcounter{partCounter}
+\newcounter{homeworkProblemCounter}
+\setcounter{homeworkProblemCounter}{1}
+\nobreak\extramarks{Problem \arabic{homeworkProblemCounter}}{}\nobreak{}
+
+%
+% Homework Problem Environment
+%
+% This environment takes an optional argument. When given, it will adjust the
+% problem counter. This is useful for when the problems given for your
+% assignment aren't sequential. See the last 3 problems of this template for an
+% example.
+%
+\newenvironment{homeworkProblem}[1][-1]{
+    \ifnum#1>0
+        \setcounter{homeworkProblemCounter}{#1}
+    \fi
+    \section{Problem \arabic{homeworkProblemCounter}}
+    \setcounter{partCounter}{1}
+    \enterProblemHeader{homeworkProblemCounter}
+}{
+    \exitProblemHeader{homeworkProblemCounter}
+}
+
+%
+% Homework Details
+%   - Title
+%   - Due date
+%   - Class
+%   - Section/Time
+%   - Instructor
+%   - Author
+%
+
+\newcommand{\hmwkTitle}{Homework\ \#9}
+%\newcommand{\hmwkDueDate}{September 17, 2015}
+\newcommand{\hmwkClass}{Graph Theory}
+\newcommand{\hmwkClassTime}{}
+\newcommand{\hmwkClassInstructor}{}
+\newcommand{\hmwkAuthorName}{Lin Hung Cheng B01902059}
+
+%
+% Title Page
+
+
+\title{
+    \vspace{2in}
+    \textmd{\textbf{\hmwkClass:\ \hmwkTitle}}\\
+    %\normalsize\vspace{0.1in}\small{Due\ on\ \hmwkDueDate\ at 3:10pm}\\
+    %\vspace{0.1in}\large{\textit{\hmwkClassInstructor\ \hmwkClassTime}}
+    \vspace{3in}
+}
+
+\author{\textbf{\hmwkAuthorName}}
+\date{}
+
+\renewcommand{\part}[1]{\textbf{\large Part \Alph{partCounter}}\stepcounter{partCounter}\\}
+
+%
+% Various Helper Commands
+%
+
+% Useful for algorithms
+\newcommand{\alg}[1]{\textsc{\bfseries \footnotesize #1}}
+
+% For derivatives
+\newcommand{\deriv}[1]{\frac{\mathrm{d}}{\mathrm{d}x} (#1)}
+
+% For partial derivatives
+\newcommand{\pderiv}[2]{\frac{\partial}{\partial #1} (#2)}
+
+% Integral dx
+\newcommand{\dx}{\mathrm{d}x}
+
+% Alias for the Solution section header
+\newcommand{\solution}{\textbf{\large Solution}}
+
+% Probability commands: Expectation, Variance, Covariance, Bias
+\newcommand{\E}{\mathrm{E}}
+\newcommand{\Var}{\mathrm{Var}}
+\newcommand{\Cov}{\mathrm{Cov}}
+\newcommand{\Bias}{\mathrm{Bias}}
+
+\begin{document}
+
+\maketitle
+
+\pagebreak
+
+\begin{homeworkProblem}
+  \begin{CJK}{UTF8}{bsmi} % 開始 CJK1
+
+    \solution
+
+    \textbf{1.}
+
+    設$K_{m, n}$的m部份為a個點所在的部份，則$|[S, \bar{S}]|$為\\
+    a(n-b)+b(m-a)\\
+
+    \textbf{2.}
+
+    若要使$K_{m, n}$不連通，在移除最少邊的情況下，剩下最大的連通部份為$K_{m, n-1}$或$K_{m-1, n}$\\
+    令a = m, b = n-1，此時$|[S, \bar{S}]|$ = m\\
+    令a = m-1, b = n，此時$|[S, \bar{S}]|$ = n\\
+    可知$\kappa'(K_{m, n}) = min\{m, n\}$\\
+
+    \textbf{3.}
+
+    $K_{3, 3}$至少需3條邊才可連通，所以除去7條邊會剩2條邊，無法連通。\\
+    根據公式，邊截集的數目為(1)所示，在$ 0 \leq a, b \leq 3$的條件下，無法找到邊為7的邊截集。
+    
+  \end{CJK}
+\end{homeworkProblem}
+
+\begin{homeworkProblem}
+  \begin{CJK}{UTF8}{bsmi} % 開始 CJK2
+
+    \proof
+
+    若 $\delta(G) = n-1$，此時G為完全圖，$\kappa(G) = n-1$\\
+    若 $\delta(G) = n-2$，刪除任意n-3個點產生$G'$，此時$G'$仍為連通，因為每個點最多只會和一個點不相連，而$G'$有三個點。\\
+    因為$\kappa(G)<\delta(G)$，所以$\kappa(G) = n-2$，得證。\\
+
+    $V = \{a, b, c, d, e\}, E = \{ab, ac, bc, cd, ce, de\}$\\
+    $\delta(G) = 2$\\
+    $\kappa(G) = 1$(c)\\
+    
+\end{CJK} % 結束 CJK 環境 
+\end{homeworkProblem}
+
+\pagebreak
+
+\begin{homeworkProblem}
+  \begin{CJK}{UTF8}{bsmi} % 開始 CJK3
+
+    \solution
+
+    與5.6的證明類似\\
+    令$S = \kappa(G)$，$H_1, H_2$ 為 G-S 的兩個連通部份，對於任何$v\in S$，v在$H_1$與$H_2$當中都必各有鄰居。\\
+    又因為$\Delta(G) \leq 3$，考慮下列情況：\\
+    若deg(v) = 3：\\
+    如果v在其中某一部份當中只有一個鄰居，那我們就把連往該鄰居的邊加入切斷集中。\\
+    如果v在兩部份當中都只有一個鄰居但第三個鄰居不屬於S，那隨便將連往$H_1$或$H_2$的其中一邊加入切斷集。\\
+    如果v在兩部份當中都只有一個鄰居，但第三個鄰居u也屬於S，將v和u連往同一側的邊選出。\\
+    若deg(v) = 2，v各有一條邊連到$H_1$, $H_2$，隨便將連往$H_1$或$H_2$的其中一邊加入切斷集。\\
+    若deg(v) = 1，則移除此邊即可。\\
+
+    共使用了$|S|$條邊加入切斷集中，得證。
+    
+  \end{CJK} % 結束 CJK 環境 
+\end{homeworkProblem}
+
+\begin{homeworkProblem}
+  \begin{CJK}{UTF8}{bsmi} % 開始 CJK4
+
+    \solution
+    
+    對於只有一個圈的仙人掌，n個點會有n個邊，符合條件。\\
+    對於只有圈的仙人掌，可從原本第一個圈的點連出新的圈，每增加一個m個點的圈，會使n增加m-1，邊數增加m。\\
+    新增加的點數m-1, 邊數為 m，$3((m-1)-1)/2 \geq m$，化簡得 $m \geq 3$，因為m形成圈，條件必成立。且因為第一個圈已符合條件，整體也符合條件。\\
+    對於有邊和圈的仙人掌，每加入一條邊(連結兩個區塊的圈)，會增加一個點和一條邊，所以必符合條件，得證。
+    
+  \end{CJK} % 結束 CJK 環境    
+\end{homeworkProblem}
+
+\begin{homeworkProblem}
+  \begin{CJK}{UTF8}{bsmi} % 開始 CJK5
+
+    \solution
+    
+    $\Rightarrow$
+
+    % http://math.stackexchange.com/questions/179759/suppose-g-is-2-connected-show-that-there-exists-a-path-from-x-to-y-cont
+    因為G為2連通，y-z必在一圈C上，令在C中的y-z路徑為p，x-y的一條路徑為P:\\
+    若$P \cap C = y$，則路徑為P-p(重複的y不計)。\\
+    若$|P \cap C|>1$，則找P中第一個和p重複的點v，從v沿著C中的路徑到達y，即可走p。路徑為x-v-y-p(重複的y不計)。\\
+
+    $\Leftarrow$
+    
+    設去除一點y後，存在x, z使G-y沒有x-z路徑，則代表所有$v \in G-x-y-z$所產生的x-v-z路徑都有經過y，所以在G中找不到能產生x-z-y的路徑，因為x-z路徑中必包含y，矛盾。
+    
+   
+  \end{CJK} % 結束 CJK 環境    
+\end{homeworkProblem}
+
+\end{document}
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: t
+%%% End:

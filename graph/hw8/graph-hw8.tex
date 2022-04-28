@@ -1,0 +1,270 @@
+\documentclass{article}
+
+\usepackage{fancyhdr}
+\usepackage{extramarks}
+\usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage{amsfonts}
+\usepackage{tikz}
+\usepackage[plain]{algorithm}
+\usepackage{algpseudocode}
+\usepackage[encapsulated]{CJK}
+\usepackage{graphicx}
+\usepackage{caption}
+\usepackage{subcaption}
+\graphicspath{ {./images/} }
+
+\usetikzlibrary{automata,positioning}
+
+%
+% Basic Document Settings
+%
+
+\topmargin=-0.45in
+\evensidemargin=0in
+\oddsidemargin=0in
+\textwidth=6.5in
+\textheight=9.0in
+\headsep=0.25in
+
+\linespread{1.1}
+
+\pagestyle{fancy}
+\lhead{\hmwkAuthorName}
+\chead{\hmwkClass\:\hmwkTitle}
+\rhead{\firstxmark}
+\lfoot{\lastxmark}
+\cfoot{\thepage}
+
+\renewcommand\headrulewidth{0.4pt}
+\renewcommand\footrulewidth{0.4pt}
+
+\setlength\parindent{0pt}
+
+%
+% Create Problem Sections
+%
+
+\newcommand{\enterProblemHeader}[1]{
+    \nobreak\extramarks{}{Problem \arabic{#1} continued on next page\ldots}\nobreak{}
+    \nobreak\extramarks{Problem \arabic{#1} (continued)}{Problem \arabic{#1} continued on next page\ldots}\nobreak{}
+}
+
+\newcommand{\exitProblemHeader}[1]{
+    \nobreak\extramarks{Problem \arabic{#1} (continued)}{Problem \arabic{#1} continued on next page\ldots}\nobreak{}
+    \stepcounter{#1}
+    \nobreak\extramarks{Problem \arabic{#1}}{}\nobreak{}
+}
+
+\setcounter{secnumdepth}{0}
+\newcounter{partCounter}
+\newcounter{homeworkProblemCounter}
+\setcounter{homeworkProblemCounter}{1}
+\nobreak\extramarks{Problem \arabic{homeworkProblemCounter}}{}\nobreak{}
+
+%
+% Homework Problem Environment
+%
+% This environment takes an optional argument. When given, it will adjust the
+% problem counter. This is useful for when the problems given for your
+% assignment aren't sequential. See the last 3 problems of this template for an
+% example.
+%
+\newenvironment{homeworkProblem}[1][-1]{
+    \ifnum#1>0
+        \setcounter{homeworkProblemCounter}{#1}
+    \fi
+    \section{Problem \arabic{homeworkProblemCounter}}
+    \setcounter{partCounter}{1}
+    \enterProblemHeader{homeworkProblemCounter}
+}{
+    \exitProblemHeader{homeworkProblemCounter}
+}
+
+%
+% Homework Details
+%   - Title
+%   - Due date
+%   - Class
+%   - Section/Time
+%   - Instructor
+%   - Author
+%
+
+\newcommand{\hmwkTitle}{Homework\ \#8}
+%\newcommand{\hmwkDueDate}{September 17, 2015}
+\newcommand{\hmwkClass}{Graph Theory}
+\newcommand{\hmwkClassTime}{}
+\newcommand{\hmwkClassInstructor}{}
+\newcommand{\hmwkAuthorName}{Lin Hung Cheng B01902059}
+
+%
+% Title Page
+
+
+\title{
+    \vspace{2in}
+    \textmd{\textbf{\hmwkClass:\ \hmwkTitle}}\\
+    %\normalsize\vspace{0.1in}\small{Due\ on\ \hmwkDueDate\ at 3:10pm}\\
+    %\vspace{0.1in}\large{\textit{\hmwkClassInstructor\ \hmwkClassTime}}
+    \vspace{3in}
+}
+
+\author{\textbf{\hmwkAuthorName}}
+\date{}
+
+\renewcommand{\part}[1]{\textbf{\large Part \Alph{partCounter}}\stepcounter{partCounter}\\}
+
+%
+% Various Helper Commands
+%
+
+% Useful for algorithms
+\newcommand{\alg}[1]{\textsc{\bfseries \footnotesize #1}}
+
+% For derivatives
+\newcommand{\deriv}[1]{\frac{\mathrm{d}}{\mathrm{d}x} (#1)}
+
+% For partial derivatives
+\newcommand{\pderiv}[2]{\frac{\partial}{\partial #1} (#2)}
+
+% Integral dx
+\newcommand{\dx}{\mathrm{d}x}
+
+% Alias for the Solution section header
+\newcommand{\solution}{\textbf{\large Solution}}
+
+% Probability commands: Expectation, Variance, Covariance, Bias
+\newcommand{\E}{\mathrm{E}}
+\newcommand{\Var}{\mathrm{Var}}
+\newcommand{\Cov}{\mathrm{Cov}}
+\newcommand{\Bias}{\mathrm{Bias}}
+
+\begin{document}
+
+\maketitle
+
+\pagebreak
+
+\begin{homeworkProblem}
+  \begin{CJK}{UTF8}{bsmi} % 開始 CJK
+    有n 個公車司機， n 條費時分別為x1, x2, . . . , xn 的上午路線以及n 條費時分別為y1, y2, . . . ,yn的下午路線。如果他的工時總和超過t就要付他加班費。公司的目標是要分配每個司機一條上午路線及一條下午路線， 使得所有司機超時的總和越小越好。\\
+    將上述問題化為加權二分圖問題， 並證明將第i 長的上午路線和第i 短的下午路線分配給同一個司機即可達到公司的目的。\\
+
+    \solution
+    
+    將上午路線和下午路線視為二分圖的兩邊，形成二分圖，其邊($x_i$, $y_j$)為$\{x_iy_j | x_i+y_j-t \geq 0\}$，權重為$x_i+y_j-t$，其餘邊權重為0，所得的匹配權重和即為加班費總和。\\
+
+    \proof
+    
+    % 因為時數固定，若能有愈多匹配，將使扣掉的工時總和愈多(若有人工時小於t，代表只扣掉小於t的工時)，加班費(= 工時總和 - 扣掉的工時)愈少。\\
+    希望匹配得到最低權重。\\
+    令 $x_1 > x_2 > x_3 .... > x_n, y_1 < y_2 < y_3 ... < y_n$。\\
+    若為匹配 $(x_1, y_1), (x_2, y_2), (x_3, y_3) ... (x_n, y_n)$，則使權重最小($x_1$和$y_1$最不可能有權重$>0$的邊，以此類推)。
+    
+  \end{CJK}
+\end{homeworkProblem}
+
+\begin{homeworkProblem}
+  \begin{CJK}{UTF8}{bsmi} % 開始 CJK
+    證明一棵樹T 有完美匹配的充要條件是$o(T − v) = 1$ 對T 中的每一個點v 都成立。
+    
+    \proof\\
+    
+    \rightarrow\\
+    
+    樹T有完美匹配，則有一個最大交錯路徑P經過所有點，且點的數目為偶數。\\
+    若T-v存在兩個奇連通部份$S_1, S_2$，因為$S_1, S_2$的點在T中也不相連，$S_1, S_2$中的奇點無法匹配，無法達到完美匹配，矛盾。\\
+    且T-v有奇數個點，T-v至少有一點奇連通部份。所以T-v恰有一個奇連通部份。\\
+    
+    \leftarrow\\
+    
+    % 在n = 2的時候明顯成立。\\
+    % 設在 n = m 的時候成立，設v, w為T的leaf，則考慮樹T' = T-v-w中的點x，若T-x只有一個奇連通部份，則T'-x仍然只有一個奇連通部份；若T-x有一個奇連通部份和其他偶連通部份，T'-x，若。\\
+    對於每個v，只需找到 (T-v的奇連通部份)$ \cap N(v)$ 的點作匹配即可，因為$o(T-v) = 1$且T為樹，對應的點w恰有一個，若v的奇連通部份為S，此時$w \in S$，則S-w為偶數點，根據條件，不會有2個以上奇連通部份，所以S-w只有偶連通部份。則w的奇連通部份 $\in \bar{S}$，此時$v \in \bar{S}$，所以每兩點會互相對應，可找到一完美匹配。\\
+        
+\end{CJK} % 結束 CJK 環境 
+\end{homeworkProblem}
+
+\pagebreak
+
+\begin{homeworkProblem}
+  \begin{CJK}{UTF8}{bsmi} % 開始 CJK
+    假設圖G 滿足$o(G − S) ≤ |S|$ 對所有$S ⊆ V (G)$ 皆成立， 而且T 是滿足$o(G − T) = |T|$ 的最大點集。\\
+    (a) 證明G − T 的所有連通部分都有奇數點， 進而證明$T = ∅$。\\
+    (b) 對於G − T 的任一連通部分C， 證明C − x 對於所有$x ∈ V (G)$ 都滿足Tutte 條件。\\
+    (c) 設C 是G − T 的所有連通部分所成的集合， 考慮以$T ∪ C$ 為點集、以${tC : t ∈ T,C ∈ C,NG(t) ∩ C =∅}$為邊集的二分圖H。利用Hall 定理證明H 有一匹配、其大小為|C|。\\
+    (d) 利用(a), (b), (c) 證明Tutte 定理。\\
+
+    \proof
+
+    \\
+    
+    (a)\\
+    已知$o(G - T) = |T|$，若G-T存在一連通部分S為偶數點，則可在S中找到一點v，使S-v至少有一個奇數點連通部份。此時T+v為一個更大的點集合，滿足$o(G - T) = |T|$的條件，矛盾。\\
+    T若為空集合，此時$o(G) \leq 0$，與G-T的所有連通部分都有奇數點的假設矛盾。所以$ T \neq \emptyset$\\
+
+    (b)\\
+    若存在$S \in V(C)$ 使  $o(C-S) > |S|$，則 $T \cup S$ 會使 $o(G-T \cup S ) = (o(G-T) - o(C)) + o(C-S) > |T| - 1 + |S| \neq |T \cup S| = |T| + |S|$，矛盾。\\
+
+    (c)\\
+    若對於任何$c \in C$ 都有$|N_{T}(c)| \geq |c|$, 則H中有C-完美匹配，其配對大小為$|C|$。\\
+    
+    (d)\\
+    由(a)可知有 $T \notin \emptyset$，G-T有T個奇連通部份，由(c)得知T可和所有奇連通部份剩下的點相連。其餘點由(b)可知每個C-x都滿足tutte條件，則可遞迴使用此方法匹配；最後所有點被匹配完，可得一完美匹配。\\
+    
+  \end{CJK} % 結束 CJK 環境 
+\end{homeworkProblem}
+
+\begin{homeworkProblem}
+  \begin{CJK}{UTF8}{bsmi} % 開始 CJK
+    依照下列的男方與女方之偏好順序列表， 求出男方求婚法與女方求婚法的結果。\\
+    男方{u, v,w, x, y, z}，女方{a, b, c, d, e, f}\\
+    $u : a > b > d > c > f > e a : z > x > y > u > v > w\\
+    v : a > b > c > f > e > d b : y > z > w > x > v > u\\
+    w : c > b > d > a > f > e c : v > x > w > y > u > z\\
+    x : c > a > d > b > e > f d : w > y > u > x > z > v\\
+    y : c > d > a > b > f > e e : u > v > x > w > y > z\\
+    z : d > e > f > c > b > a f : u > w > x > v > z > y\\$
+    
+    \solution
+    
+    男：uf vc wb xa yd ze\\
+    女：az by cv dw ex fu
+
+  \end{CJK} % 結束 CJK 環境    
+\end{homeworkProblem}
+
+\begin{homeworkProblem}
+  \begin{CJK}{UTF8}{bsmi} % 開始 CJK
+    (a) 證明在求婚法當中， 至多只有一個男生會被拒絕n − 1 次。\\
+    (b) 試構造一種偏好組合， 使得進行求婚法的時候每次迴圈過程中都恰只有一個男生被拒絕， 且到最後除了一個男生被拒絕了n − 1 次以外其他男生都被拒絕了n − 2 次。作為推論， 求婚法總會在不超過(n − 1)2 次迴圈內完成。\\
+
+    \solution
+    
+    (a)設有兩個男生a, b會被拒絕n-1次，令兩人的最後配對為(a, x), (b, y)。\\
+    則rank(a, x) = n, rank(b, y) = n, $rank(x, a) < rank(x, b)$, $rank(y, b) < rank(y, a)$。\\
+    a 會先向 y 求婚，b 會先向 x 求婚，此時為穩定狀態，矛盾。\\
+    若也有最終配對為(c, z)的c向x或y求婚，不失一般性設為x，且 $rank(c, x) < rank(b, x)$，若b向z求婚成功，則(a, y), (b, z), (c, x)求婚會成為最終配對，矛盾；若b向z求婚失敗，則可向當時配對(d,z)的d的最終配對求婚，以此類推，b必可找到尚未配對的人完成最終配對(因為目前有(c-x)配對)，矛盾。\\
+    若為其他情況，如$rank(b, x) < rank(c, x)$，則不影響(a, y), (b, x)的穩定狀態，仍為矛盾。\\
+
+    所以最多只有一個男生會被拒絕n-1次\\
+    
+    (b)\\
+    n = 3, 男方:${a, b, c}$, 女方:${w, x, y}$\\
+    \begin{tabular}{rank}
+        & w & x & y \\
+      a & 13 & 22 & 31 \\
+      b & 12 & 21 & 32 \\
+      c & 21 & 13 & 33
+    \end{tabular}
+    
+  \end{CJK} % 結束 CJK 環境    
+\end{homeworkProblem}
+
+\end{document}
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: t
+%%% End:

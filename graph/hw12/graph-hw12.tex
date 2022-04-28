@@ -1,0 +1,265 @@
+\documentclass{article}
+
+\usepackage{fancyhdr}
+\usepackage{extramarks}
+\usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage{amsfonts}
+\usepackage{tikz}
+\usepackage[plain]{algorithm}
+\usepackage{algpseudocode}
+\usepackage[encapsulated]{CJK}
+\usepackage{graphicx}
+\usepackage{caption}
+\usepackage{subcaption}
+\graphicspath{ {./images/} }
+
+\usetikzlibrary{automata,positioning}
+
+%
+% Basic Document Settings
+%
+
+\topmargin=-0.45in
+\evensidemargin=0in
+\oddsidemargin=0in
+\textwidth=6.5in
+\textheight=9.0in
+\headsep=0.25in
+
+\linespread{1.1}
+
+\pagestyle{fancy}
+\lhead{\hmwkAuthorName}
+\chead{\hmwkClass\:\hmwkTitle}
+\rhead{\firstxmark}
+\lfoot{\lastxmark}
+\cfoot{\thepage}
+
+\renewcommand\headrulewidth{0.4pt}
+\renewcommand\footrulewidth{0.4pt}
+
+\setlength\parindent{0pt}
+
+%
+% Create Problem Sections
+%
+
+\newcommand{\enterProblemHeader}[1]{
+    \nobreak\extramarks{}{Problem \arabic{#1} continued on next page\ldots}\nobreak{}
+    \nobreak\extramarks{Problem \arabic{#1} (continued)}{Problem \arabic{#1} continued on next page\ldots}\nobreak{}
+}
+
+\newcommand{\exitProblemHeader}[1]{
+    \nobreak\extramarks{Problem \arabic{#1} (continued)}{Problem \arabic{#1} continued on next page\ldots}\nobreak{}
+    \stepcounter{#1}
+    \nobreak\extramarks{Problem \arabic{#1}}{}\nobreak{}
+}
+
+\setcounter{secnumdepth}{0}
+\newcounter{partCounter}
+\newcounter{homeworkProblemCounter}
+\setcounter{homeworkProblemCounter}{1}
+\nobreak\extramarks{Problem \arabic{homeworkProblemCounter}}{}\nobreak{}
+
+%
+% Homework Problem Environment
+%
+% This environment takes an optional argument. When given, it will adjust the
+% problem counter. This is useful for when the problems given for your
+% assignment aren't sequential. See the last 3 problems of this template for an
+% example.
+%
+\newenvironment{homeworkProblem}[1][-1]{
+    \ifnum#1>0
+        \setcounter{homeworkProblemCounter}{#1}
+    \fi
+    \section{Problem \arabic{homeworkProblemCounter}}
+    \setcounter{partCounter}{1}
+    \enterProblemHeader{homeworkProblemCounter}
+}{
+    \exitProblemHeader{homeworkProblemCounter}
+}
+
+%
+% Homework Details
+%   - Title
+%   - Due date
+%   - Class
+%   - Section/Time
+%   - Instructor
+%   - Author
+%
+
+\newcommand{\hmwkTitle}{Homework\ \#12}
+%\newcommand{\hmwkDueDate}{September 17, 2015}
+\newcommand{\hmwkClass}{Graph Theory}
+\newcommand{\hmwkClassTime}{}
+\newcommand{\hmwkClassInstructor}{}
+\newcommand{\hmwkAuthorName}{Lin Hung Cheng B01902059}
+
+%
+% Title Page
+
+
+\title{
+    \vspace{2in}
+    \textmd{\textbf{\hmwkClass:\ \hmwkTitle}}\\
+    %\normalsize\vspace{0.1in}\small{Due\ on\ \hmwkDueDate\ at 3:10pm}\\
+    %\vspace{0.1in}\large{\textit{\hmwkClassInstructor\ \hmwkClassTime}}
+    \vspace{3in}
+}
+
+\author{\textbf{\hmwkAuthorName}}
+\date{}
+
+\renewcommand{\part}[1]{\textbf{\large Part \Alph{partCounter}}\stepcounter{partCounter}\\}
+
+%
+% Various Helper Commands
+%
+
+% Useful for algorithms
+\newcommand{\alg}[1]{\textsc{\bfseries \footnotesize #1}}
+
+% For derivatives
+\newcommand{\deriv}[1]{\frac{\mathrm{d}}{\mathrm{d}x} (#1)}
+
+% For partial derivatives
+\newcommand{\pderiv}[2]{\frac{\partial}{\partial #1} (#2)}
+
+% Integral dx
+\newcommand{\dx}{\mathrm{d}x}
+
+% Alias for the Solution section header
+\newcommand{\solution}{\textbf{\large Solution}}
+
+% Probability commands: Expectation, Variance, Covariance, Bias
+\newcommand{\E}{\mathrm{E}}
+\newcommand{\Var}{\mathrm{Var}}
+\newcommand{\Cov}{\mathrm{Cov}}
+\newcommand{\Bias}{\mathrm{Bias}}
+
+\begin{document}
+
+\maketitle
+
+\pagebreak
+
+\begin{homeworkProblem}
+  \begin{CJK}{UTF8}{bsmi} % 開始 CJK1
+    \solution
+    將原本的點集中的$\{0, 1, 2\}$視為點$v_1$, $\{3, 4, 5\}$視為點$v_2$, $\{6, 7, 8\}, \{9, 10, 11\}, \{12, 13\}$分別視為點$v_3, v_4, v_5$。\\
+    則此五點形成$K_5$，無法畫出平面圖。
+    
+  \end{CJK}
+\end{homeworkProblem}
+
+\begin{homeworkProblem}
+  \begin{CJK}{UTF8}{bsmi} % 開始 CJK2
+    \proof
+    
+    從給定的$p_1$, $p_2$, ...投影到球面上，並在球面上畫出圖G，因為圖G為平面圖，必可於球面上畫出。\\
+    再投影回平面上即可。
+    
+\end{CJK} % 結束 CJK 環境 
+\end{homeworkProblem}
+
+\pagebreak
+
+\begin{homeworkProblem}
+  \begin{CJK}{UTF8}{bsmi} % 開始 CJK3
+    \solution
+
+    由Euler公式可知，$t(K_{4, 4})$和$t(K_{5, 5}) \geq 2$。
+    
+    \textbf{1.}
+
+    $t(K_{4, 4})$ 可分為$K_{2, 4} + K_{2, 4}$。\\
+    $t(K_{4, 4}) = 2$
+
+    \textbf{2.}
+
+    $t(K_{5, 5})$ 可分為兩圖（如右）\\
+    $t(K_{5, 5}) = 2$
+    
+  \end{CJK} % 結束 CJK 環境 
+\end{homeworkProblem}
+
+\begin{homeworkProblem}
+  \begin{CJK}{UTF8}{bsmi} % 開始 CJK4
+    \solution
+
+    令$K_{n, n, n}$的三部分為$G_1, G_2, G_3$
+    
+    \textbf{(a)}
+
+    可將f(n)分為三部分：$G_1-G_2, G_2-G_3, G_1-G_3$。\\
+    三部分內的最少交叉數均為$c(K_{n, n})$，\\
+    所以$f(n) \geq 3c(K_{n, n})$。
+    
+    $f(n) >= c(K_{n, 2n}) = n \times 2n - (6n-4)$\\
+    $c(K_{n, n}) = n \times n - (4n-4)$
+
+    將三部分的點放置將平面分成三份的三個軸上，因為從任意兩部分各取兩點，最多有一交叉，\\
+    可知每部分最多有$(C^n_2)^2$ 個交叉，所以$f(n) \leq 3(n 2)^2$。
+
+    \textbf{(b)}
+
+    去除一點後，每一個交叉會重複計算3次，產生6個$c(K_{3, 2, 1})$和1個$c(K_{3, 3})$\\
+    $3c(K_{3, 3, 1}) \geq 6c(K_{3, 2, 1}) + c(K_{3, 3}) = 7，c(K_{3, 3, 1}) > 2$。\\
+    而由下圖可知$c(K_{3, 3, 1}) \leq 3$，所以$c(K_{3, 3, 1}) = 3$。\\
+
+    去除一點後，每一個交叉會重複計算4次，產生6個$c(K_{3, 2, 2})$和2個$c(K_{3, 3, 1})$。\\
+    $4c(K_{3, 3, 2}) \geq 6c(K_{3, 2, 2}) + 2c(K_{3, 3, 1}) = 18，c(K_{3, 3, 1}) \geq 5$。\\
+    而由下圖可知$c(K_{3, 3, 2}) \leq 7$，得證。\\
+
+    去除一點後，每一個交叉會重複計算5次，產生9個$c(K_{3, 3, 2})$。\\
+    $5c(K_{3, 3, 3}) \geq 9c(K_{3, 3, 2})$，代入5可得$c(K_{3, 3, 3}) \geq 9$。\\
+    而由下圖可知$c(K_{3, 3, 2}) \leq 15$，得證。\\
+    \\
+    \\
+    \\
+
+    \textbf{(c)}
+
+    n=3時成立。\\
+    設n=N-1成立，n=N時，f(N-1)為f(N)在每一部分各移除一點，若交叉的點只在其中兩部分，會重覆$N(N-2)^2$次；\\
+    若交叉的點包含3部分的點，會重覆$(N-2)(N-1)^2$次，此兩種交叉的數目皆為f(N-1)。\\
+    所以$(N-2)(N-1)^2f(N) \geq N^3 \times f(N-1) = N^3 (N-1)^3 (N-2)/6$， \\
+    $f(N) \geq N^3(N-1)/6$，得證。
+    
+    \textbf{(d)}
+    將三部分各放置於二維中的三維座標上，且各有接近一半的點分別放在正負軸上(如圖示)\\
+    此時有$2^3 \times 3/2$ = 12種組合，每種組合最多有(如x+, y+)$(C^{n/2}_2)^2)$個交叉，\\
+    再加上有12種連接至不同軸的交叉(如線(x+, y+)，(x+, z+)的交叉)有$(n/2 2)^2 \times n/2 \times n/2$個交叉，共有\\
+    $f(n) \leq 12(3/64n^4 + O(n^3)) = 9/16n^4 + O(n^3)$\\
+    
+    % http://www.math.ntu.edu.tw/~gjchang/courses/2006-02-graph-theory/sec-6-3-solution-Lin-WH.pdf
+  \end{CJK} % 結束 CJK 環境    
+\end{homeworkProblem}
+
+\begin{homeworkProblem}
+  \begin{CJK}{UTF8}{bsmi} % 開始 CJK5
+
+    \solution
+
+    \textbf{(a)}
+    m = 6時成立。$m > 6$時，N若m = M-1成立，在m = M的情況下，\\
+    去除M部分中的一點, 產生M個$K_{M-1, n}$。\\
+    M的每個交叉重複M-2次，$(M-2)c(K_{M, n}) \geq Mc(K_{M-1, n})$\\
+    $c(K_{M, n}) \geq (M/(M-2))((M-1)((M-2)/5)(n/2)((n-1)/2)) = M(M-1)/5(n/2)((n-1)/2))$。\\
+    由數學歸納法得證。
+
+    \textbf{(b)}
+    $c(K_n) \geq c(K_{n/2, n}) \geq 1/80n^4 + O(n^3)$
+    
+  \end{CJK} % 結束 CJK 環境    
+\end{homeworkProblem}
+
+\end{document}
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: t
+%%% End:

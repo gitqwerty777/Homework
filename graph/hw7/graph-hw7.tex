@@ -1,0 +1,254 @@
+\documentclass{article}
+
+\usepackage{fancyhdr}
+\usepackage{extramarks}
+\usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage{amsfonts}
+\usepackage{tikz}
+\usepackage[plain]{algorithm}
+\usepackage{algpseudocode}
+\usepackage[encapsulated]{CJK}
+\usepackage{graphicx}
+\usepackage{caption}
+\usepackage{subcaption}
+\graphicspath{ {./images/} }
+
+\usetikzlibrary{automata,positioning}
+
+%
+% Basic Document Settings
+%
+
+\topmargin=-0.45in
+\evensidemargin=0in
+\oddsidemargin=0in
+\textwidth=6.5in
+\textheight=9.0in
+\headsep=0.25in
+
+\linespread{1.1}
+
+\pagestyle{fancy}
+\lhead{\hmwkAuthorName}
+\chead{\hmwkClass\:\hmwkTitle}
+\rhead{\firstxmark}
+\lfoot{\lastxmark}
+\cfoot{\thepage}
+
+\renewcommand\headrulewidth{0.4pt}
+\renewcommand\footrulewidth{0.4pt}
+
+\setlength\parindent{0pt}
+
+%
+% Create Problem Sections
+%
+
+\newcommand{\enterProblemHeader}[1]{
+    \nobreak\extramarks{}{Problem \arabic{#1} continued on next page\ldots}\nobreak{}
+    \nobreak\extramarks{Problem \arabic{#1} (continued)}{Problem \arabic{#1} continued on next page\ldots}\nobreak{}
+}
+
+\newcommand{\exitProblemHeader}[1]{
+    \nobreak\extramarks{Problem \arabic{#1} (continued)}{Problem \arabic{#1} continued on next page\ldots}\nobreak{}
+    \stepcounter{#1}
+    \nobreak\extramarks{Problem \arabic{#1}}{}\nobreak{}
+}
+
+\setcounter{secnumdepth}{0}
+\newcounter{partCounter}
+\newcounter{homeworkProblemCounter}
+\setcounter{homeworkProblemCounter}{1}
+\nobreak\extramarks{Problem \arabic{homeworkProblemCounter}}{}\nobreak{}
+
+%
+% Homework Problem Environment
+%
+% This environment takes an optional argument. When given, it will adjust the
+% problem counter. This is useful for when the problems given for your
+% assignment aren't sequential. See the last 3 problems of this template for an
+% example.
+%
+\newenvironment{homeworkProblem}[1][-1]{
+    \ifnum#1>0
+        \setcounter{homeworkProblemCounter}{#1}
+    \fi
+    \section{Problem \arabic{homeworkProblemCounter}}
+    \setcounter{partCounter}{1}
+    \enterProblemHeader{homeworkProblemCounter}
+}{
+    \exitProblemHeader{homeworkProblemCounter}
+}
+
+%
+% Homework Details
+%   - Title
+%   - Due date
+%   - Class
+%   - Section/Time
+%   - Instructor
+%   - Author
+%
+
+\newcommand{\hmwkTitle}{Homework\ \#7}
+%\newcommand{\hmwkDueDate}{September 17, 2015}
+\newcommand{\hmwkClass}{Graph Theory}
+\newcommand{\hmwkClassTime}{}
+\newcommand{\hmwkClassInstructor}{}
+\newcommand{\hmwkAuthorName}{Lin Hung Cheng B01902059}
+
+%
+% Title Page
+
+
+\title{
+    \vspace{2in}
+    \textmd{\textbf{\hmwkClass:\ \hmwkTitle}}\\
+    %\normalsize\vspace{0.1in}\small{Due\ on\ \hmwkDueDate\ at 3:10pm}\\
+    %\vspace{0.1in}\large{\textit{\hmwkClassInstructor\ \hmwkClassTime}}
+    \vspace{3in}
+}
+
+\author{\textbf{\hmwkAuthorName}}
+\date{}
+
+\renewcommand{\part}[1]{\textbf{\large Part \Alph{partCounter}}\stepcounter{partCounter}\\}
+
+%
+% Various Helper Commands
+%
+
+% Useful for algorithms
+\newcommand{\alg}[1]{\textsc{\bfseries \footnotesize #1}}
+
+% For derivatives
+\newcommand{\deriv}[1]{\frac{\mathrm{d}}{\mathrm{d}x} (#1)}
+
+% For partial derivatives
+\newcommand{\pderiv}[2]{\frac{\partial}{\partial #1} (#2)}
+
+% Integral dx
+\newcommand{\dx}{\mathrm{d}x}
+
+% Alias for the Solution section header
+\newcommand{\solution}{\textbf{\large Solution}}
+
+% Probability commands: Expectation, Variance, Covariance, Bias
+\newcommand{\E}{\mathrm{E}}
+\newcommand{\Var}{\mathrm{Var}}
+\newcommand{\Cov}{\mathrm{Cov}}
+\newcommand{\Bias}{\mathrm{Bias}}
+
+\begin{document}
+
+\maketitle
+
+\pagebreak
+
+\begin{homeworkProblem}
+  \begin{CJK}{UTF8}{bsmi} % 開始 CJK
+定義n維超立方（n-dimensionalhypercube）之點集為所有長度為n 的二進字串，而兩個頂點相鄰若且唯若它們的字串恰有一位不同。如果把頂點的二進字串看作是這些頂點在n 維空間中的座標， 那麼就容易看出Qn 其實就相當於是n 維空間中的單位立方塊， 故名。
+    證明對於n ≥ 2， $Q_n$ 至少有$2^{2^{n−2}}$ 種完美匹配。    
+
+    \proof
+    
+    % http://math.stackexchange.com/questions/687535/hypercube-perfect-matchings
+    
+    對於n = 2，$Q_n$有$2^{2^{2-2}}$ = 2種完美匹配。\\
+    設n = m時，$Q_n$至少有$2^{2^{n-2}}$種完美匹配，則當n =m+1時，可以將$Q_{m+1}$分成2個$Q_m$，每一個$Q_m$都至少有$2^{2^{m-2}}$種完美匹配，在二個$Q_m$不互相匹配的情況下，$Q_{m+1}$至少有$(2^{2^{m-2}})^2 = (2^{2^{m-1}})$種完美匹配。\\
+    由歸納法得證，在 n $\geq$ 2, 至少有$2^{2^{n-2}}$種完美匹配
+  \end{CJK}
+\end{homeworkProblem}
+
+\begin{homeworkProblem}
+  \begin{CJK}{UTF8}{bsmi} % 開始 CJK
+    4.7 假設二分圖G 的二部份為X 和Y。如果X 中每個點的度數至少為2， 而且|N(S)| ≥ |S| 對所有S ⊆ X 恆成立， 則G 最少有兩個不同的X-完美匹配。\\
+    若將定理4.7中的假設「每點的度數至少為2」改為「每點的度數至少為r」， 則可以得到什麼結論
+    
+    \solution
+    
+    同定理4.5的第一種證明。\\
+    第一種情況，y有r種選法，而對應的r種$G'$皆有完美匹配，因此就得到G至少有r個X-完美匹配。\\
+    第二種情況，$G_1$ 有r個$X_1$-完美匹配，其中對x $\in$ S* 皆有d(G1(x)) = d(G(x))；而$G_2$至少有一個$X_2$-完美匹配，其中對$x \in X − S*$ 有可能d(G2(x)) $<$ d(G(x))， 所以合起來G至少也有r個X-完美匹配
+        
+\end{CJK} % 結束 CJK 環境 
+\end{homeworkProblem}
+
+
+
+\begin{homeworkProblem}
+  \begin{CJK}{UTF8}{bsmi} % 開始 CJK
+    兩個人在圖G 上玩遊戲， 規則如下： 第一個人先選取任一點開始，之後兩人輪流選取一個未被選過、但和前一次對方選的點相鄰的點。無法繼續選取的人算輸。\\
+    試證明：若G 有完美匹配， 則第二個人有必勝策略； 否則第一個人有必勝策略。
+
+    \proof
+
+    令第一個人為$p_1$, 第二個人為$p_2$。\\
+    
+    若G有完美匹配，則當$p_1$每選一個w, $p_2$選擇w的匹配x，可知只要$p_1$可以選擇一點，$p_2$必可選擇對應的一點，$p_2$必不敗(必勝)。\\
+    
+    若G無完美匹配，則$p_1$選取不屬於G的最大匹配的點v，之後$p_2$每選一點w，$p_1$選擇w的匹配x。\\
+    設$p_2$選一點w，$p_1$無法找到匹配，則選過的點產生的路徑(v ... w)是一個G－可擴展路徑(v和w都不屬於匹配中的點)，代表還可以擴張，與無法找到匹配的假設矛盾。\\
+    因此，只要$p_2$可以選擇一點，$p_1$必可選擇對應的一點，$p_1$必不敗(必勝)。
+    
+  \end{CJK} % 結束 CJK 環境 
+\end{homeworkProblem}
+
+\pagebreak
+
+\begin{homeworkProblem}
+  \begin{CJK}{UTF8}{bsmi} % 開始 CJK
+    一個每行每列和都是1 的非負實數矩陣稱為雙重隨機矩陣（doubly stochasticmatrix）， 這樣的矩陣中若其元素為0 或1，則稱為置換矩陣（permutationmatrix）。試證明， 任一雙重隨機矩陣Q 都可以表示成Q = c1P1+c2P2+. . .+cmPm， 其中c1, c2, . . . , cm 是和為1 的非負實數， P1, P2, . . . , Pm 為置換矩陣。
+
+    \proof
+    %http://math2.uncc.edu/~ghetyei/courses/old/F07.3116/birkhofft.pdf
+
+    令G的行組成的點集為R, doubly stochastic matrix 為 M\\
+    設G無完美匹配，不失一般性，設R有一子集r使 $|N(r)| < |r|$ \\
+    根據doubly stochastic matrix的性質，屬於r行的元素和應為$|r|$，屬於N(r)列的元素和應為$|N(r)|$；\\
+    因為r連接到所有非0的鄰居，$\sum_{i \in r, j \in N(r)} M_{ij} = |r|$。\\
+    而N(r)只連接到屬於r的鄰居, $\sum_{i \in r, j \in N(r)} M_{ij} \leq |N(r)|$。\\
+
+    此時 $\sum_{i \in r, j \in N(r)} M_{ij} \leq |N(r)| < |r| = \sum_{i \in r, j \in N(r)} M_{ij}$，矛盾，所以G有完美匹配。
+
+    找到M的完美匹配所對應的元素集S，若其中的最小值為v，則令P為位於S的元素值皆為1的matrix，可找到一個 doubly stochastic matrix $M'$ 使 M = vP + (1-v)$M'$。再尋找$M'$的完美匹配......，直到$M_n$為permutation matrix。
+    因為$M'$至少比M少一個非零元素，必能找到$M_n$。\\
+    
+  \end{CJK} % 結束 CJK 環境    
+\end{homeworkProblem}
+
+\begin{homeworkProblem}
+  \begin{CJK}{UTF8}{bsmi} % 開始 CJK
+    (a) 證明任一圖G 中的一點集S 是獨立集若且唯若S bar是一個點覆蓋， 因此，α(G) + β(G) = |V (G)|。\\
+    (b) 證明任一沒有孤立點的圖G 恆有a'(G) + b'(G) = |V (G)|。\\
+    (c) 證明若二分圖G 沒有孤立點， 則α(G) =b'(G)\\
+    
+    \proof
+    
+    (a)\\
+    $\Rightarrow$\\
+    設Sbar不是一個點覆蓋，則G中至少有一邊$e=\{x, y\}$ , $x, y \notin V(\bar{s})$, 此時x, y相鄰且 $x, y \in S$, S非獨立集，矛盾。\\
+    $\Leftarrow$\\
+    設S不是一個獨立集，則S會包含二點x, y 使 $(x, y) \in G(e)$, 此時$\bar{S}$ 不包含x, y, 無法覆蓋邊(x, y), 矛盾。
+
+    max $|S|$ 會產生 min $|\bar{S}|$，即$\alpha$和$\beta$ ，所以$\alpha(G) + \beta(G) = |V(G)|$。\\
+    (b)\\
+    % http://theory.stanford.edu/~trevisan/cs261/all-notes-2010.pdf
+    考慮$a'$(G)以外的點集C，點集中的點互不相鄰，否則$a'$(G)加上兩個相鄰的點會產生更大的matching。\\
+    考慮$b'$(G)，若使用$a'$(G)+C來覆蓋，則最小值為$|a(G)|+|C| \leq |a(G)|+(|V(G)|-2a(G)) = |V(G)| - a(G)$。
+
+    $a'(G) + b'(G) = a'(G) + (|V(G)|-a'(G)) = |V(G)|$。
+    
+    (c)\\
+    若沒有孤立點，二分圖的minimum edge cover邊數 = minimum vertex cover點數，由(a)可知maximum independent set = minimum vertex cover，在二分圖中也等同於minimum edge cover的邊數，得證。
+    
+  \end{CJK} % 結束 CJK 環境    
+\end{homeworkProblem}
+
+\end{document}
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: t
+%%% End:
