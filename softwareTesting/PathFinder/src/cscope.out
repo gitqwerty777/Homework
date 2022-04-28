@@ -1,0 +1,2177 @@
+cscope 15 $HOME/Documents/softwareTesting/PathFinder/src -q 0000000127 0000009393
+	@AStar.cpp
+
+1 
+	~"ASr.h
+"
+
+3 
+	gASr
+::
+	$ASr
+()
+
+4 {
+	}
+}
+
+6 
+ASr
+::~
+	$ASr
+()
+
+7 {
+	}
+}
+
+9 
+boŞ
+ 
+ASr
+::
+g‘P©h
+(
+ASrNode
+* 
+¡¬t
+, ASrNode* 
+gßl
+, 
+¡d
+::
+veùÜ
+<ASrNode*>& 
+·th
+)
+
+11 
+ASrNode
+ *
+cu¼’tNode
+, *
+	gchdNode
+;
+
+12 
+	gf
+, 
+	gg
+, 
+	gh
+;
+
+14 
+	g¡d
+::
+make_h—p
+(
+İ’
+.
+begš
+(), o³n.
+’d
+(), 
+Com·»NodesASr
+());
+
+15 
+pushO³n
+(
+¡¬t
+);
+
+17 !
+	gİ’
+.
+em±y
+())
+
+19 
+	g¡d
+::
+sÜt
+(
+İ’
+.
+begš
+(), o³n.
+’d
+(), 
+Com·»NodesASr
+());
+
+21 
+	gcu¼’tNode
+ = 
+İ’
+.
+äÚt
+();
+
+22 
+pİO³n
+(
+cu¼’tNode
+);
+
+24 
+	gcu¼’tNode
+->
+£tClo£d
+(
+Œue
+);
+
+25 
+	gşo£d
+.
+push_back
+(
+cu¼’tNode
+);
+
+27 if(
+	gcu¼’tNode
+ =ğ
+gßl
+)
+
+29 
+»cÚ¡ruùP©h
+(
+cu¼’tNode
+, 
+·th
+);
+
+30  
+	gŒue
+;
+
+33 cÚ¡‡uto& 
+	gchd»n
+ : 
+cu¼’tNode
+->
+g‘Chd»n
+() )
+
+35 
+chdNode
+ = 
+¡©ic_ÿ¡
+<
+ASrNode
+*>(
+chd»n
+.
+fœ¡
+);
+
+36 
+	gg
+ = 
+cu¼’tNode
+->
+g‘G
+(è+ 
+chd»n
+.
+£cÚd
+;
+
+37 ifĞ(
+	gchdNode
+->
+isO³n
+(è|| chdNode->
+isClo£d
+()è&& chdNode->
+g‘G
+(è< 
+	gg
+)
+
+40 
+	gh
+ = 
+di¡ªûB‘w“n
+(
+chdNode
+, 
+gßl
+);
+
+41 
+	gf
+ = 
+g
+ + 
+h
+;
+
+42 
+	gchdNode
+->
+£tF
+(
+f
+);
+
+43 
+	gchdNode
+->
+£tG
+(
+g
+);
+
+44 
+	gchdNode
+->
+£tH
+(
+h
+);
+
+45 
+	gchdNode
+->
+£tP¬’t
+(
+cu¼’tNode
+);
+
+47 if(
+	gchdNode
+->
+isClo£d
+())
+
+48 
+	gchdNode
+->
+£tClo£d
+(
+çl£
+);
+
+49 if(!
+	gchdNode
+->
+isO³n
+())
+
+50 
+pushO³n
+(
+chdNode
+);
+
+53  
+	gçl£
+;
+
+56 
+	gASr
+::
+	$pushO³n
+(
+ASrNode
+* 
+node
+)
+
+58 
+İ’
+.
+	`push_back
+(
+node
+);
+
+59 
+¡d
+::
+	`push_h—p
+(
+İ’
+.
+	`begš
+(), o³n.
+	`’d
+(), 
+	`Com·»NodesASr
+());
+
+60 
+node
+->
+	`£tO³n
+(
+Œue
+);
+
+61 
+	}
+}
+
+63 
+	gASr
+::
+	$pİO³n
+(
+ASrNode
+* 
+node
+)
+
+65 
+¡d
+::
+	`pİ_h—p
+(
+İ’
+.
+	`begš
+(), o³n.
+	`’d
+(), 
+	`Com·»NodesASr
+());
+
+66 
+İ’
+.
+	`pİ_back
+();
+
+67 
+node
+->
+	`£tO³n
+(
+çl£
+);
+
+68 
+	}
+}
+
+70 
+	gASr
+::
+	$»Ëa£Nodes
+()
+
+72 cÚ¡‡uto& 
+node
+ : 
+İ’
+)
+
+73 
+node
+->
+	`»Ëa£
+();
+
+74 cÚ¡‡uto& 
+node
+ : 
+şo£d
+)
+
+75 
+node
+->
+	`»Ëa£
+();
+
+76 
+	}
+}
+
+78 
+	gASr
+::
+	$ş—r
+()
+
+80 
+	`»Ëa£Nodes
+();
+
+81 
+İ’
+.
+	`ş—r
+();
+
+82 
+şo£d
+.
+	`ş—r
+();
+
+83 
+	}
+}
+
+	@AStar.h
+
+1 #´agm¨
+Úû
+
+
+3 
+	~<veùÜ
+>
+
+4 
+	~<®gÜ™hm
+>
+
+5 
+	~"P©hAlgÜ™hm.h
+"
+
+6 
+	~"Node.h
+"
+
+8 şas 
+	cASrNode
+ : 
+public
+ 
+Node
+
+
+10 
+public
+:
+
+12 
+	$ASrNode
+() :
+
+13 
+	`m_f
+(0.0), 
+	`m_g
+(0.0), 
+	`m_h
+(0.0),
+
+14 
+	`şo£d
+(
+çl£
+), 
+	$İ’
+(
+çl£
+)
+
+17 
+vœtu®
+ ~
+	$ASrNode
+()
+
+18 {
+	}
+}
+
+20 
+	$£tPos™iÚ
+(
+x
+, 
+y
+)
+
+22 
+m_x
+ = 
+x
+;
+
+23 
+m_y
+ = 
+y
+;
+
+24 
+	}
+}
+
+26 
+	$£tF
+(
+f
+)
+
+28 
+m_f
+ = 
+f
+;
+
+29 
+	}
+}
+
+31 
+	$£tG
+(
+g
+)
+
+33 
+m_g
+ = 
+g
+;
+
+34 
+	}
+}
+
+36 
+	$£tH
+(
+h
+)
+
+38 
+m_h
+ = 
+h
+;
+
+39 
+	}
+}
+
+41 
+	$£tO³n
+(
+boŞ
+ 
+v®ue
+)
+
+43 
+İ’
+ = 
+v®ue
+;
+
+44 
+	}
+}
+
+46 
+	$£tClo£d
+(
+boŞ
+ 
+v®ue
+)
+
+48 
+şo£d
+ = 
+v®ue
+;
+
+49 
+	}
+}
+
+51 
+šlše
+ 
+	$g‘X
+() const
+
+53  
+m_x
+;
+
+54 
+	}
+}
+
+56 
+šlše
+ 
+	$g‘Y
+() const
+
+58  
+m_y
+;
+
+59 
+	}
+}
+
+61 
+šlše
+ 
+	$g‘F
+() const
+
+63  
+m_f
+;
+
+64 
+	}
+}
+
+66 
+šlše
+ 
+	$g‘G
+() const
+
+68  
+m_g
+;
+
+69 
+	}
+}
+
+71 
+šlše
+ 
+	$g‘H
+() const
+
+73  
+m_h
+;
+
+74 
+	}
+}
+
+76 
+šlše
+ 
+boŞ
+ 
+	$isO³n
+() const
+
+78  
+İ’
+;
+
+79 
+	}
+}
+
+81 
+šlše
+ 
+boŞ
+ 
+	$isClo£d
+() const
+
+83  
+şo£d
+;
+
+84 
+	}
+}
+
+86 
+vœtu®
+ 
+	$di¡ªûTo
+(
+ASrNode
+* 
+node
+) const = 0;
+
+88 
+	$»Ëa£
+()
+
+90 
+İ’
+ = 
+şo£d
+ = 
+çl£
+;
+
+91 
+m_f
+ = 
+m_g
+ = 
+m_h
+ = 0.0f;
+
+92 
+m_·»Á
+ = 
+nuÎ±r
+;
+
+93 
+	}
+}
+
+95 
+	g´Ùeùed
+:
+
+96 
+m_f
+, 
+	gm_g
+, 
+	gm_h
+;
+
+97 
+	gm_x
+, 
+	gm_y
+;
+
+98 
+boŞ
+ 
+	gİ’
+, 
+	gşo£d
+;
+
+101 
+	sCom·»NodesASr
+
+
+103 
+boŞ
+ 
+İ”©Ü
+(è(cÚ¡ 
+ASrNode
+* 
+	ms1
+, cÚ¡ ASrNod*
+	ms2
+) const
+
+105  
+	ms1
+->
+g‘F
+(è< 
+	ms2
+->getF();
+
+109 
+şass
+ 
+	gASr
+ : 
+public
+ 
+P©hAlgÜ™hm
+<
+ASrNode
+>
+
+111 
+public
+:
+
+113 
+ASr
+& 
+g‘In¡ªû
+()
+
+115 
+ASr
+ 
+š¡ªû
+;
+
+116  
+	gš¡ªû
+;
+
+119 
+boŞ
+ 
+g‘P©h
+(
+ASrNode
+* 
+¡¬t
+, ASrNode* 
+gßl
+, 
+¡d
+::
+veùÜ
+<ASrNode*>& 
+·th
+);
+
+120 
+ş—r
+();
+
+122 
+	g´iv©e
+:
+
+124 
+ASr
+();
+
+125 ~
+ASr
+();
+
+127 
+»Ëa£Nodes
+();
+
+128 
+pushO³n
+(
+ASrNode
+* 
+node
+);
+
+129 
+pİO³n
+(
+ASrNode
+* 
+node
+);
+
+131 
+	g¡d
+::
+veùÜ
+<
+ASrNode
+*> 
+İ’
+, 
+	gşo£d
+;
+
+	@Dijkstra.cpp
+
+1 
+	~"Dijk¡¿.h
+"
+
+3 
+	~<lim™s
+>
+
+4 
+	~<®gÜ™hm
+>
+
+6 cÚ¡ 
+	gDijk¡¿Node
+::
+šfš™y
+ = 
+¡d
+::
+num”ic_lim™s
+<>::infinity();
+
+8 
+	gDijk¡¿
+::
+	$Dijk¡¿
+()
+
+9 {
+	}
+}
+
+11 
+Dijk¡¿
+::~
+	$Dijk¡¿
+()
+
+12 {
+	}
+}
+
+14 
+boŞ
+ 
+Dijk¡¿
+::
+g‘P©h
+(
+Dijk¡¿Node
+* 
+¡¬t
+, Dijk¡¿Node* 
+gßl
+, 
+¡d
+::
+veùÜ
+<Dijk¡¿Node*>& 
+·th
+)
+
+16 
+Dijk¡¿Node
+ *
+cu¼’tNode
+, *
+	gchdNode
+;
+
+17 
+	gdi¡
+;
+
+19 
+	g¡d
+::
+make_h—p
+(
+İ’
+.
+begš
+(), o³n.
+’d
+(), 
+Com·»Nodes
+());
+
+20 
+pushO³n
+(
+¡¬t
+);
+
+21 
+	g¡¬t
+->
+£tDi¡ªû
+(0.0f);
+
+23 !
+	gİ’
+.
+em±y
+())
+
+25 
+	g¡d
+::
+sÜt
+(
+İ’
+.
+begš
+(), o³n.
+’d
+(), 
+Com·»Nodes
+());
+
+27 
+	gcu¼’tNode
+ = 
+İ’
+.
+äÚt
+();
+
+28 
+pİO³n
+(
+cu¼’tNode
+);
+
+30 if(
+	gcu¼’tNode
+ =ğ
+gßl
+)
+
+32 
+»cÚ¡ruùP©h
+(
+cu¼’tNode
+, 
+·th
+);
+
+33  
+	gŒue
+;
+
+36 cÚ¡‡uto& 
+	gchd»n
+ : 
+cu¼’tNode
+->
+g‘Chd»n
+())
+
+38 
+chdNode
+ = 
+¡©ic_ÿ¡
+<
+Dijk¡¿Node
+*>(
+chd»n
+.
+fœ¡
+);
+
+40 
+	gdi¡
+ = 
+cu¼’tNode
+->
+g‘Di¡ªû
+(è+ 
+chd»n
+.
+£cÚd
+;
+
+41 if(!
+	gchdNode
+->
+isClo£d
+(è&& 
+	gdi¡
+ < chdNode->
+g‘Di¡ªû
+())
+
+43 
+	gchdNode
+->
+£tDi¡ªû
+(
+di¡
+);
+
+44 
+	gchdNode
+->
+£tP¬’t
+(
+cu¼’tNode
+);
+
+45 
+pushO³n
+(
+chdNode
+);
+
+50  
+	gçl£
+;
+
+53 
+	gDijk¡¿
+::
+	$pushO³n
+(
+Dijk¡¿Node
+* 
+node
+)
+
+55 
+İ’
+.
+	`push_back
+(
+node
+);
+
+56 
+¡d
+::
+	`push_h—p
+(
+İ’
+.
+	`begš
+(), o³n.
+	`’d
+(), 
+	`Com·»Nodes
+());
+
+57 
+	}
+}
+
+59 
+	gDijk¡¿
+::
+	$pİO³n
+(
+Dijk¡¿Node
+* 
+node
+)
+
+61 
+¡d
+::
+	`pİ_h—p
+(
+İ’
+.
+	`begš
+(), o³n.
+	`’d
+(), 
+	`Com·»Nodes
+());
+
+62 
+İ’
+.
+	`pİ_back
+();
+
+63 
+node
+->
+	`£tClo£d
+(
+Œue
+);
+
+64 
+şo£d
+.
+	`push_back
+(
+node
+);
+
+65 
+	}
+}
+
+68 
+	gDijk¡¿
+::
+	$»Ëa£Nodes
+()
+
+70 cÚ¡‡uto& 
+node
+ : 
+İ’
+)
+
+71 
+node
+->
+	`»Ëa£
+();
+
+72 cÚ¡‡uto& 
+node
+ : 
+şo£d
+)
+
+73 
+node
+->
+	`»Ëa£
+();
+
+74 
+	}
+}
+
+76 
+	gDijk¡¿
+::
+	$ş—r
+()
+
+78 
+	`»Ëa£Nodes
+();
+
+79 
+İ’
+.
+	`ş—r
+();
+
+80 
+şo£d
+.
+	`ş—r
+();
+
+81 
+	}
+}
+
+	@Dijkstra.h
+
+1 #´agm¨
+Úû
+
+
+3 
+	~"P©hAlgÜ™hm.h
+"
+
+4 
+	~"Node.h
+"
+
+5 
+	~<veùÜ
+>
+
+7 şas 
+	cDijk¡¿Node
+ : 
+public
+ 
+Node
+
+
+9 cÚ¡ 
+šfš™y
+;
+
+11 
+	mpublic
+:
+
+12 
+	$Dijk¡¿Node
+() :
+
+13 
+	`di¡ªû
+(
+šfš™y
+),
+
+14 
+	$şo£d
+(
+çl£
+)
+
+17 ~
+	$Dijk¡¿Node
+()
+
+18 {
+	}
+}
+
+20 
+	$£tClo£d
+(
+boŞ
+ 
+v®ue
+)
+
+22 
+şo£d
+ = 
+v®ue
+;
+
+23 
+	}
+}
+
+25 
+	$£tDi¡ªû
+(
+v®ue
+)
+
+27 
+di¡ªû
+ = 
+v®ue
+;
+
+28 
+	}
+}
+
+30 
+šlše
+ 
+boŞ
+ 
+	$isClo£d
+() const
+
+32  
+şo£d
+;
+
+33 
+	}
+}
+
+35 
+šlše
+ 
+	$g‘Di¡ªû
+() const
+
+37  
+di¡ªû
+;
+
+38 
+	}
+}
+
+40 
+	$»Ëa£
+()
+
+42 
+di¡ªû
+ = 
+šfš™y
+;
+
+43 
+şo£d
+ = 
+çl£
+;
+
+44 
+m_·»Á
+ = 
+nuÎ±r
+;
+
+45 
+	}
+}
+
+47 
+	g´Ùeùed
+:
+
+48 
+boŞ
+ 
+şo£d
+;
+
+49 
+	gdi¡ªû
+;
+
+53 
+	sCom·»Nodes
+
+
+55 
+boŞ
+ 
+İ”©Ü
+(è(cÚ¡ 
+Dijk¡¿Node
+* 
+	mn1
+, cÚ¡ Dijk¡¿Node* 
+	mn2
+)
+
+57  
+	mn1
+->
+g‘Di¡ªû
+(è< 
+	mn2
+->getDistance();
+
+62 
+şass
+ 
+	gDijk¡¿
+ : 
+public
+ 
+P©hAlgÜ™hm
+<
+Dijk¡¿Node
+>
+
+64 
+public
+:
+
+66 
+Dijk¡¿
+& 
+g‘In¡ªû
+()
+
+68 
+Dijk¡¿
+ 
+š¡ªû
+;
+
+69  
+	gš¡ªû
+;
+
+72 
+boŞ
+ 
+g‘P©h
+(
+Dijk¡¿Node
+* 
+¡¬t
+, Dijk¡¿Node* 
+gßl
+, 
+¡d
+::
+veùÜ
+<Dijk¡¿Node*>& 
+·th
+);
+
+73 
+ş—r
+();
+
+75 
+	g´iv©e
+:
+
+77 
+Dijk¡¿
+();
+
+78 ~
+Dijk¡¿
+();
+
+80 
+pushO³n
+(
+Dijk¡¿Node
+* 
+node
+);
+
+81 
+pİO³n
+(
+Dijk¡¿Node
+* 
+node
+);
+
+82 
+»Ëa£Nodes
+();
+
+84 
+	g¡d
+::
+veùÜ
+<
+Dijk¡¿Node
+*> 
+İ’
+, 
+	gşo£d
+;
+
+	@Node.cpp
+
+1 
+	~"Node.h
+"
+
+3 
+	gNode
+::
+	$Node
+() :
+
+4 
+	$m_·»Á
+(
+nuÎ±r
+)
+
+5 {
+	}
+}
+
+7 
+Node
+::~
+	$Node
+()
+
+8 {
+	}
+}
+
+10 
+Node
+* Node::
+	$g‘P¬’t
+() const
+
+12  
+m_·»Á
+;
+
+13 
+	}
+}
+
+15 
+	g¡d
+::
+veùÜ
+<
+¡d
+::
+·œ
+<
+Node
+*, >>& 
+	gNode
+::
+	$g‘Chd»n
+()
+
+17  
+m_chd»n
+;
+
+18 
+	}
+}
+
+20 
+	gNode
+::
+	$addChd
+(
+Node
+* 
+chd
+, 
+di¡ªû
+)
+
+22 
+m_chd»n
+.
+	`push_back
+(
+¡d
+::
+	`make_·œ
+(
+chd
+,
+di¡ªû
+));
+
+23 
+	}
+}
+
+25 
+	gNode
+::
+	$ş—rChd»n
+()
+
+27 
+m_chd»n
+.
+	`ş—r
+();
+
+28 
+	}
+}
+
+30 
+	gNode
+::
+	$£tP¬’t
+(
+Node
+* 
+·»Á
+)
+
+32 
+m_·»Á
+ = 
+·»Á
+;
+
+33 
+	}
+}
+
+	@Node.h
+
+1 #´agm¨
+Úû
+
+
+3 
+	~<veùÜ
+>
+
+11 şas 
+	cNode
+
+
+13 
+	mpublic
+:
+
+15 
+Node
+();
+
+16 
+	mvœtu®
+ ~
+Node
+();
+
+23 
+£tP¬’t
+(
+Node
+* 
+·»Á
+);
+
+29 
+Node
+* 
+	$g‘P¬’t
+() const;
+
+35 
+	`addChd
+(
+Node
+* 
+chd
+, 
+di¡ªû
+);
+
+41 
+¡d
+::
+veùÜ
+<¡d::
+·œ
+<
+Node
+*, >>& 
+	`g‘Chd»n
+();
+
+43 
+´Ùeùed
+:
+
+48 
+	`ş—rChd»n
+();
+
+53 
+Node
+* 
+m_·»Á
+;
+
+58 
+¡d
+::
+veùÜ
+<¡d::
+·œ
+<
+Node
+*, >> 
+m_chd»n
+;
+
+	@PathAlgorithm.h
+
+1 #´agm¨
+Úû
+
+
+3 
+	~<veùÜ
+>
+
+12 
+	g‹m¶©e
+<
+şass
+ 
+	gTNode
+>
+
+13 şas 
+	cP©hAlgÜ™hm
+
+
+15 
+	mpublic
+:
+
+17 
+TNode
+ 
+	tnode_ty³
+;
+
+27 
+vœtu®
+ 
+boŞ
+ 
+g‘P©h
+(
+TNode
+* 
+¡¬t
+, TNode* 
+gßl
+, 
+¡d
+::
+veùÜ
+<TNode*>& 
+·th
+) = 0;
+
+33 
+vœtu®
+ 
+ş—r
+() = 0;
+
+35 
+	m´Ùeùed
+:
+
+44 
+šlše
+ 
+	$di¡ªûB‘w“n
+(
+TNode
+* 
+n1
+, TNode* 
+n2
+) const
+
+46  
+n1
+->
+	`di¡ªûTo
+(
+n2
+);
+
+54 
+	`»cÚ¡ruùP©h
+(
+TNode
+* 
+node
+, 
+¡d
+::
+veùÜ
+<TNode*>& 
+·th
+)
+
+56 
+TNode
+* 
+·»Á
+ = 
+¡©ic_ÿ¡
+<TNode*>(
+node
+->
+	`g‘P¬’t
+());
+
+57 
+·th
+.
+	`push_back
+(
+node
+);
+
+58 
+·»Á
+ !ğ
+nuÎ±r
+)
+
+60 
+·th
+.
+	`push_back
+(
+·»Á
+);
+
+61 
+·»Á
+ = 
+¡©ic_ÿ¡
+<
+TNode
+*>Õ¬’t->
+	`g‘P¬’t
+());
+
+63 
+	}
+}
+
+	@PathFinder.h
+
+1 #´agm¨
+Úû
+
+
+3 
+	~<veùÜ
+>
+
+4 
+	~"P©hAlgÜ™hm.h
+"
+
+13 
+	g‹m¶©e
+ <
+şass
+ 
+	gTNode
+>
+
+14 şas 
+	cP©hFšd”
+
+
+16 
+	mpublic
+:
+
+21 
+ex¶ic™
+ 
+	$P©hFšd”
+() :
+
+22 
+	`m_¡¬t
+(
+nuÎ±r
+), 
+	$m_gßl
+(
+nuÎ±r
+)
+
+29 
+	$£tS¹
+(
+TNode
+& 
+¡¬t
+)
+
+31 
+m_¡¬t
+ = &
+¡¬t
+;
+
+32 
+	}
+}
+
+38 
+	$£tGßl
+(
+TNode
+& 
+gßl
+)
+
+40 
+m_gßl
+ = &
+gßl
+;
+
+41 
+	}
+}
+
+47 
+TNode
+* 
+	$g‘S¹
+() const
+
+49  
+m_¡¬t
+;
+
+50 
+	}
+}
+
+56 
+TNode
+* 
+	$g‘Gßl
+() const
+
+58  
+m_gßl
+;
+
+59 
+	}
+}
+
+70 
+	g‹m¶©e
+ <
+şass
+ 
+	gTAlgÜ™hm
+>
+
+71 
+boŞ
+ 
+fšdP©h
+(
+¡d
+::
+veùÜ
+<
+TNode
+*>& 
+sŞutiÚ
+, 
+hšt
+ = 0)
+
+73 
+¡d
+::
+veùÜ
+<
+ty³Çme
+ 
+TAlgÜ™hm
+::
+node_ty³
+*> 
+·th
+;
+
+74 
+	gTAlgÜ™hm
+ &
+	g®gÜ™hm
+ = 
+TAlgÜ™hm
+::
+g‘In¡ªû
+();
+
+76 ià(
+	ghšt
+ > 0)
+
+77 
+	g·th
+.
+»£rve
+(
+hšt
+);
+
+79 
+boŞ
+ 
+	g·thFound
+ = 
+®gÜ™hm
+.
+g‘P©h
+(
+m_¡¬t
+, 
+m_gßl
+, 
+·th
+);
+
+81 if(!
+	g·thFound
+){
+
+82 
+	g®gÜ™hm
+.
+ş—r
+();
+
+83  
+	gçl£
+;
+
+86 if(
+	ghšt
+ > 0)
+
+87 
+	gsŞutiÚ
+.
+»£rve
+(
+hšt
+);
+
+89 autØ
+	gr™
+ = 
+·th
+.
+rbegš
+();„™ !ğ·th.
+»nd
+(); ++rit)
+
+90 
+	gsŞutiÚ
+.
+push_back
+Ğ
+¡©ic_ÿ¡
+<
+TNode
+*>(*
+r™
+) );
+
+92 
+	g®gÜ™hm
+.
+ş—r
+();
+
+93  
+	gŒue
+;
+
+96 
+	g´iv©e
+:
+
+97 
+TNode
+ *
+m_¡¬t
+, *
+	gm_gßl
+;
+
+	@
+1
+.
+0
+8
+87
+AStar.cpp
+AStar.h
+Dijkstra.cpp
+Dijkstra.h
+Node.cpp
+Node.h
+PathAlgorithm.h
+PathFinder.h

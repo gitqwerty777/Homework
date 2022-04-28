@@ -1,0 +1,25 @@
+..F..
+======================================================================
+FAIL: test_random_file (__main__.GithubSearch)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "selenium-unittest.py", line 72, in test_random_file
+    assert(filecmp.cmp("tempcheckfile", originalFilePath))
+AssertionError
+
+----------------------------------------------------------------------
+Ran 5 tests in 582.808s
+
+FAILED (failures=1)
+https://github.com/runningskull/gnugo.git
+random choose ./gnugo/regression/games/egc2001/tg-gg.sgf
+
+['.', 'gnugo', 'regression', 'games', 'egc2001', 'tg-gg.sgf']
+2
+3
+4
+5
+https://github.com/runningskull/gnugo/raw/master/regression/games/tg-gg.sgf
+https://github.com/runningskull/gnugo/search?utf8=%E2%9C%93&q=SAFE_ON_BOARD%28i%2C+j%29
+<selenium.webdriver.firefox.webelement.FirefoxWebElement (session="377de6b7-1f3b-4a4a-8758-8ea45c1b031e", element="6f6ac8bf-1753-4569-b22c-932bf045de53")>
+origin

@@ -1,0 +1,163 @@
+                     GNU Go Task List
+
+You can help make GNU Go the best Go program.
+
+This is a task-list for anyone who is interested in helping with GNU
+Go. If you want to work on such a project you should correspond with
+us until we reach a common vision of how the feature will work!
+
+A note about copyright. Before any code can be accepted as a part of
+the official release of GNU Go, the Free Software Foundation will want
+you to sign a copyright disclaimer. Of course you can work on a forked
+version without signing such a disclaimer. If you want your changes to
+the program to be incorporated into the version we distribute we need
+such a disclaimer. Please contact the GNU Go maintainers, Daniel Bump
+(bump@sporadic.stanford.edu) and Gunnar Farneback
+(gunnar@lysator.liu.se), to get more information and the papers to
+sign.
+
+Below is a list of things YOU could work on. We are already working on
+some of these tasks, but don't let that stop you. Please contact us or
+the person assigned to task for further discussion.
+
+//--------------------------------------------------------------
+// General
+//--------------------------------------------------------------
+
+ * If you can, send us bug FIXES as well as bug reports. If you see
+   some bad behavior, figure out what causes it, and what to do about
+   fixing it. And send us a patch! If you find an interesting bug and
+   cannot tell us how to fix it, we would be happy to have you tell us
+   about it anyway. Send us the sgf file (if possible) and attach
+   other relevant information, such as the GNU Go version number. In
+   cases of assertion failures and segmentation faults we probably
+   want to know what operating system and compiler you were using, in
+   order to determine if the problem is platform dependent.
+
+ * Extend the regression test suites.
+   See the texinfo manual in the doc directory for a description of
+   how to do this. In particular it would be useful with test suites
+   for common life and death problems. Currently second line groups, L
+   groups and the tripod shape are reasonably well covered, but there
+   is for example almost nothing on comb formations, carpenter's
+   square, and so on. Other areas where test suites would be most
+   welcome are fuseki, tesuji, and endgame.
+
+ * Tuning the pattern databases. These are under constant revision.
+   Tuning them is a sort of art. It is not necessary to do any
+   programming to do this since most of the patterns do not require
+   helpers. We would like it if a few more Dan level players would
+   learn this skill.
+
+//--------------------------------------------------------------
+// Monte Carlo
+//--------------------------------------------------------------
+
+The main strength of recent computer go programs is coming from Monte
+Carlo simulation techniques. GNU Go has an implementation of UCT
+search but it is behind state of the art and in particular scales very
+badly to 19x19.
+
+ * Implement RAVE (Rapid Action Value Estimation). [Medium difficulty]
+
+ * Implement progressive widening. [Easy to implement, proving that it
+   improves strength might be harder.]
+
+ * Reuse and prune the UCT search tree between moves. [Medium
+   difficulty]
+
+ * Implement other improvements that have been discussed on the
+   Computer Go mailing list.
+
+ * Tune the 3x3 pattern databases better. [Tuning is easy but doing it
+   well probably quite difficult.]
+
+ * Find a way to analyze the effectiveness of the random simulation
+   policy. It is in general very difficult to understand how the
+   details of the random simulations affect the strength of the UCT
+   search so anything that adds insight into this would be most
+   welcome. [Extremely difficult]
+
+ * Implement life and death reading with Monte Carlo simulations for
+   unclear leaf nodes. The life and death reading in owl.c tends to be
+   very uninformative when it runs out of nodes. [Difficult]
+
+ * Make the Monte Carlo search and/or simulations take advantage of
+   the tactical/connection/owl/semeai reading results. [Extremely
+   difficult]
+
+//--------------------------------------------------------------
+// Multithreading
+//--------------------------------------------------------------
+
+Most of the internal structures of GNU Go were developed in a time
+when computers generally were singlethreaded. This means lots of
+global data structures and in particular a global board implementation
+which would be very hard to adapt for multiple threads. However,
+additional computational power is most worthwhile in the Monte Carlo
+code, which has its own board code and data structures which were
+designed with multithreading in mind.
+
+ * Make the Monte Carlo code multithreaded. [Difficult]
+
+ * Make the GTP event loop multithreaded. [Medium difficulty]
+
+ * Implement pondering (thinking on the opponent's time) for the Monte
+   Carlo code. This requires at least that reuse of UCT search trees
+   has been implemented and one of items above. [Medium difficulty]
+
+ * Make other interfaces than GTP also use the GTP event loop. The
+   purpose of this would be to gain the benefits of multithreading
+   also for other interfaces without having to reimplement it for each
+   of them. [Difficult]
+
+//--------------------------------------------------------------
+// Utilities
+//--------------------------------------------------------------
+
+ * Improve tuning/development GUI. Today regression/view.pike provides
+   support for viewing some of the analysis going on inside the engine
+   but it is far from complete and also has a troublesome dependency
+   on GTK1. It would in particular be valuable to have a GUI which
+   could be used to inspect the UCT search tree and other details of
+   the Monte Carlo code. [Varying difficulty depending on ambition.]
+
+ * Infrastructure for evaluating Monte Carlo experiments. It takes
+   much time to evaluate changes in the Monte Carlo code. Usually
+   hundreds of games have to be run, preferrably against multiple
+   opponents, to gather sufficient statistics to determine the value
+   of the change.  This is both time consuming and bothersome to
+   organize for each developer. Thus it would help to have an
+   infrastructure that could organize the games and present the
+   results, and ideally also distribute the games to multiple
+   computers. [Big and difficult.]
+
+//--------------------------------------------------------------
+// Other
+//--------------------------------------------------------------
+
+ * Implement a proof number search version of tactical reading. The
+   current tactical reading does a fairly good job but it would be
+   interesting to see how an algorithm based on proof number search or
+   one of its variations would do. This could potentially also tie in
+   to the task of taking advantage of tactical reading for Monte Carlo
+   search. [Medium difficulty]
+
+ * Write a script which plays through the joseki databases and checks
+   that the engine really generates a joseki move for all positions in
+   the databases. This would also be interesting to run with the
+   --nojosekidb option. [Easy]
+
+ * Improve the heuristics for assessment of the safety of a
+   group. This should probably involve some kind of Monte Carlo
+   analysis. [Difficult]
+
+ * Support for ko in eyes.db and optics.c. [Difficult]
+
+ * Create a paradigm for handling other types of ko (approach move ko,
+   multi-step ko, etc) and then write code that handles them. [Very
+   difficult]
+
+ * Reimplement patterns/mkpat.c. This code is quite messy after a long
+   time of evolutionary development and would benefit from a clean
+   redesign. [Medium difficulty but rather big.]

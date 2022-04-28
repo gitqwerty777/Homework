@@ -1,0 +1,26 @@
+In file included from cities.cpp:16:0:
+../src/PathFinder.h: In member function ‘bool PathFinder<TNode>::findPath(std::vector<TNode*>&, int)’:
+../src/PathFinder.h:73:38: error: type/value mismatch at argument 1 in template parameter list for ‘template<class _Tp, class _Alloc> class std::vector’
+    std::vector<TAlgorithm::node_type*> path;
+                                      ^
+../src/PathFinder.h:73:38: note:   expected a type, got ‘(TAlgorithm:: node_type * <expression error>)’
+../src/PathFinder.h:73:38: error: template argument 2 is invalid
+../src/PathFinder.h:77:10: error: request for member ‘reserve’ in ‘path’, which is of non-class type ‘int’
+     path.reserve(hint);
+          ^
+../src/PathFinder.h:87:19: error: ‘rbegin’ is not a member of ‘std’
+    for(auto rit = std::rbegin(path); rit != std::rend(path); ++rit)
+                   ^
+../src/PathFinder.h:87:45: error: ‘rend’ is not a member of ‘std’
+    for(auto rit = std::rbegin(path); rit != std::rend(path); ++rit)
+                                             ^
+../src/PathFinder.h: In instantiation of ‘bool PathFinder<TNode>::findPath(std::vector<TNode*>&, int) [with TAlgorithm = Dijkstra; TNode = City]’:
+cities.cpp:104:40:   required from here
+../src/PathFinder.h:79:60: error: no matching function for call to ‘Dijkstra::getPath(City*&, City*&, int&)’
+    bool pathFound = algorithm.getPath(m_start, m_goal, path);
+                                                            ^
+In file included from cities.cpp:17:0:
+../src/Dijkstra.h:72:8: note: candidate: virtual bool Dijkstra::getPath(DijkstraNode*, DijkstraNode*, std::vector<DijkstraNode*, std::allocator<DijkstraNode*> >&)
+   bool getPath(DijkstraNode* start, DijkstraNode* goal, std::vector<DijkstraNode*>& path);
+        ^
+../src/Dijkstra.h:72:8: note:   no known conversion for argument 3 from ‘int’ to ‘std::vector<DijkstraNode*, std::allocator<DijkstraNode*> >&’
