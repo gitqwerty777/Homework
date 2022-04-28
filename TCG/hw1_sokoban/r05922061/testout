@@ -1,0 +1,7 @@
+time ./solver < ../testdata/small.in
+/bin/sh: ./solver: 沒有此一檔案或目錄
+
+real	0m0.001s
+user	0m0.001s
+sys	0m0.000s
+make: *** [Makefile:10: test] Error 127

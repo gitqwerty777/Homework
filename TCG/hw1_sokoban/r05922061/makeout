@@ -1,0 +1,7 @@
+g++ -std=c++11 -O3 -march=native -Wall -c board.cpp -o board.o
+board.cpp: In member function 「bool Board::AStar(int&)」:
+board.cpp:133:1: 警告：在有回傳值的函式中未發現 return 敘述 [-Wreturn-type]
+ }
+ ^
+g++ -std=c++11 -Wall -c solver.cpp -o solver.o
+g++ -std=c++11 -O3 -march=native -Wall solver.o board.o -o solver
