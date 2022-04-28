@@ -1,0 +1,13 @@
+from nltk.corpus import sinica_treebank
+#reader
+#http://cpmarkchang.logdown.com/posts/184192-python-nltk-sinica-treebank
+
+sinica_treebank.parsed_sents()[15].draw()
+
+
+
+
+
+
+
+

@@ -1,0 +1,7 @@
+最新更新日期：2011/11/30
+本程式目的是幫助統計斷詞結果
+請在命令列下輸入：CountWordFreq.exe [InputFile] [OutputFile] [0/1]
+[InputFile]：輸入檔為以tab字元區隔的斷詞文字，詞性可(不)加註在詞後面，以括號括起來
+[OutputFile]：輸出文字中的所有詞，以及其出現的次數
+[0/1]：統計時是否要連同Part Of Speech一起考慮。0:Without Part Of Speech 1:With Part Of Speech
+如需排序可以將結果貼在EXCEL檔
