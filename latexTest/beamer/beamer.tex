@@ -1,0 +1,142 @@
+\documentclass[xcolor=dvipsnames, utf8]{beamer}
+\usepackage{listings}
+\usepackage{CJKutf8}
+\usepackage{graphicx}
+\graphicspath{{./figs/}{./}}
+
+\usecolortheme[named=Green]{structure}
+\usetheme{Warsaw}
+\useoutertheme{infolines}
+
+\begin{document}
+
+\begin{CJK}{UTF8}{bsmi}
+\logo{\includegraphics[width=5cm]{emacs-move.png}}
+\title{go}
+\author{HCL}
+\institute{NTU CSIE}
+\date{2015/07/09}
+
+\begin{frame}
+\titlepage
+\end{frame}
+
+\begin{frame}
+\frametitle{Beam Theme}
+\begin{itemize}
+\item<1-> AnnArbor
+Antibes
+Bergen
+Berkeley
+Berlin
+Boadilla
+CambridgeUS
+Copenhagen
+Dresden
+Frankfurt
+Goettingen
+Hannover
+Ilmenau
+JuanLesPins
+Luebeck
+\item<2->Madrid
+Marburg
+Montpellier
+PaloAlto
+\only<2->{only2} % looks like the same to uncover
+\uncover<2->{uncover2}
+Pittsburgh
+\item<3->Rochester
+Singapore
+Szeged
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{t2}
+\color<2>{green}{green words only at second page\\} % page specific command should put at first
+\color{green}{green words\\}
+\alert{alert words}
+\end{frame}
+
+\begin{frame}[label=t3]
+\frametitle{t3}
+\begin{block}{small point}
+green title
+\end{block}
+
+\begin{alertblock}{big point}
+red title
+\end{alertblock}
+
+\end{frame}
+
+\begin{frame}[fragile]{t4}
+\lstset{language=C++,
+                basicstyle=\ttfamily,
+                keywordstyle=\color{blue}\ttfamily,
+                stringstyle=\color{red}\ttfamily,
+                commentstyle=\color{green}\ttfamily,
+                morecomment=[l][\color{magenta}]{\#}
+}
+\begin{lstlisting}
+  #include<stdio.h>
+  #include<iostream>
+  // C++ lstlist example
+  int main(void){
+    printf("Hello World\n");
+    return 0;
+  }
+\end{lstlisting}
+
+\hyperlink{t3}{\beamerbutton{go to t3}}
+\end{frame}
+
+\begin{frame}{第五張投影片}
+中文測試 % https://www.ptt.cc/bbs/LaTeX/M.1210092248.A.597.html
+
+
+
+
+\end{frame}
+
+\begin{frame}[fragile]{frame6}
+\lstset{language=python,
+        numbers=left,
+        numberstyle=\tiny,
+        showstringspaces=false,
+        %aboveskip=40pt,
+        frame=leftline
+}
+
+\begin{lstlisting}
+  import random
+  for i in range(10): # loop
+  j = random.randint()
+  print j
+\end{lstlisting}
+
+\end{frame}
+
+\begin{frame}{frame7-insert code file}
+  \lstset{language=python, 
+    keywordstyle=\color{blue}\ttfamily,
+    stringstyle=\color{red}\ttfamily,
+    commentstyle=\color{green}\ttfamily,
+    morecomment=[l][\color{magenta}]{\#}
+  }
+  \lstinputlisting{../NLP/p1/include.py}
+\end{frame}
+
+\begin{frame}
+
+$formula() = X^1_2$
+
+
+資料來源：
+蔡炎龍
+政治大學應用數學系
+\end{frame}
+
+\end{CJK}
+\end{document}

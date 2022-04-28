@@ -1,0 +1,15 @@
+\frametitle {frame6}\lstset {language=python,
+        numbers=left,
+        numberstyle=\tiny,
+        showstringspaces=false,
+        %aboveskip=40pt,
+        frame=leftline
+}
+
+\begin{lstlisting}
+  import random
+  for i in range(10): # loop
+  j = random.randint()
+  print j
+\end{lstlisting}
+
