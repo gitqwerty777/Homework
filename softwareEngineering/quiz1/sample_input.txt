@@ -1,0 +1,25 @@
+5
+1 authorA math
+2 authorB math
+3 authorA physics
+4 authorC art
+5 ahthorC history
+3
+staff 1
+borrower 2 2
+borrower 3 4
+1
+checkout 2 1
+1
+checkout 3 1
+1
+list author authorA
+3
+list subject music
+1
+last-checked 1
+2
+checked-list 2
+3
+checked-list 1
+exit
