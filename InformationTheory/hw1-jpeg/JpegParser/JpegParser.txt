@@ -1,0 +1,460 @@
+======================================
+JPEG Parser 使用說明 v0.97 (2002/04/15)
+
+ 	         By Po-Kang Hsiao, CML LAB
+======================================
+
+  output bmp file
+    JpegParser [input file] -bmp=xxx.bmp
+
+  output yuv file
+    JpegParser [input file] -yuv=xxx.yuv
+
+  output debug on screen without block content in each stage
+    JpegParser [input file] -debug
+
+  output debug on screen with block content in each stage
+    JpegParser [input file] -debug -output_block
+
+  output debug file without block content in each stage
+    JpegParser [input file] -debug=xxx.txt
+
+  output debug file with block content in each stage
+    JpegParser [input file] -debug=xxx.txt -output_block
+
+  PS: 本程式為 Win2000 下 compile 出來的程式, 不保證其他平台能跑, 有問題請mail給 TA.
+
+============
+What is New?
+============
+
+  [2002/03/28] v0.95
+  第一版 parser release.
+
+  [2002/04/08] v0.96
+  1.  修正 Quantization Table 的輸出, Spec 定義為 Zig-Zag-Scan 的順序進來, 本來輸出也是照 Zig-Zag-Order 的順序, 
+      為了避免混淆, 改成兩個輸出, 一個是 Zig-Zag-Scan order 一個是 Block-order, 方便大家作 DeQuantize 的對照.
+  2.  支援 Progressive-DCT mode 的 Header Parsing (only SOS not including MCU part).
+
+  [2002/04/14] v0.97
+  1.  修改輸入參數格式, 加入可直接輸出到螢幕上的 debug 模式.
+
+=================
+Debug File Format
+=================
+
+  以下截錄一小段 parse monalisa.jpg 的結果
+
+ffe0 - APP
+	Lp: 16
+ffdb - DQT
+	Lq: 67
+	Pq: 0	Tq: 0	Qk: 8
+	In Parsing order (Zig-Zag-Scan order):
+	  8 6 6 7 6 5 8 7 7 7 9 9 8 10 12 20 13 12 11 11 12 25 18 19 15 20 29 26 31 30 29 26 28 28 32 36 46 39 32 34 44 35 28 28 40 55 41 44 48 49 52 52 52 31 39 57 61 56 50 60 46 51 52 50 
+	In Block order:
+	   8    6    5    8   12   20   26   31 
+	   6    6    7   10   13   29   30   28 
+	   7    7    8   12   20   29   35   28 
+	   7    9   11   15   26   44   40   31 
+	   9   11   19   28   34   55   52   39 
+	  12   18   28   32   41   52   57   46 
+	  25   32   39   44   52   61   60   51 
+	  36   46   48   49   56   50   52   50 
+....
+
+ffc0 - SOF - Baseline DCT, Huffman coding
+	Lf: 17	P: 8	Y: 443	X: 286	Nf: 3
+	Component: 1	 H: 2	 V: 2	 Tq: 0
+	Component: 2	 H: 1	 V: 1	 Tq: 1
+	Component: 3	 H: 1	 V: 1	 Tq: 1
+
+ffc4 - DHT
+	Lh: 31
+	Tc: 0	Th: 0
+	Li: 0 1 5 1 1 1 1 1 1 0 0 0 0 0 0 0 
+	Vi,j:0 1 2 3 4 5 6 7 8 9 10 11 
+	Size	CodeWord		Symbol
+	(2,	00              ,	0x00)
+	(3,	010             ,	0x01)
+	(3,	011             ,	0x02)
+	(3,	100             ,	0x03)
+	(3,	101             ,	0x04)
+	(3,	110             ,	0x05)
+	(4,	1110            ,	0x06)
+	(5,	11110           ,	0x07)
+	(6,	111110          ,	0x08)
+	(7,	1111110         ,	0x09)
+	(8,	11111110        ,	0x0a)
+	(9,	111111110       ,	0x0b)
+
+....
+
+ffda - SOS
+	Ls: 12	Ns: 3
+	Cs: 1	Td: 0	Ta: 0
+	Cs: 2	Td: 1	Ta: 1
+	Cs: 3	Td: 1	Ta: 1
+	Ss: 0	Se: 63	Ah: 0	Al: 0
+
+MCU (0,0) ;; 這個是表示 MCU 的座標 (Y,X)
+	DataUnit: (0,0,0) ;; (component id, V, H)
+		DC Predictor: 0
+		DC:
+			T: 5	DIFF: 7	EXTEND(DIFF,T): -24
+		AC:
+			RS: 0x02  RRRR:  0  SSSS:  2  ZZ(K): 2	EXTEND(ZZ(K),SSSS):   2
+			RS: 0x03  RRRR:  0  SSSS:  3  ZZ(K): 2	EXTEND(ZZ(K),SSSS):  -5
+			RS: 0x03  RRRR:  0  SSSS:  3  ZZ(K): 1	EXTEND(ZZ(K),SSSS):  -6
+			RS: 0x02  RRRR:  0  SSSS:  2  ZZ(K): 0	EXTEND(ZZ(K),SSSS):  -3
+			RS: 0x01  RRRR:  0  SSSS:  1  ZZ(K): 1	EXTEND(ZZ(K),SSSS):   1
+			RS: 0x02  RRRR:  0  SSSS:  2  ZZ(K): 3	EXTEND(ZZ(K),SSSS):   3
+			RS: 0x01  RRRR:  0  SSSS:  1  ZZ(K): 0	EXTEND(ZZ(K),SSSS):  -1
+			RS: 0x03  RRRR:  0  SSSS:  3  ZZ(K): 3	EXTEND(ZZ(K),SSSS):  -4
+			RS: 0x11  RRRR:  1  SSSS:  1  ZZ(K): 1	EXTEND(ZZ(K),SSSS):   1
+			RS: 0x01  RRRR:  0  SSSS:  1  ZZ(K): 0	EXTEND(ZZ(K),SSSS):  -1
+			RS: 0x01  RRRR:  0  SSSS:  1  ZZ(K): 1	EXTEND(ZZ(K),SSSS):   1
+			RS: 0x11  RRRR:  1  SSSS:  1  ZZ(K): 0	EXTEND(ZZ(K),SSSS):  -1
+			RS: 0x21  RRRR:  2  SSSS:  1  ZZ(K): 1	EXTEND(ZZ(K),SSSS):   1
+			RS: 0x21  RRRR:  2  SSSS:  1  ZZ(K): 0	EXTEND(ZZ(K),SSSS):  -1
+			RS: 0x21  RRRR:  2  SSSS:  1  ZZ(K): 1	EXTEND(ZZ(K),SSSS):   1
+			RS: 0x01  RRRR:  0  SSSS:  1  ZZ(K): 0	EXTEND(ZZ(K),SSSS):  -1
+			RS: 0x31  RRRR:  3  SSSS:  1  ZZ(K): 1	EXTEND(ZZ(K),SSSS):   1
+			RS: 0x00 -- EOB
+
+		*Before DeQuantize*
+		 -24    2    1    3   -1    0    0    1 
+		  -5   -3   -1    0    0    0    0    0 
+		  -6   -4    1    1    0    0    0    0 
+		   0   -1    0   -1    0    0    0    0 
+		   1    0    1    0    0    0    0    0 
+		  -1    0    0    0    0    0    0    0 
+		   0    0    0    0    0    0    0    0 
+		   0    0    0    0    0    0    0    0 
+
+		*Before IDCT*
+		-192   12    5   24  -12    0    0   31 
+		 -30  -18   -7    0    0    0    0    0 
+		 -42  -28    8   12    0    0    0    0 
+		   0   -9    0  -15    0    0    0    0 
+		   9    0   19    0    0    0    0    0 
+		 -12    0    0    0    0    0    0    0 
+		   0    0    0    0    0    0    0    0 
+		   0    0    0    0    0    0    0    0 
+
+		*After IDCT*
+		 -40  -46  -41  -51  -32  -31  -20  -27 
+		 -32  -37  -31  -38  -19  -24  -23  -37 
+		 -20  -26  -22  -32  -15  -23  -25  -42 
+		  -6  -13  -12  -28  -17  -24  -20  -31 
+		  -4   -7   -3  -21  -14  -23  -15  -21 
+		 -17  -17   -9  -22  -14  -25  -20  -28 
+		 -20  -26  -23  -34  -19  -25  -22  -35 
+		  -6  -22  -29  -43  -21  -21  -15  -29 
+
+		*After level shift (+128)*
+		  88   82   87   77   96   97  108  101 
+		  96   91   97   90  109  104  105   91 
+		 108  102  106   96  113  105  103   86 
+		 122  115  116  100  111  104  108   97 
+		 124  121  125  107  114  105  113  107 
+		 111  111  119  106  114  103  108  100 
+		 108  102  105   94  109  103  106   93 
+		 122  106   99   85  107  107  113   99 
+
+	DataUnit: (0,0,1)
+		DC Predictor: -24
+		DC:
+			T: 4	DIFF: 6	EXTEND(DIFF,T): -9
+		AC:
+			RS: 0x02  RRRR:  0  SSSS:  2  ZZ(K): 1	EXTEND(ZZ(K),SSSS):  -2
+			RS: 0x02  RRRR:  0  SSSS:  2  ZZ(K): 0	EXTEND(ZZ(K),SSSS):  -3
+			RS: 0x03  RRRR:  0  SSSS:  3  ZZ(K): 3	EXTEND(ZZ(K),SSSS):  -4
+			RS: 0x01  RRRR:  0  SSSS:  1  ZZ(K): 0	EXTEND(ZZ(K),SSSS):  -1
+			RS: 0x02  RRRR:  0  SSSS:  2  ZZ(K): 1	EXTEND(ZZ(K),SSSS):  -2
+			RS: 0x02  RRRR:  0  SSSS:  2  ZZ(K): 2	EXTEND(ZZ(K),SSSS):   2
+			RS: 0x02  RRRR:  0  SSSS:  2  ZZ(K): 1	EXTEND(ZZ(K),SSSS):  -2
+			RS: 0x12  RRRR:  1  SSSS:  2  ZZ(K): 1	EXTEND(ZZ(K),SSSS):  -2
+			RS: 0x01  RRRR:  0  SSSS:  1  ZZ(K): 0	EXTEND(ZZ(K),SSSS):  -1
+			RS: 0x01  RRRR:  0  SSSS:  1  ZZ(K): 1	EXTEND(ZZ(K),SSSS):   1
+			RS: 0x01  RRRR:  0  SSSS:  1  ZZ(K): 1	EXTEND(ZZ(K),SSSS):   1
+			RS: 0x11  RRRR:  1  SSSS:  1  ZZ(K): 1	EXTEND(ZZ(K),SSSS):   1
+			RS: 0x01  RRRR:  0  SSSS:  1  ZZ(K): 1	EXTEND(ZZ(K),SSSS):   1
+			RS: 0x11  RRRR:  1  SSSS:  1  ZZ(K): 0	EXTEND(ZZ(K),SSSS):  -1
+			RS: 0x01  RRRR:  0  SSSS:  1  ZZ(K): 0	EXTEND(ZZ(K),SSSS):  -1
+			RS: 0x01  RRRR:  0  SSSS:  1  ZZ(K): 1	EXTEND(ZZ(K),SSSS):   1
+			RS: 0xa1  RRRR: 10  SSSS:  1  ZZ(K): 0	EXTEND(ZZ(K),SSSS):  -1
+			RS: 0x00 -- EOB
+
+		*Before DeQuantize*
+		 -33   -2   -2    2    1    1    0    0 
+		  -3   -1   -2    0    0    0    0    0 
+		  -4    0    1   -1    0   -1    0    0 
+		  -2    1   -1    0    0    0    0    0 
+		  -1    1    0    0    0    0    0    0 
+		   0    0    0    0    0    0    0    0 
+		   0    0    0    0    0    0    0    0 
+		   0    0    0    0    0    0    0    0 
+
+		*Before IDCT*
+		-264  -12  -10   16   12   20    0    0 
+		 -18   -6  -14    0    0    0    0    0 
+		 -28    0    8  -12    0  -29    0    0 
+		 -14    9  -11    0    0    0    0    0 
+		  -9   11    0    0    0    0    0    0 
+		   0    0    0    0    0    0    0    0 
+		   0    0    0    0    0    0    0    0 
+		   0    0    0    0    0    0    0    0 
+
+		*After IDCT*
+		 -49  -44  -44  -40  -35  -43  -51  -46 
+		 -41  -45  -41  -33  -30  -31  -33  -34 
+		 -30  -44  -37  -24  -28  -23  -19  -29 
+		 -21  -44  -34  -20  -30  -25  -19  -38 
+		 -21  -43  -33  -19  -30  -27  -23  -45 
+		 -26  -41  -34  -23  -29  -28  -26  -38 
+		 -29  -36  -36  -32  -31  -31  -30  -28 
+		 -29  -30  -38  -40  -35  -36  -35  -24 
+
+		*After level shift (+128)*
+		  79   84   84   88   93   85   77   82 
+		  87   83   87   95   98   97   95   94 
+		  98   84   91  104  100  105  109   99 
+		 107   84   94  108   98  103  109   90 
+		 107   85   95  109   98  101  105   83 
+		 102   87   94  105   99  100  102   90 
+		  99   92   92   96   97   97   98  100 
+		  99   98   90   88   93   92   93  104 
+
+	DataUnit: (0,1,0)
+		DC Predictor: -33
+		DC:
+			T: 4	DIFF: 13	EXTEND(DIFF,T): 13
+		AC:
+			RS: 0x02  RRRR:  0  SSSS:  2  ZZ(K): 2	EXTEND(ZZ(K),SSSS):   2
+			RS: 0x02  RRRR:  0  SSSS:  2  ZZ(K): 1	EXTEND(ZZ(K),SSSS):  -2
+			RS: 0x02  RRRR:  0  SSSS:  2  ZZ(K): 2	EXTEND(ZZ(K),SSSS):   2
+			RS: 0x01  RRRR:  0  SSSS:  1  ZZ(K): 0	EXTEND(ZZ(K),SSSS):  -1
+			RS: 0x02  RRRR:  0  SSSS:  2  ZZ(K): 2	EXTEND(ZZ(K),SSSS):   2
+			RS: 0x21  RRRR:  2  SSSS:  1  ZZ(K): 0	EXTEND(ZZ(K),SSSS):  -1
+			RS: 0x01  RRRR:  0  SSSS:  1  ZZ(K): 0	EXTEND(ZZ(K),SSSS):  -1
+			RS: 0x01  RRRR:  0  SSSS:  1  ZZ(K): 1	EXTEND(ZZ(K),SSSS):   1
+			RS: 0x01  RRRR:  0  SSSS:  1  ZZ(K): 0	EXTEND(ZZ(K),SSSS):  -1
+			RS: 0x01  RRRR:  0  SSSS:  1  ZZ(K): 0	EXTEND(ZZ(K),SSSS):  -1
+			RS: 0x11  RRRR:  1  SSSS:  1  ZZ(K): 1	EXTEND(ZZ(K),SSSS):   1
+			RS: 0x01  RRRR:  0  SSSS:  1  ZZ(K): 0	EXTEND(ZZ(K),SSSS):  -1
+			RS: 0x11  RRRR:  1  SSSS:  1  ZZ(K): 1	EXTEND(ZZ(K),SSSS):   1
+			RS: 0x11  RRRR:  1  SSSS:  1  ZZ(K): 0	EXTEND(ZZ(K),SSSS):  -1
+			RS: 0x01  RRRR:  0  SSSS:  1  ZZ(K): 0	EXTEND(ZZ(K),SSSS):  -1
+			RS: 0xf0  RRRR: 15  SSSS:  0  
+			RS: 0x61  RRRR:  6  SSSS:  1  ZZ(K): 0	EXTEND(ZZ(K),SSSS):  -1
+			RS: 0x00 -- EOB
+
+		*Before DeQuantize*
+		 -20    2    2    0    1   -1    0    0 
+		  -2   -1    0    0    0    0    0    0 
+		   2   -1   -1    1    0    0    0   -1 
+		  -1   -1    0    0    0    0    0    0 
+		   1   -1    0    0    0    0    0    0 
+		  -1    0    0    0    0    0    0    0 
+		   0    0    0    0    0    0    0    0 
+		   0    0    0    0    0    0    0    0 
+
+		*Before IDCT*
+		-160   12   10    0   12  -20    0    0 
+		 -12   -6    0    0    0    0    0    0 
+		  14   -7   -8   12    0    0    0  -28 
+		  -7   -9    0    0    0    0    0    0 
+		   9  -11    0    0    0    0    0    0 
+		 -12    0    0    0    0    0    0    0 
+		   0    0    0    0    0    0    0    0 
+		   0    0    0    0    0    0    0    0 
+
+		*After IDCT*
+		 -25  -20  -34  -18  -20  -11  -25  -14 
+		 -16  -14  -24  -19  -19  -19  -28  -18 
+		 -15  -16  -19  -27  -19  -31  -30  -22 
+		 -18  -20  -17  -32  -17  -34  -25  -18 
+		 -17  -19  -15  -29  -14  -30  -21  -13 
+		 -17  -17  -20  -27  -18  -29  -27  -19 
+		 -16  -14  -24  -20  -20  -21  -30  -21 
+		 -10   -6  -22   -8  -13   -6  -22  -12 
+
+		*After level shift (+128)*
+		 103  108   94  110  108  117  103  114 
+		 112  114  104  109  109  109  100  110 
+		 113  112  109  101  109   97   98  106 
+		 110  108  111   96  111   94  103  110 
+		 111  109  113   99  114   98  107  115 
+		 111  111  108  101  110   99  101  109 
+		 112  114  104  108  108  107   98  107 
+		 118  122  106  120  115  122  106  116 
+
+	DataUnit: (0,1,1)
+		DC Predictor: -20
+		DC:
+			T: 0	DIFF: 0	EXTEND(DIFF,T): 0
+		AC:
+			RS: 0x02  RRRR:  0  SSSS:  2  ZZ(K): 1	EXTEND(ZZ(K),SSSS):  -2
+			RS: 0x03  RRRR:  0  SSSS:  3  ZZ(K): 0	EXTEND(ZZ(K),SSSS):  -7
+			RS: 0x03  RRRR:  0  SSSS:  3  ZZ(K): 3	EXTEND(ZZ(K),SSSS):  -4
+			RS: 0x01  RRRR:  0  SSSS:  1  ZZ(K): 1	EXTEND(ZZ(K),SSSS):   1
+			RS: 0x01  RRRR:  0  SSSS:  1  ZZ(K): 0	EXTEND(ZZ(K),SSSS):  -1
+			RS: 0x01  RRRR:  0  SSSS:  1  ZZ(K): 1	EXTEND(ZZ(K),SSSS):   1
+			RS: 0x11  RRRR:  1  SSSS:  1  ZZ(K): 1	EXTEND(ZZ(K),SSSS):   1
+			RS: 0x01  RRRR:  0  SSSS:  1  ZZ(K): 1	EXTEND(ZZ(K),SSSS):   1
+			RS: 0x01  RRRR:  0  SSSS:  1  ZZ(K): 1	EXTEND(ZZ(K),SSSS):   1
+			RS: 0x11  RRRR:  1  SSSS:  1  ZZ(K): 0	EXTEND(ZZ(K),SSSS):  -1
+			RS: 0x01  RRRR:  0  SSSS:  1  ZZ(K): 1	EXTEND(ZZ(K),SSSS):   1
+			RS: 0x11  RRRR:  1  SSSS:  1  ZZ(K): 1	EXTEND(ZZ(K),SSSS):   1
+			RS: 0x01  RRRR:  0  SSSS:  1  ZZ(K): 1	EXTEND(ZZ(K),SSSS):   1
+			RS: 0x01  RRRR:  0  SSSS:  1  ZZ(K): 0	EXTEND(ZZ(K),SSSS):  -1
+			RS: 0x01  RRRR:  0  SSSS:  1  ZZ(K): 1	EXTEND(ZZ(K),SSSS):   1
+			RS: 0x01  RRRR:  0  SSSS:  1  ZZ(K): 0	EXTEND(ZZ(K),SSSS):  -1
+			RS: 0x01  RRRR:  0  SSSS:  1  ZZ(K): 0	EXTEND(ZZ(K),SSSS):  -1
+			RS: 0x11  RRRR:  1  SSSS:  1  ZZ(K): 0	EXTEND(ZZ(K),SSSS):  -1
+			RS: 0x21  RRRR:  2  SSSS:  1  ZZ(K): 1	EXTEND(ZZ(K),SSSS):   1
+			RS: 0x21  RRRR:  2  SSSS:  1  ZZ(K): 0	EXTEND(ZZ(K),SSSS):  -1
+			RS: 0xd1  RRRR: 13  SSSS:  1  ZZ(K): 1	EXTEND(ZZ(K),SSSS):   1
+			RS: 0x00 -- EOB
+
+		*Before DeQuantize*
+		 -20   -2   -1    1    0    1    0   -1 
+		  -7    1    0    1    1    0    0    1 
+		  -4    1   -1   -1    1    0    0    0 
+		   1    0    1    0    0    0    0    0 
+		   1   -1    0    0    0    0    0    0 
+		  -1   -1    0    0    0    0    0    0 
+		   0    0    0    0    0    0    0    0 
+		   0    0    0    0    0    0    0    0 
+
+		*Before IDCT*
+		-160  -12   -5    8    0   20    0  -31 
+		 -42    6    0   10   13    0    0   28 
+		 -28    7   -8  -12   20    0    0    0 
+		   7    0   11    0    0    0    0    0 
+		   9  -11    0    0    0    0    0    0 
+		 -12  -18    0    0    0    0    0    0 
+		   0    0    0    0    0    0    0    0 
+		   0    0    0    0    0    0    0    0 
+
+		*After IDCT*
+		 -26  -44  -37  -25  -25  -35  -29  -25 
+		 -16  -30  -28  -20  -25  -32  -32  -36 
+		 -24  -30  -29  -20  -25  -19  -22  -32 
+		 -25  -25  -28  -18  -23   -3   -6  -17 
+		 -10   -8  -17   -9  -24    2   -4  -13 
+		 -13   -9  -20   -7  -30   -3  -11  -14 
+		 -27  -20  -27   -4  -32   -8  -17  -13 
+		 -25  -16  -22    7  -27   -8  -22  -15 
+
+		*After level shift (+128)*
+		 102   84   91  103  103   93   99  103 
+		 112   98  100  108  103   96   96   92 
+		 104   98   99  108  103  109  106   96 
+		 103  103  100  110  105  125  122  111 
+		 118  120  111  119  104  130  124  115 
+		 115  119  108  121   98  125  117  114 
+		 101  108  101  124   96  120  111  115 
+		 103  112  106  135  101  120  106  113 
+
+	DataUnit: (1,0,0)
+		DC Predictor: 0
+		DC:
+			T: 4	DIFF: 3	EXTEND(DIFF,T): -12
+		AC:
+			RS: 0x01  RRRR:  0  SSSS:  1  ZZ(K): 1	EXTEND(ZZ(K),SSSS):   1
+			RS: 0x02  RRRR:  0  SSSS:  2  ZZ(K): 2	EXTEND(ZZ(K),SSSS):   2
+			RS: 0x21  RRRR:  2  SSSS:  1  ZZ(K): 1	EXTEND(ZZ(K),SSSS):   1
+			RS: 0x00 -- EOB
+
+		*Before DeQuantize*
+		 -12    1    1    0    0    0    0    0 
+		   2    0    0    0    0    0    0    0 
+		   0    0    0    0    0    0    0    0 
+		   0    0    0    0    0    0    0    0 
+		   0    0    0    0    0    0    0    0 
+		   0    0    0    0    0    0    0    0 
+		   0    0    0    0    0    0    0    0 
+		   0    0    0    0    0    0    0    0 
+
+		*Before IDCT*
+		-108    9   12    0    0    0    0    0 
+		  18    0    0    0    0    0    0    0 
+		   0    0    0    0    0    0    0    0 
+		   0    0    0    0    0    0    0    0 
+		   0    0    0    0    0    0    0    0 
+		   0    0    0    0    0    0    0    0 
+		   0    0    0    0    0    0    0    0 
+		   0    0    0    0    0    0    0    0 
+
+		*After IDCT*
+		  -7   -8  -10  -12  -13  -12  -11  -10 
+		  -7   -9  -11  -12  -13  -13  -11  -10 
+		  -8  -10  -12  -13  -14  -13  -12  -11 
+		  -9  -11  -13  -14  -15  -15  -13  -12 
+		 -11  -12  -14  -16  -16  -16  -15  -14 
+		 -12  -13  -15  -17  -17  -17  -16  -15 
+		 -13  -14  -16  -18  -18  -18  -17  -16 
+		 -13  -14  -16  -18  -19  -18  -17  -16 
+
+		*After level shift (+128)*
+		 121  120  118  116  115  116  117  118 
+		 121  119  117  116  115  115  117  118 
+		 120  118  116  115  114  115  116  117 
+		 119  117  115  114  113  113  115  116 
+		 117  116  114  112  112  112  113  114 
+		 116  115  113  111  111  111  112  113 
+		 115  114  112  110  110  110  111  112 
+		 115  114  112  110  109  110  111  112 
+
+	DataUnit: (2,0,0)
+		DC Predictor: 0
+		DC:
+			T: 2	DIFF: 3	EXTEND(DIFF,T): 3
+		AC:
+			RS: 0x02  RRRR:  0  SSSS:  2  ZZ(K): 1	EXTEND(ZZ(K),SSSS):  -2
+			RS: 0x01  RRRR:  0  SSSS:  1  ZZ(K): 0	EXTEND(ZZ(K),SSSS):  -1
+			RS: 0x11  RRRR:  1  SSSS:  1  ZZ(K): 0	EXTEND(ZZ(K),SSSS):  -1
+			RS: 0x01  RRRR:  0  SSSS:  1  ZZ(K): 0	EXTEND(ZZ(K),SSSS):  -1
+			RS: 0x00 -- EOB
+
+		*Before DeQuantize*
+		   3   -2   -1    0    0    0    0    0 
+		  -1   -1    0    0    0    0    0    0 
+		   0    0    0    0    0    0    0    0 
+		   0    0    0    0    0    0    0    0 
+		   0    0    0    0    0    0    0    0 
+		   0    0    0    0    0    0    0    0 
+		   0    0    0    0    0    0    0    0 
+		   0    0    0    0    0    0    0    0 
+
+		*Before IDCT*
+		  27  -18  -12    0    0    0    0    0 
+		  -9  -11    0    0    0    0    0    0 
+		   0    0    0    0    0    0    0    0 
+		   0    0    0    0    0    0    0    0 
+		   0    0    0    0    0    0    0    0 
+		   0    0    0    0    0    0    0    0 
+		   0    0    0    0    0    0    0    0 
+		   0    0    0    0    0    0    0    0 
+
+		*After IDCT*
+		  -6   -4   -1    3    5    6    6    6 
+		  -5   -3    0    3    5    6    6    6 
+		  -4   -2    1    4    5    6    6    5 
+		  -2   -1    2    4    6    6    5    5 
+		  -1    1    3    5    6    6    5    4 
+		   1    2    4    6    7    6    5    4 
+		   2    3    5    6    7    6    5    4 
+		   3    4    5    7    7    6    5    4 
+
+		*After level shift (+128)*
+		 122  124  127  131  133  134  134  134 
+		 123  125  128  131  133  134  134  134 
+		 124  126  129  132  133  134  134  133 
+		 126  127  130  132  134  134  133  133 
+		 127  129  131  133  134  134  133  132 
+		 129  130  132  134  135  134  133  132 
+		 130  131  133  134  135  134  133  132 
+		 131  132  133  135  135  134  133  132 

@@ -1,0 +1,7 @@
+* DONE check MCU(SN-01, 08.png)
+  CLOSED: [2017-04-26 Wed 20:38]
+* DONE fix expand
+  CLOSED: [2017-04-27 Thu 10:24]
+* DONE fix combineblocks
+  CLOSED: [2017-04-27 Thu 10:24]
+* TODO fix readMCU wrong size

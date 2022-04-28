@@ -1,0 +1,121 @@
+g++ -pipe -std=c++11 -Wall -Wextra -Wpedantic  -g3 -lm   -c -o MPEGDecoder.o MPEGDecoder.cpp
+In file included from MPEGDecoder.h:3:0,
+                 from MPEGDecoder.cpp:1:
+bitReader.h: In member function ‘bool BitReader::nextBit()’:
+bitReader.h:43:20: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
+       if(byteIndex >= content.size()){
+                    ^
+In file included from MPEGDecoder.cpp:1:0:
+MPEGDecoder.h: In constructor ‘ColorInfo::ColorInfo(int, int, int, int)’:
+MPEGDecoder.h:154:10: warning: ‘ColorInfo::H’ will be initialized after [-Wreorder]
+   int V, H;
+          ^
+MPEGDecoder.h:152:7: warning:   ‘int ColorInfo::qtableid’ [-Wreorder]
+   int qtableid;
+       ^
+MPEGDecoder.h:156:1: warning:   when initialized here [-Wreorder]
+ ColorInfo(int colorid, int V, int H, int qtableid): colorid(colorid), V(V), H(H), qtableid(qtableid) {}
+ ^
+MPEGDecoder.h: At global scope:
+MPEGDecoder.h:187:1: error: ‘virtual’ can only be specified for functions
+ };
+ ^
+MPEGDecoder.h: In constructor ‘MotionTable::MotionTable(char*, BitReader&)’:
+MPEGDecoder.h:191:52: error: class ‘MotionTable’ does not have any field named ‘bitReader’
+ MotionTable(char* fileName, BitReader& bitReader): bitReader(bitReader){
+                                                    ^
+MPEGDecoder.h:193:32: warning: format ‘%s’ expects a matching ‘char*’ argument [-Wformat=]
+         while(fscanf(f, "%s %d") == )
+                                ^
+MPEGDecoder.h:193:32: warning: format ‘%d’ expects a matching ‘int*’ argument [-Wformat=]
+MPEGDecoder.h:193:37: error: expected primary-expression before ‘)’ token
+         while(fscanf(f, "%s %d") == )
+                                     ^
+MPEGDecoder.h: At global scope:
+MPEGDecoder.h:196:24: warning: unused parameter ‘value’ [-Wunused-parameter]
+     void getValue(int &value){
+                        ^
+MPEGDecoder.cpp: In member function ‘void MPEGDecoder::readInputFile()’:
+MPEGDecoder.cpp:315:9: warning: unused variable ‘result’ [-Wunused-variable]
+     int result = stat(inputFileName, &info);
+         ^
+MPEGDecoder.cpp: In member function ‘void MPEGDecoder::defineQuanizationTable()’:
+MPEGDecoder.cpp:343:14: warning: ISO C++ forbids variable length array ‘s’ [-Wvla]
+   char s[size];
+              ^
+MPEGDecoder.cpp: In member function ‘void MPEGDecoder::ignoreSection()’:
+MPEGDecoder.cpp:381:14: warning: ISO C++ forbids variable length array ‘s’ [-Wvla]
+   char s[size];
+              ^
+MPEGDecoder.cpp: In member function ‘void MPEGDecoder::startOfFrame()’:
+MPEGDecoder.cpp:387:14: warning: ISO C++ forbids variable length array ‘s’ [-Wvla]
+   char s[size];
+              ^
+MPEGDecoder.cpp: In member function ‘void MPEGDecoder::defineHuffmanTable()’:
+MPEGDecoder.cpp:433:14: warning: ISO C++ forbids variable length array ‘s’ [-Wvla]
+   char s[size];
+              ^
+MPEGDecoder.cpp:449:42: error: ‘TYPEDC’ was not declared in this scope
+     epr("hufftable %s-%d\n", (tableType==TYPEDC)?"DC":"AC", tableid);
+                                          ^
+MPEGDecoder.cpp:452:20: error: ‘class HuffmanTable’ has no member named ‘bitSize’
+       huffmanTable.bitSize[i] = readInt(1);
+                    ^
+MPEGDecoder.cpp:454:18: error: ‘class HuffmanTable’ has no member named ‘buildSizeTable’
+     huffmanTable.buildSizeTable();
+                  ^
+MPEGDecoder.cpp:455:40: error: ‘class HuffmanTable’ has no member named ‘huffSize’
+     for(size_t i = 0; i < huffmanTable.huffSize.size(); i++){
+                                        ^
+MPEGDecoder.cpp:457:22: error: ‘class HuffmanTable’ has no member named ‘huffValue’
+         huffmanTable.huffValue.push_back(value);
+                      ^
+MPEGDecoder.cpp:459:18: error: ‘class HuffmanTable’ has no member named ‘buildCodeTable’
+     huffmanTable.buildCodeTable();
+                  ^
+MPEGDecoder.cpp: In member function ‘void MPEGDecoder::startScan()’:
+MPEGDecoder.cpp:477:14: warning: ISO C++ forbids variable length array ‘s’ [-Wvla]
+   char s[size];
+              ^
+MPEGDecoder.cpp: In member function ‘void MPEGDecoder::scanImage()’:
+MPEGDecoder.cpp:515:20: error: ‘escapeHeader’ was not declared in this scope
+     } else if(c == escapeHeader){
+                    ^
+MPEGDecoder.cpp: In member function ‘bool MPEGDecoder::handleEscape_content(unsigned char)’:
+MPEGDecoder.cpp:606:31: error: ‘escapeHeader’ was not declared in this scope
+       content[contentIndex] = escapeHeader;
+                               ^
+MPEGDecoder.cpp: In member function ‘void MPEGDecoder::recoverDCdiff()’:
+MPEGDecoder.cpp:625:17: error: ‘MAX_COMP_NUM’ was not declared in this scope
+     int dc_prev[MAX_COMP_NUM] = {0};
+                 ^
+MPEGDecoder.cpp:631:26: error: ‘dc_prev’ was not declared in this scope
+                 du[0] += dc_prev[compNum];
+                          ^
+MPEGDecoder.cpp: In member function ‘void MPEGDecoder::readDataUnit(int, std::vector<int>&)’:
+MPEGDecoder.cpp:717:19: error: ‘class HuffmanTable’ has no member named ‘exist’
+         if(htable.exist(bits, code)){//fit length and codeword
+                   ^
+MPEGDecoder.cpp:718:28: error: ‘class HuffmanTable’ has no member named ‘codeEntry’
+             value = htable.codeEntry[bits][code];
+                            ^
+MPEGDecoder.cpp:727:12: error: use of deleted function ‘HuffmanTable& HuffmanTable::operator=(const HuffmanTable&)’
+     htable = AChuffmanTables[cinfo.acid];
+            ^
+In file included from MPEGDecoder.cpp:1:0:
+MPEGDecoder.h:179:15: note: ‘HuffmanTable& HuffmanTable::operator=(const HuffmanTable&)’ is implicitly deleted because the default definition would be ill-formed:
+ virtual class HuffmanTable{//TODO: move to new file
+               ^
+MPEGDecoder.h:179:15: error: non-static reference member ‘BitReader& HuffmanTable::bitReader’, can’t use default assignment operator
+MPEGDecoder.cpp: In member function ‘void MPEGDecoder::unSubSampling(MCU&)’:
+MPEGDecoder.cpp:858:22: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
+     for(int i = 0; i < colorInfos.size(); i++){//for color i
+                      ^
+In file included from MPEGDecoder.cpp:1:0:
+MPEGDecoder.h: In instantiation of ‘void epr(const char*, Args ...) [with Args = {}]’:
+MPEGDecoder.h:79:31:   required from here
+MPEGDecoder.h:22:12: warning: format not a string literal and no format arguments [-Wformat-security]
+     fprintf(stderr, s, args...);
+            ^
+<builtin>: recipe for target 'MPEGDecoder.o' failed
+make: *** [MPEGDecoder.o] Error 1

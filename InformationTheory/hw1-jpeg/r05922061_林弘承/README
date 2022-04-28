@@ -1,0 +1,42 @@
+CXXFLAGS=-pipe -std=c++11 -Wall -Wextra -Wpedantic -O3 -march=native -g -lm
+CFLAGS=-pipe -std=c++11 -Wall -Wextra -Wpedantic -O3 -march=native -g -lm
+CXX=g++
+CC=g++
+
+# Environment
+#   Ubuntu 16.04 64bits
+#   g++ (Ubuntu 5.4.0-6ubuntu1~16.04.4) 5.4.0 20160609
+#   python version: 2.7.12
+
+# Introduction
+# mainly inspired by jpeg_read (https://github.com/enmasse/jpeg_read) and (blog.csdn.net/lpt19832003/article/details/1713718) and homework handout
+# use C++ to transform JPEG to RGB pixel format, and use python libraries to transform to bmp or show it directly by gui
+# require python PIL library
+
+# Usage
+# make run would meet to requirement of homework spec
+# Ex. make run ARGS="JPEG/monalisa.jpg output.bmp", the result is output.bmp
+
+JPEGDecoder: JPEGDecoder.o main.o
+	g++ $(CXXFLAGS) JPEGDecoder.o main.o -o JPEGDecoder
+main.o: main.cpp JPEGDecoder.h
+JPEGDecoder.o: JPEGDecoder.h
+
+# default arguments
+ARGS?=JPEG/monalisa.jpg output1.bmp
+
+run: # save as bmp
+	./JPEGDecoder ${ARGS}; python rgbTobmp.py
+run2: # save as bmp
+	./JPEGDecoder JPEG/gig-sn08.jpg output2.bmp; python rgbTobmp.py
+run3: # save as bmp
+	./JPEGDecoder JPEG/gig-sn01.jpg output3.bmp; python rgbTobmp.py
+run4: # save as bmp
+	./JPEGDecoder JPEG/teatime.jpg output4.bmp; python rgbTobmp.py
+
+show: # show image by python tk library
+	./JPEGDecoder ${ARGS} show; python showImage.py
+debug:
+	gdb --args ./JPEGDecoder JPEG/monalisa.jpg output.rgb
+clean:
+	rm -f JPEGDecoder *.o

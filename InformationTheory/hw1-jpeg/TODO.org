@@ -1,0 +1,4 @@
+* bmp
+  http://www.vulcanware.com/cpp_bmp/index.html
+* reference
+https://github.com/enmasse/jpeg_read

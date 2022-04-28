@@ -1,0 +1,6 @@
+files
+* http://www.cmlab.csie.ntu.edu.tw/~fakewen/backup_onedown/one_down/itct/mpeg/
+header
+* http://dvd.sourceforge.net/dvdinfo/mpeghdrs.html#seq
+
+* http://baike.baidu.com/item/MPEG-1/214216

@@ -1,0 +1,66 @@
+g++ -pipe -std=c++11 -Wall -Wextra -Wpedantic -O3 -march=native -g   -c -o JPEGDecoder.o JPEGDecoder.cpp
+In file included from JPEGDecoder.cpp:1:0:
+JPEGDecoder.h: In member function ‘void HuffmanTable::build()’:
+JPEGDecoder.h:96:9: warning: unused variable ‘lastk’ [-Wunused-variable]
+     int lastk = k;
+         ^
+JPEGDecoder.cpp: At global scope:
+JPEGDecoder.cpp:24:31: warning: unused parameter ‘index’ [-Wunused-parameter]
+ void JPEGDecoder::readAPP(int index){//ignore
+                               ^
+JPEGDecoder.cpp:27:31: warning: unused parameter ‘index’ [-Wunused-parameter]
+ void JPEGDecoder::readSOF(int index){//ignore
+                               ^
+JPEGDecoder.cpp:30:31: warning: unused parameter ‘index’ [-Wunused-parameter]
+ void JPEGDecoder::readRST(int index){//ignore
+                               ^
+JPEGDecoder.cpp: In member function ‘void JPEGDecoder::defineQuanizationTable()’:
+JPEGDecoder.cpp:56:14: warning: ISO C++ forbids variable length array ‘s’ [-Wvla]
+   char s[size];
+              ^
+JPEGDecoder.cpp:66:28: warning: ISO C++ forbids variable length array ‘tableStr’ [-Wvla]
+     char tableStr[tableSize];
+                            ^
+JPEGDecoder.cpp: In member function ‘void JPEGDecoder::ignoreSection()’:
+JPEGDecoder.cpp:86:14: warning: ISO C++ forbids variable length array ‘s’ [-Wvla]
+   char s[size];
+              ^
+JPEGDecoder.cpp: In member function ‘void JPEGDecoder::readSOF()’:
+JPEGDecoder.cpp:92:14: warning: ISO C++ forbids variable length array ‘s’ [-Wvla]
+   char s[size];
+              ^
+JPEGDecoder.cpp: In member function ‘void JPEGDecoder::defineHuffmanTable()’:
+JPEGDecoder.cpp:140:14: warning: ISO C++ forbids variable length array ‘s’ [-Wvla]
+   char s[size];
+              ^
+JPEGDecoder.cpp:166:33: error: incompatible types in assignment of ‘int’ to ‘char [16]’
+       huffmanTable.huffValue[i] = readInt(1);
+                                 ^
+JPEGDecoder.cpp: In member function ‘void JPEGDecoder::readDRI()’:
+JPEGDecoder.cpp:179:14: warning: ISO C++ forbids variable length array ‘s’ [-Wvla]
+   char s[size];
+              ^
+JPEGDecoder.cpp:181:7: warning: unused variable ‘MCUInterval’ [-Wunused-variable]
+   int MCUInterval = readInt(2);
+       ^
+JPEGDecoder.cpp: In member function ‘void JPEGDecoder::startScan()’:
+JPEGDecoder.cpp:194:14: warning: ISO C++ forbids variable length array ‘s’ [-Wvla]
+   char s[size];
+              ^
+JPEGDecoder.cpp:204:7: warning: unused variable ‘selectStart’ [-Wunused-variable]
+   int selectStart = readInt(1);
+       ^
+JPEGDecoder.cpp:205:7: warning: unused variable ‘selectEnd’ [-Wunused-variable]
+   int selectEnd = readInt(1);
+       ^
+JPEGDecoder.cpp:206:7: warning: unused variable ‘select’ [-Wunused-variable]
+   int select = readInt(1);
+       ^
+In file included from JPEGDecoder.cpp:1:0:
+JPEGDecoder.h: In instantiation of ‘void epr(const char*, Args ...) [with Args = {}]’:
+JPEGDecoder.cpp:40:28:   required from here
+JPEGDecoder.h:13:10: warning: format not a string literal and no format arguments [-Wformat-security]
+   fprintf(stderr, s, args...);
+          ^
+<builtin>: recipe for target 'JPEGDecoder.o' failed
+make: *** [JPEGDecoder.o] Error 1

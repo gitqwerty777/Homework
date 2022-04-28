@@ -1,0 +1,3 @@
+./MPEGDecoder MPEG/IPB_ALL.M1V
+makefile:23: recipe for target 'run3' failed
+make: *** [run3] 中斷
