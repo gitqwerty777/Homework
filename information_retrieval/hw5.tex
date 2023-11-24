@@ -1,0 +1,260 @@
+\documentclass{article}
+
+\usepackage{fancyhdr}
+\usepackage{extramarks}
+\usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage{amsfonts}
+\usepackage{tikz}
+\usepackage[plain]{algorithm}
+\usepackage{algpseudocode}
+\usepackage[encapsulated]{CJK}
+\usepackage{graphicx}
+\graphicspath{ {./images/} }
+
+\usetikzlibrary{automata,positioning}
+
+%
+% Basic Document Settings
+%
+
+\topmargin=-0.45in
+\evensidemargin=0in
+\oddsidemargin=0in
+\textwidth=6.5in
+\textheight=9.0in
+\headsep=0.25in
+
+\linespread{1.1}
+
+\pagestyle{fancy}
+\lhead{\hmwkAuthorName}
+\chead{\hmwkClass\:\hmwkTitle}
+\rhead{\firstxmark}
+\lfoot{\lastxmark}
+\cfoot{\thepage}
+
+\renewcommand\headrulewidth{0.4pt}
+\renewcommand\footrulewidth{0.4pt}
+
+\setlength\parindent{0pt}
+
+%
+% Create Problem Sections
+%
+
+\newcommand{\enterProblemHeader}[1]{
+    \nobreak\extramarks{}{Problem \arabic{#1} continued on next page\ldots}\nobreak{}
+    \nobreak\extramarks{Problem \arabic{#1} (continued)}{Problem \arabic{#1} continued on next page\ldots}\nobreak{}
+}
+
+\newcommand{\exitProblemHeader}[1]{
+    \nobreak\extramarks{Problem \arabic{#1} (continued)}{Problem \arabic{#1} continued on next page\ldots}\nobreak{}
+    \stepcounter{#1}
+    \nobreak\extramarks{Problem \arabic{#1}}{}\nobreak{}
+}
+
+\setcounter{secnumdepth}{0}
+\newcounter{partCounter}
+\newcounter{homeworkProblemCounter}
+\setcounter{homeworkProblemCounter}{1}
+\nobreak\extramarks{Problem \arabic{homeworkProblemCounter}}{}\nobreak{}
+
+%
+% Homework Problem Environment
+%
+% This environment takes an optional argument. When given, it will adjust the
+% problem counter. This is useful for when the problems given for your
+% assignment aren't sequential. See the last 3 problems of this template for an
+% example.
+%
+\newenvironment{homeworkProblem}[1][-1]{
+    \ifnum#1>0
+        \setcounter{homeworkProblemCounter}{#1}
+    \fi
+    \section{Problem \arabic{homeworkProblemCounter}}
+    \setcounter{partCounter}{1}
+    \enterProblemHeader{homeworkProblemCounter}
+}{
+    \exitProblemHeader{homeworkProblemCounter}
+}
+
+%
+% Homework Details
+%   - Title
+%   - Due date
+%   - Class
+%   - Section/Time
+%   - Instructor
+%   - Author
+%
+
+\newcommand{\hmwkTitle}{Homework\ \#5}
+%\newcommand{\hmwkDueDate}{September 17, 2015}
+\newcommand{\hmwkClass}{Information Retrieval}
+\newcommand{\hmwkClassTime}{}
+\newcommand{\hmwkClassInstructor}{}
+\newcommand{\hmwkAuthorName}{Lin Hung Cheng B01902059}
+
+%
+% Title Page
+%
+
+\title{
+    \vspace{2in}
+    \textmd{\textbf{\hmwkClass:\ \hmwkTitle}}\\
+    %\normalsize\vspace{0.1in}\small{Due\ on\ \hmwkDueDate\ at 3:10pm}\\
+    %\vspace{0.1in}\large{\textit{\hmwkClassInstructor\ \hmwkClassTime}}
+    \vspace{3in}
+}
+
+\author{\textbf{\hmwkAuthorName}}
+\date{}
+
+\renewcommand{\part}[1]{\textbf{\large Part \Alph{partCounter}}\stepcounter{partCounter}\\}
+
+%
+% Various Helper Commands
+%
+
+% Useful for algorithms
+\newcommand{\alg}[1]{\textsc{\bfseries \footnotesize #1}}
+
+% For derivatives
+\newcommand{\deriv}[1]{\frac{\mathrm{d}}{\mathrm{d}x} (#1)}
+
+% For partial derivatives
+\newcommand{\pderiv}[2]{\frac{\partial}{\partial #1} (#2)}
+
+% Integral dx
+\newcommand{\dx}{\mathrm{d}x}
+
+% Alias for the Solution section header
+\newcommand{\solution}{\textbf{\large Solution}}
+
+% Probability commands: Expectation, Variance, Covariance, Bias
+\newcommand{\E}{\mathrm{E}}
+\newcommand{\Var}{\mathrm{Var}}
+\newcommand{\Cov}{\mathrm{Cov}}
+\newcommand{\Bias}{\mathrm{Bias}}
+
+\begin{document}
+
+\maketitle
+
+\pagebreak
+
+\begin{homeworkProblem}
+  \begin{CJK}{UTF8}{bsmi} % 開始 CJK 
+    \textbf{Solution}
+
+    add collection size into consideration: \\
+
+    new score = $(1-a) \times originalScore$(like F1, MAP, which with precision and recall) $ + (a) \times \log{collectionSize}$, 
+    a is the parameter such that $0 \leq a \leq 1$\\
+    \\
+    The new score can properly reflect the collection size in evaluation by tuning the parameter a.\\
+    Finally, I think we should use the same collection to compare evaluation score in the regular basis.
+    
+  \end{CJK}
+\end{homeworkProblem}
+
+\begin{homeworkProblem}
+  \begin{CJK}{UTF8}{bsmi} % 開始 CJK
+
+    \textbf{1.}
+    
+    transform matrix = $0.2e + 0.8A^T$\\
+    A = \[ \left(
+        \begin{array}{ccccc}
+          0 & 0.5 & 0.5 & 0 & 0\\
+          0 & 0 & 0 & 0.5 & 0.5\\
+          0 & 1 & 0 & 0 & 0\\
+          0 & 0 & 1 & 0 & 0\\          
+          0 & 0 & 0 & 1 & 0\\
+        \end{array} \right)\]
+
+    transform matrix = \[ \left(
+        \begin{array}{ccccc}
+          0.04 & 0.04 & 0.04 & 0.04 & 0.04\\
+          0.44 & 0.04 & 0.84 & 0.04 & 0.04\\
+          0.44 & 0.04 & 0.04 & 0.84 & 0.04\\
+          0.04 & 0.44 & 0.04 & 0.04 & 0.84\\          
+          0.04 & 0.44 & 0.04 & 0.04 & 0.04\\
+        \end{array} \right)\] 
+
+
+    \textbf{2.}
+    \[ \left(
+        \begin{array}{ccccc}
+          0 & 0.3 & 0.3 & 0.275 & 0.125\\
+        \end{array} \right)\] 
+
+    code link: http://ppt.cc/CvN9Z
+
+  \end{CJK} % 結束 CJK 環境 
+\end{homeworkProblem}
+
+\begin{homeworkProblem}
+  \begin{CJK}{UTF8}{bsmi} % 開始 CJK
+
+    \textbf{1.}
+    L = \[ \left(
+        \begin{array}{ccccc}
+          0 & 1 & 1 & 0 & 0\\
+          0 & 0 & 0 & 1 & 1\\
+          0 & 1 & 0 & 0 & 0\\
+          0 & 0 & 1 & 0 & 0\\          
+          0 & 0 & 0 & 1 & 0\\
+        \end{array}
+      \right)\]
+
+    $L^TL$ = \[ \left(
+        \begin{array}{ccccc}
+          0 & 0 & 0 & 0 & 0\\
+          0 & 2 & 1 & 0 & 0\\
+          0 & 1 & 2 & 0 & 0\\
+          0 & 0 & 0 & 2 & 1\\          
+          0 & 0 & 0 & 1 & 1\\
+        \end{array}
+      \right)\]         
+
+    $LL^T$ = \[ \left(
+        \begin{array}{ccccc}
+          2 & 0 & 1 & 1 & 0\\
+          0 & 2 & 0 & 0 & 1\\
+          1 & 0 & 1 & 0 & 0\\
+          1 & 0 & 0 & 1 & 0\\          
+          0 & 1 & 0 & 0 & 1\\
+        \end{array}
+      \right)\] 
+
+    \textbf{2.}
+
+    a =\[ \left(
+        \begin{array}{ccccc}
+          0.0 & 0.3379694019471488 & 0.3379694019471488 & 0.20027816411682894 & 0.12378303198887344\\
+        \end{array}
+      \right)\]
+
+    h =\[ \left(
+        \begin{array}{ccccc}
+          0.3677639046538025 & 0.16345062429057888 & 0.18388195232690124 & 0.18388195232690124 & 0.1010215664018161\\          
+        \end{array}
+      \right)\]     
+
+    code link: http://ppt.cc/1wfY2
+
+    \textbf{3.}
+
+    hits seems to be having more information about the node. For example, pagerank score in node 1 is 0 because no other nodes refer to it. But hits set hub score to node 1, which give fair evaluation of nodes.
+
+  \end{CJK} % 結束 CJK 環境 
+\end{homeworkProblem}
+
+\end{document}
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: t
+%%% End:
